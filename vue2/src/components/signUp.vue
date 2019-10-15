@@ -81,7 +81,7 @@ export default {
       ) {
         let newUser = { username: this.username, password: this.password };
         this.$store.dispatch("signup", newUser)
-       .then(() => this.$router.push("/signUpAs"))
+       .then(() => this.$router.push("/landingpage"))
         .catch(err => console.log(err));
       //   axios.post("http://localhost:8081/user/signup", newUser).then(response => {
       //     if (response.status == 200) {
@@ -94,6 +94,8 @@ export default {
       // } else {
       //   alert("Invalid credentials")
       // }
+    } else {
+      alert("Invalid credentials")
     }
     },
 
