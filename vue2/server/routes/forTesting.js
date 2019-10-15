@@ -157,10 +157,27 @@ userRoute.route('/signedup').get((req,res) => {
     res.status(200).json(data)
 })
 
+
+userRoute.route('/logout').get((req,res) => {
+    data = {}
+})
+
 userRoute.route('/fullsignup').post((req,res) =>{
     data = {}
     console.log("hello")
     console.log(req.body)
+     user = req.body;
+    var token = jwt.sign({
+        username: user.username,
+        password: user.password
+    }, config.secret, {
+        expiresIn: 86400 
+    });
+    res.status(200).send({
+        user: user,
+        auth: true,
+        token: token
+    });
 })
 
 

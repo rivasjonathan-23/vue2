@@ -1,8 +1,8 @@
 <template>
-  <center>
+  <div>
     <h1>hi welcome</h1>
     <button v-on:click="logout">logout</button>
-  </center>
+  </div>
 </template>
 <script>
 export default {
@@ -20,6 +20,7 @@ export default {
 <style scoped>
 h1 {
   position: absolute;
+  left:750px;
   margin-top: 200px;
 }
 button {

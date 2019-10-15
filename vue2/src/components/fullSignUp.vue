@@ -2,8 +2,15 @@
   <div class="innercont">
     <form @submit.prevent="register">
       <div class="col-sm-4">
-        <p class="sign">Sign Up</p>
-        <label>
+        <div v-if="isLoggedIn">
+          <h1>Hello&nbsp;{{ this.username }}</h1>
+          <h2 class="uname"></h2>
+          <h3 class="inst">Fill up the form to continue creating your account</h3>
+          <hr>
+           <h4 class="inst">or do it later | <span class="lgt" v-on:click="logout">Logout</span></h4>
+        </div>
+        <p class="sign" v-if="!isLoggedIn">Sign Up</p>
+        <label v-if="!isLoggedIn">
           <p class="label-txt1">USERNAME</p>
           <input type="text" class="input" required v-model="username" v-on:keyup="checkUsername">
           <div class="line-box">
@@ -13,7 +20,7 @@
             <span class="err" v-if="err">Username already taken!</span>
           </transition>
         </label>
-        <label>
+        <label v-if="!isLoggedIn">
           <p class="label-txt1">PASSWORD</p>
           <input type="password" class="input" required v-model="password">
           <div class="line-box">
@@ -26,7 +33,7 @@
             >must be at least 8 characters!</span>
           </transition>
         </label>
-        <label>
+        <label v-if="!isLoggedIn">
           <p class="label-txt1">CONFIRM PASSWORD</p>
           <input type="password" class="input" required v-model="confirmpassword">
           <div class="line-box">
@@ -69,34 +76,6 @@
         <label>
           <p class="label-txt">ADDRESS</p>
           <input type="text" class="input" required v-model="address">
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
-        </label>
-        <table class="lastrow">
-          <td>
-            <label class="ln">
-              <p class="label-txt">OCCUPATION</p>
-              <input type="text" class="input" required v-model="occupation">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-            </label>
-          </td>
-          <td id="years">
-            <label class="ln">
-              <p class="label-txt">YEARS</p>
-              <input type="number" class="input" required v-model="years" min="1">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-            </label>
-          </td>
-        </table>
-
-        <label>
-          <p class="label-txt">EMAIL ADDRESS</p>
-          <input type="email" class="input" required v-model="email">
           <div class="line-box">
             <div class="line"></div>
           </div>
@@ -202,6 +181,35 @@
             </div>
           </td>
         </table>
+
+        <label>
+          <p class="label-txt">EMAIL ADDRESS</p>
+          <input type="email" class="input" required v-model="email">
+          <div class="line-box">
+            <div class="line"></div>
+          </div>
+        </label>
+        
+        <table class="lastrow">
+          <td>
+            <label class="ln">
+              <p class="label-txt">OCCUPATION</p>
+              <input type="text" class="input" required v-model="occupation">
+              <div class="line-box">
+                <div class="line"></div>
+              </div>
+            </label>
+          </td>
+          <td id="years">
+            <label class="ln">
+              <p class="label-txt">YEARS</p>
+              <input type="number" class="input" required v-model="years" min="1">
+              <div class="line-box">
+                <div class="line"></div>
+              </div>
+            </label>
+          </td>
+        </table>
         <button type="submit">submit</button>
       </div>
     </form>
@@ -230,7 +238,7 @@ export default {
       isValid: false,
       years: "",
       err: false,
-      isSuccessful: this.$store.getters.isloggedIn
+      isLoggedIn: this.$store.getters.isLoggedIn
     };
   },
 
@@ -253,7 +261,6 @@ export default {
         this.password != "" &&
         this.password == this.confirmpassword
       ) {
-        console.log(this.isSuccessful)
         // axios.post("http://localhost:8081/user/fullsignup", userInfo);
         this.$store
           .dispatch("fullsignup", userInfo)
@@ -286,7 +293,13 @@ export default {
     },
     month(m) {
       this.birthdate.month = m;
+    },
+    logout() {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/");
+        })
     }
+
   },
   created() {
     
@@ -366,6 +379,11 @@ export default {
   opacity: 0;
 }
 
+.lgt {
+  color: red;
+  text-decoration: underline;
+}
+
 .col-sm-4 {
   overflow: auto;
   background: #e3e3e3;
@@ -377,7 +395,9 @@ export default {
   border-top-right-radius: 0;
   border-right: 1px solid #b3b4b5;
 }
-
+.uname  {
+  text-decoration: underline;
+}
 h5 {
   margin: 0;
   padding: 3px;
@@ -392,8 +412,9 @@ h5:hover {
   padding: 0px;
   display: none;
   position: absolute;
-  background: white;
   border: 1px solid lightgray;
+  z-index:9999;
+  background:#f7fafa;
 }
 
 #mnth {
