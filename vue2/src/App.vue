@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-inverse">
+    <b-navbar class="navbar" toggleable="lg" type="dark">
       <div class="container-fluid">
         <div class="navbar-header">
           <router-link to="/">
@@ -8,31 +8,41 @@
           </router-link>
         </div>
 
-        <ul id="nav" class="nav navbar-nav navbar-right">
-          <li>
-            <form class="navbar-form navbar-right" id="search" @submit.prevent="search">
-              <div class="form-group has-search">
-                <span class="material-icons">search</span>
-                <input type="text" class="form-control" placeholder="Search" v-model="person">
-              </div>
-            </form>
-          </li>
-          <li>
-            <div v-if="!this.$store.getters.isLoggedIn">
-              <router-link class="btn btn-default" to="/signUpAs">
-                <p class="auth">Sign up</p>
-              </router-link>
+        <b-navbar-nav class="ml-auto">
+          <ul id="nav" class="nav navbar-nav navbar-right">
+            <li>
+              <b-nav-form id="search" @submit.prevent="search">
+                <div class="searchbox">
+                  <!-- <span class="material-icons">search</span> -->
+                  <input
+                    type="text"
+                    id="srch"
+                    class="form-control"
+                    placeholder="Search"
+                    v-model="person"
+                  >
+                </div>
+              </b-nav-form>
+            </li>
+            <li>
+              <div v-if="!this.$store.getters.isLoggedIn">
+                <router-link class="btn btn-default" to="/signUpAs">
+                  <p class="auth">Sign up</p>
+                </router-link>
 
-              <router-link id="su" class="btn btn-default" to="/login">
-                <p class="auth">Sign in</p>
-              </router-link>
-            </div>
-            <button v-else id="su" class="btn btn-default" @click="signout"><p class="singout">Sign out</p></button>
-          </li>
-        </ul>
-        <span class="fa fa-bars"></span>
+                <router-link id="su" class="btn btn-default" to="/login">
+                  <p class="auth">Sign in</p>
+                </router-link>
+              </div>
+              <button v-else id="su" class="btn btn-default" @click="signout">
+                <p class="singout">Sign out</p>
+              </button>
+            </li>
+          </ul>
+        </b-navbar-nav>
+        <span class="fa fa-bars">=</span>
       </div>
-    </nav>
+    </b-navbar>
     <center>
       <router-view/>
     </center>
@@ -70,8 +80,8 @@ export default {
     },
     signout() {
       this.$store.dispatch("logout").then(() => {
-        this.$router.push("/login")
-      })
+        this.$router.push("/login");
+      });
     }
   },
   mounted() {
@@ -115,23 +125,42 @@ export default {
   top: 0px;
   right: 0px;
   margin: 10px;
-  display: none;
+  /* display: none; */
   color: white;
   cursor: pointer;
   transition: ease 0.3s;
+}
+
+.searchbox {
+  /* margin: 10px; */
+  padding: 0;
+}
+
+#srch {
+  margin: 0;
+  font-size: 13px;
+  padding: 8px;
+  width: 190px;
 }
 
 .fa:hover {
   background-color: lightblue;
   border-radius: 25px;
 }
-
+p {
+  cursor: pointer;
+  transition: ease 0.3s;
+}
 .btn:hover {
   border-color: gray;
 }
 
 p:hover {
   text-shadow: 5px 5px 5px black;
+}
+
+#search {
+  margin: 12px;
 }
 
 #search:hover {
@@ -192,7 +221,7 @@ body {
   font-size: 17px;
   color: white;
   font-weight: normal;
-  padding-right:10px;
+  padding-right: 10px;
 }
 
 .web-name {
@@ -292,6 +321,11 @@ button {
   cursor: pointer;
   transition: ease 0.3s;
 }
+
+/* #nav {
+  width: 450px;
+  text-align: right;
+} */
 
 button:hover {
   background: #5d5f61;

@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>hi welcome</h1>
+     <b-form-input v-model="text" placeholder="Enter your name"></b-form-input>
     <button v-on:click="logout">logout</button>
   </div>
 </template>
@@ -26,6 +27,10 @@ h1 {
 button {
     position: absolute;
     margin-top: 250px;
+}
+b-form-input{
+  position: absolute;
+  margin-top: 300px;
 }
 </style>
 

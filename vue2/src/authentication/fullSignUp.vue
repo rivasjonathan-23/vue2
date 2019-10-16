@@ -1,6 +1,6 @@
 <template>
   <div class="innercont">
-    <form @submit.prevent="register">
+    <b-form @submit.prevent="register">
       <div class="col-sm-4">
         <p class="sign">Sign Up</p>
         <label>
@@ -205,7 +205,7 @@
         </table>
         <button type="submit">submit</button>
       </div>
-    </form>
+    </b-form>
   </div>
 </template>
 
@@ -534,7 +534,6 @@ table {
 }
 
 .innercont {
-  /* margin-top: 100px; */
   padding: 0;
   border-radius: 2px;
   border: 1px solid #bdbebf;

@@ -2,6 +2,7 @@
   <!-- <div id="signup"> -->
     <form class="signupform" @submit.prevent="login">
       <h1 class="sign">Sign up</h1>
+      
       <label>
         <p class="label-txt">USERNAME</p>
         <input

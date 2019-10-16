@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store.js'
-import Home from './components/home'
-import login from './components/Login'
-import FullSignUp from './components/fullSignUp'
-import OrgSignUp from './components/orgSignUp'
-import TypeOfUser from './components/typeOfUser'
-import LandingPage from './components/userLandingPage'
+import Home from './authentication/home'
+import login from './authentication/Login'
+import FullSignUp from './authentication/fullSignUp'
+import OrgSignUp from './authentication/orgSignUp'
+import TypeOfUser from './authentication/typeOfUser'
+import LandingPage from './authentication/userLandingPage'
 
 Vue.use(Router)
 

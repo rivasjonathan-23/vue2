@@ -2,6 +2,7 @@
   <div>
     <div class="container">
       <SignUp></SignUp>
+      
     </div>
     <div class="posts"></div>
   </div>

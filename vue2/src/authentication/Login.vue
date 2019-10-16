@@ -85,7 +85,7 @@ export default {
 #lgn {
   border: 1px solid lightgrey;
   width: 400px;
-  margin-top: 150px;
+  /* margin-top: 150px; */
   margin-bottom: 40px;
   background: white;
   padding: 40px;
@@ -98,7 +98,7 @@ export default {
 .container {
   justify-content: center;
   margin: 0;
-  padding-top: 0;
+  padding-top: 150px;
   width: 100%;
 }
 .input {

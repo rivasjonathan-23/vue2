@@ -58,8 +58,12 @@ export default {
 
 <style scoped>
 .container {
+  padding-top:90px;
+  text-align: center;
+  margin-top:0;
   margin-left: 0;
-  padding: 0;
+  padding-left: 0;
+  padding-right:0;
   width: 100%;
   font-weight: normal;
 }
@@ -78,7 +82,7 @@ export default {
 .holder {
   padding: 0;
   width: 970px;
-  margin-top: 80px;
+  /* margin-top: 80px; */
   text-align: right;
 }
 .ch {
