@@ -13,25 +13,28 @@
             <form class="navbar-form navbar-right" id="search" @submit.prevent="search">
               <div class="form-group has-search">
                 <span class="material-icons">search</span>
-                <input type="text" class="form-control" placeholder="Search" v-model="person"/>
+                <input type="text" class="form-control" placeholder="Search" v-model="person">
               </div>
             </form>
           </li>
           <li>
-            <router-link class="btn btn-default" to="/signUpAs">
-              <p class="auth">Sign up</p>
-            </router-link>
+            <div v-if="!this.$store.getters.isLoggedIn">
+              <router-link class="btn btn-default" to="/signUpAs">
+                <p class="auth">Sign up</p>
+              </router-link>
 
-            <router-link id="su" class="btn btn-default" to="/login">
-              <p class="auth">Sign in</p>
-            </router-link>
+              <router-link id="su" class="btn btn-default" to="/login">
+                <p class="auth">Sign in</p>
+              </router-link>
+            </div>
+            <button v-else id="su" class="btn btn-default" @click="signout"><p class="singout">Sign out</p></button>
           </li>
         </ul>
         <span class="fa fa-bars"></span>
       </div>
     </nav>
     <center>
-      <router-view />
+      <router-view/>
     </center>
   </div>
 </template>
@@ -39,32 +42,36 @@
 
 <script>
 import $ from "jquery";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "app",
   data() {
     return {
       person: ""
-    }
+    };
   },
   methods: {
     search() {
-      let user = { user : this.person}
+      let user = { user: this.person };
       axios.post("http://localhost:8081/search", user).then(
-      response => {
-        if (response.data.respond != "Cannot find user!") {
-          console.log(response.data);
-          alert(response.data.respond);
-        } 
-        else {
-          alert(response.data.respond);
+        response => {
+          if (response.data.respond != "Cannot find user!") {
+            console.log(response.data);
+            alert(response.data.respond);
+          } else {
+            alert(response.data.respond);
+          }
+        },
+        err => {
+          console.log("error");
         }
-      },
-      err => {
-        console.log("error");
-      }
-    );
+      );
+    },
+    signout() {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/login")
+      })
     }
   },
   mounted() {
@@ -115,7 +122,7 @@ export default {
 }
 
 .fa:hover {
-  background-color: grey;
+  background-color: lightblue;
   border-radius: 25px;
 }
 
@@ -176,6 +183,16 @@ body {
   margin-bottom: 2px;
   font-size: 17px;
   color: white;
+}
+
+.singout {
+  margin: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  font-size: 17px;
+  color: white;
+  font-weight: normal;
+  padding-right:10px;
 }
 
 .web-name {

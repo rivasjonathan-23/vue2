@@ -60,6 +60,7 @@
 <script>
 import $ from "jquery";
 import axios from "axios";
+import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: "SignUp",
@@ -80,20 +81,17 @@ export default {
         this.password.length > 7
       ) {
         let newUser = { username: this.username, password: this.password };
-        this.$store.dispatch("signup", newUser)
-       .then(() => this.$router.push("/signUpAs"))
-        .catch(err => console.log(err));
-      //   axios.post("http://localhost:8081/user/signup", newUser).then(response => {
-      //     if (response.status == 200) {
-      //       console.log(response.data);
-      //       this.$router.push("/signUpAs");
-      //     } 
-      //   }, err => {
-      //     alert("an error occrured")
-      //   });
-      // } else {
-      //   alert("Invalid credentials")
-      // }
+      //   this.$store.dispatch("signup", newUser)
+      //  .then(() => this.$router.push("/signUpAs"))
+      //   .catch(err => console.log(err));
+        axios.post("http://localhost:8081/user/signup", newUser).then(response => {
+          if (response.status == 200) {
+            this.$router.push("/signUpAs");
+          } 
+        }, err => {
+          alert("an error occrured")
+        });
+     
     } else {
       alert("Invalid credentials")
     }

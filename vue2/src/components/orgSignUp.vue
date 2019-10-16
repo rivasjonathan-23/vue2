@@ -2,51 +2,58 @@
   <div class="container">
     <center>
       <div class="innercont">
-        <form  @submit.prevent="register">
-
+        <form @submit.prevent="register">
           <div class="col-sm-4">
-          <p class="sign">Sign Up</p>
-          <label>
-            <p class="label-txt1">ADMIN USERNAME</p>
-            <input type="text" class="input" required v-model="username" v-on:keyup="checkUsername">
-            <div class="line-box">
-              <div class="line"></div>
-            </div>
-            <transition name="slide-fade">
-              <span class="err" v-if="err">Username already taken!</span>
-            </transition>
-          </label>
-          <label>
-            <p class="label-txt1">PASSWORD</p>
-            <input type="password" class="input" required v-model="password">
-            <div class="line-box">
-              <div class="line"></div>
-            </div>
-            <transition name="slide-fade">
-              <span
-                class="err"
-                v-show=" password.length < 8 && password  != ''"
-              >must be at least 8 characters!</span>
-            </transition>
-          </label>
-          <label>
-            <p class="label-txt1">CONFIRM PASSWORD</p>
-            <input type="password" class="input" required v-model="confirmpassword">
-            <div class="line-box">
-              <div class="line"></div>
-            </div>
-            <transition name="slide-fade">
-              <span
-                class="err"
-                v-show="confirmpassword != password && confirmpassword && password"
-              >Password doesn't match!</span>
-            </transition>
-          </label>
+            
+            <p class="sign">Sign Up</p>
+            <label>
+              <p class="label-txt1">ADMIN USERNAME</p>
+              <input
+                type="text"
+                class="input"
+                required
+                v-model="username"
+                v-on:keyup="checkUsername"
+              >
+              <div class="line-box">
+                <div class="line"></div>
+              </div>
+              <transition name="slide-fade">
+                <span class="err" v-if="err">Username already taken!</span>
+              </transition>
+            </label>
+            <label>
+              <p class="label-txt1">PASSWORD</p>
+              <input type="password" class="input" required v-model="password">
+              <div class="line-box">
+                <div class="line"></div>
+              </div>
+              <transition name="slide-fade">
+                <span
+                  class="err"
+                  v-show=" password.length < 8 && password  != ''"
+                >must be at least 8 characters!</span>
+              </transition>
+            </label>
+            <label>
+              <p class="label-txt1">CONFIRM PASSWORD</p>
+              <input type="password" class="input" required v-model="confirmpassword">
+              <div class="line-box">
+                <div class="line"></div>
+              </div>
+              <transition name="slide-fade">
+                <span
+                  class="err"
+                  v-show="confirmpassword != password && confirmpassword && password"
+                >Password doesn't match!</span>
+              </transition>
+            </label>
+            <!-- </div> -->
           </div>
           <div id="perinfo" class="col-sm-8">
             <p class="sign2">About your organization</p>
             <label>
-              <p class="label-txt">NAME  OF THE ORGANIZATION</p>
+              <p class="label-txt">NAME OF THE ORGANIZATION</p>
               <input type="text" class="input" required v-model="name">
               <div class="line-box">
                 <div class="line"></div>
@@ -68,13 +75,16 @@
               </div>
             </label>
             <label>
-              <p class="label-txt">WHAT YOU DO? (<i>Short description</i>)</p>
+              <p class="label-txt">
+                WHAT YOU DO? (
+                <i>Short description</i>)
+              </p>
               <input id="description" type="text" class="input" required v-model="description">
               <div class="line-box">
                 <div class="line"></div>
               </div>
             </label>
-            
+
             <button type="submit">submit</button>
           </div>
         </form>
@@ -100,7 +110,8 @@ export default {
       description: "",
       isValid: false,
       years: "",
-      err: false
+      err: false,
+      isLoggedIn: this.$store.getters.isLoggedIn
     };
   },
 
@@ -147,9 +158,20 @@ export default {
             console.log("error occured");
           }
         );
+    },
+    logout() {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/");
+      });
     }
   },
   created() {
+    if (this.username != "") {
+      window.addEventListener(
+        "beforeunload",
+        alert("Are you sure you want to sign out?")
+      );
+    }
     if (
       this.username != "" &&
       this.password != "" &&
@@ -173,16 +195,24 @@ export default {
   },
   mounted() {
     $(".input").focus(function() {
-      $(this).parent().find("p").addClass("label-active").css({"color":"#0071ff"});
-
+      $(this)
+        .parent()
+        .find("p")
+        .addClass("label-active")
+        .css({ color: "#0071ff" });
     });
 
     $(".input").focusout(function() {
       if ($(this).val() == "") {
-        $(this).parent().find("p").removeClass("label-active");
-
+        $(this)
+          .parent()
+          .find("p")
+          .removeClass("label-active");
       }
-      $(this).parent().find("p").css({"color":"#555657"});
+      $(this)
+        .parent()
+        .find("p")
+        .css({ color: "#555657" });
     });
   }
 };
@@ -196,13 +226,26 @@ export default {
 .slide-fade-leave-active {
   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }
-.slide-fade-enter, .slide-fade-leave-to {
+.slide-fade-enter,
+.slide-fade-leave-to {
   transform: translateX(10px);
   opacity: 0;
 }
+.lgt {
+  color: red;
+  text-decoration: underline;
+}
 
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #b3b4b5;
+  margin: 1em 0;
+  padding: 0;
+}
 .col-sm-4 {
-  overflow:auto;
+  overflow: auto;
   background: #e3e3e3;
   padding: 40px;
   text-align: center;
@@ -214,7 +257,7 @@ export default {
 }
 
 #description {
-  overflow:visible;
+  overflow: visible;
 }
 
 .srow {
@@ -228,7 +271,7 @@ export default {
 }
 
 #perinfo {
-  overflow:auto;
+  overflow: auto;
   padding: 40px;
   margin: 0;
   border-radius: 5px;
@@ -297,13 +340,12 @@ table {
 
 .innercont {
   /* margin-top: 100px; */
-  padding:0;
+  padding: 0;
   border-radius: 2px;
   border: 1px solid #bdbebf;
   overflow: visible;
   width: 970px;
   height: 650px;
-  
 }
 
 .body {
@@ -376,9 +418,8 @@ label {
   width: 100%;
 }
 
-
 .label-active {
-  color:#0071ff;
+  color: #0071ff;
   font-size: 0.8em;
   top: -3em;
 }

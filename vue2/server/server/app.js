@@ -14,7 +14,7 @@ const userRoute = require('../routes/forTesting')
 
 // const config = require('./DB')
     
-// mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;   
 
 // mongoose.connect(config.DB, {
 //     useNewUrlParser: true,

@@ -103,21 +103,12 @@ userRoute.route("/checkusername").post((req, res) => {
     //     })
 })
 
+
 var user= { username: "", password: ""}
 userRoute.route("/signup").post((req, res) => {
-
     data = req.body
     user = req.body;
-    var token = jwt.sign({
-        username: user.username,
-        password: user.password
-    }, config.secret, {
-        expiresIn: 86400 
-    });
-    res.status(200).send({
-        user: user,
-        auth: true,
-        token: token
+    res.status(200).end()
     });
     
     // let user = new User(req.body)
@@ -151,16 +142,16 @@ userRoute.route("/signup").post((req, res) => {
     //         }
 
     //     })
-})
+// })
 
 userRoute.route('/signedup').get((req,res) => {
-    res.status(200).json(data)
-})
-
-
-userRoute.route('/logout').get((req,res) => {
+    user2 = data
     data = {}
+    res.status(200).json(user2)
 })
+
+
+
 
 userRoute.route('/fullsignup').post((req,res) =>{
     data = {}

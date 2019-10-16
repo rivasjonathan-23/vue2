@@ -2,15 +2,8 @@
   <div class="innercont">
     <form @submit.prevent="register">
       <div class="col-sm-4">
-        <div v-if="isLoggedIn">
-          <h1>Hello&nbsp;{{ this.username }}</h1>
-          <h2 class="uname"></h2>
-          <h3 class="inst">Fill up the form to continue creating your account</h3>
-          <hr>
-           <h4 class="inst">or do it later | <span class="lgt" v-on:click="logout">Logout</span></h4>
-        </div>
-        <p class="sign" v-if="!isLoggedIn">Sign Up</p>
-        <label v-if="!isLoggedIn">
+        <p class="sign">Sign Up</p>
+        <label>
           <p class="label-txt1">USERNAME</p>
           <input type="text" class="input" required v-model="username" v-on:keyup="checkUsername">
           <div class="line-box">
@@ -20,7 +13,7 @@
             <span class="err" v-if="err">Username already taken!</span>
           </transition>
         </label>
-        <label v-if="!isLoggedIn">
+        <label>
           <p class="label-txt1">PASSWORD</p>
           <input type="password" class="input" required v-model="password">
           <div class="line-box">
@@ -33,7 +26,7 @@
             >must be at least 8 characters!</span>
           </transition>
         </label>
-        <label v-if="!isLoggedIn">
+        <label>
           <p class="label-txt1">CONFIRM PASSWORD</p>
           <input type="password" class="input" required v-model="confirmpassword">
           <div class="line-box">
@@ -189,7 +182,7 @@
             <div class="line"></div>
           </div>
         </label>
-        
+
         <table class="lastrow">
           <td>
             <label class="ln">
@@ -217,8 +210,10 @@
 </template>
 
 <script>
+
 import axios from "axios";
 import $ from "jquery";
+import { required, minLength } from 'vuelidate/lib/validators';
 
 export default {
   name: "FullSignUp",
@@ -234,14 +229,14 @@ export default {
       address: "",
       occupation: "",
       gender: "",
-      birthdate: { month: "", day: "", year: "" },
+      birthdate: {month: "", day: "", year: "" },
       isValid: false,
       years: "",
       err: false,
       isLoggedIn: this.$store.getters.isLoggedIn
     };
   },
-
+  
   methods: {
     register() {
       let userInfo = {
@@ -261,7 +256,6 @@ export default {
         this.password != "" &&
         this.password == this.confirmpassword
       ) {
-        // axios.post("http://localhost:8081/user/fullsignup", userInfo);
         this.$store
           .dispatch("fullsignup", userInfo)
           .then(() => this.$router.push("/landingpage"))
@@ -297,12 +291,10 @@ export default {
     logout() {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/");
-        })
+      });
     }
-
   },
   created() {
-    
     if (
       this.username != "" &&
       this.password != "" &&
@@ -328,6 +320,7 @@ export default {
     );
   },
   mounted() {
+    
     $(".input").focus(function() {
       $(this)
         .parent()
@@ -384,6 +377,15 @@ export default {
   text-decoration: underline;
 }
 
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #b3b4b5;
+  margin: 1em 0;
+  padding: 0;
+}
+
 .col-sm-4 {
   overflow: auto;
   background: #e3e3e3;
@@ -395,7 +397,7 @@ export default {
   border-top-right-radius: 0;
   border-right: 1px solid #b3b4b5;
 }
-.uname  {
+.uname {
   text-decoration: underline;
 }
 h5 {
@@ -413,12 +415,13 @@ h5:hover {
   display: none;
   position: absolute;
   border: 1px solid lightgray;
-  z-index:9999;
-  background:#f7fafa;
+  z-index: 9999;
+  background: #f7fafa;
 }
 
 #mnth {
   width: 100%;
+  margin-left: 0;
 }
 
 .BD {
