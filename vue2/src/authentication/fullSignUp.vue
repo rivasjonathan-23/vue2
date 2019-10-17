@@ -281,7 +281,7 @@ export default {
             }
           },
           err => {
-            console.log("error occured");
+            console.log("error");
           }
         );
     },

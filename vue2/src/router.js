@@ -7,6 +7,7 @@ import FullSignUp from './authentication/fullSignUp'
 import OrgSignUp from './authentication/orgSignUp'
 import TypeOfUser from './authentication/typeOfUser'
 import userpage from './views/Userpage'
+//comment
 
 Vue.use(Router)
 
