@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="container">
+  <div class="outercont">
+    <div class="con">
       <SignUp></SignUp>
       
     </div>
@@ -43,9 +43,24 @@ export default {
   background-color: white;
 }
 
-.container {
+body {
+  padding:0;
+  margin:0;
+}
+
+.outercont {
+  width: 100%;
+  padding-left:0;
+  padding-right:0;
+  margin-right:0;
+  margin-left:0;
+}
+
+.con {
+  margin-right: 0;
+  margin-left: 0;
   background-image: linear-gradient(to bottom right, white, #d9dcde);
-  margin: 0;
+  /* margin: 0; */
   padding-top: 0;
   height: 650px;
   width: 100%;

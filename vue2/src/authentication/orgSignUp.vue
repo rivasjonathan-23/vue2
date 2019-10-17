@@ -1,10 +1,9 @@
 <template>
-  <div class="container">
-    <center>
-      <div class="innercont">
-        <form @submit.prevent="register">
-          <div class="col-sm-4">
-            
+  <center>
+    <div class="innercont">
+      <b-form @submit.prevent="register">
+        <b-row>
+          <b-col class="signup" sm="4">
             <p class="sign">Sign Up</p>
             <label>
               <p class="label-txt1">ADMIN USERNAME</p>
@@ -48,9 +47,8 @@
                 >Password doesn't match!</span>
               </transition>
             </label>
-            <!-- </div> -->
-          </div>
-          <div id="perinfo" class="col-sm-8">
+          </b-col>
+          <b-col id="perinfo" sm="8">
             <p class="sign2">About your organization</p>
             <label>
               <p class="label-txt">NAME OF THE ORGANIZATION</p>
@@ -86,11 +84,11 @@
             </label>
 
             <button type="submit">submit</button>
-          </div>
-        </form>
-      </div>
-    </center>
-  </div>
+          </b-col>
+        </b-row>
+      </b-form>
+    </div>
+  </center>
 </template>
 
 <script>
@@ -236,6 +234,11 @@ export default {
   text-decoration: underline;
 }
 
+.bcont {
+  margin:0;
+  /* background:red; */
+}
+
 hr {
   display: block;
   height: 1px;
@@ -244,12 +247,13 @@ hr {
   margin: 1em 0;
   padding: 0;
 }
-.col-sm-4 {
+.signup {
   overflow: auto;
   background: #e3e3e3;
   padding: 40px;
   text-align: center;
   border-right: none;
+  /* border: 1px solid #bdbebf; */
   height: 648px;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
@@ -331,9 +335,11 @@ table {
   overflow: visible;
 }
 
-.container {
+.container2 {
   margin-left: 0;
+  margin-top: 0;
   padding: 0;
+  padding-top: 0;
   width: 100%;
   font-weight: normal;
 }
@@ -343,7 +349,7 @@ table {
   padding: 0;
   border-radius: 2px;
   border: 1px solid #bdbebf;
-  overflow: visible;
+  overflow: hidden;
   width: 970px;
   height: 650px;
 }

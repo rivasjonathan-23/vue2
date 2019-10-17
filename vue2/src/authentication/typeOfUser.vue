@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <b-container class="contain">
     <center>
       <div class="holder">
         <div class="choices">
@@ -19,12 +19,13 @@
         <OrgSignUp v-show="type=='Organization'"></OrgSignUp>
       </div>
     </center>
-  </div>
+  </b-container>
 </template>
 
 <script>
 import FullSignUp from "./fullSignUp";
 import OrgSignUp from "./orgSignUp";
+import $ from "jquery";
 
 export default {
   name: "TypeOfUser",
@@ -57,16 +58,20 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.contain {
+  text-align: center;
   padding-top:90px;
   text-align: center;
   margin-top:0;
   margin-left: 0;
+  margin-right:0;
   padding-left: 0;
   padding-right:0;
   width: 100%;
   font-weight: normal;
 }
+
+
 
 .tp {
   margin-bottom: 2px;

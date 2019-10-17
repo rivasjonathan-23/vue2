@@ -6,7 +6,7 @@ import login from './authentication/Login'
 import FullSignUp from './authentication/fullSignUp'
 import OrgSignUp from './authentication/orgSignUp'
 import TypeOfUser from './authentication/typeOfUser'
-import LandingPage from './authentication/userLandingPage'
+import userpage from './views/Userpage'
 
 Vue.use(Router)
 
@@ -49,8 +49,8 @@ let router = new Router({
       })
     },
     {
-    path: '/landingpage',
-    component: LandingPage,
+    path: '/user',
+    component: userpage,
     meta: {
       requiresAuth: true
     },

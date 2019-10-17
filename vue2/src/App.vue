@@ -44,7 +44,7 @@
       </div>
     </b-navbar>
     <center>
-      <router-view/>
+      <router-view class="content"/>
     </center>
   </div>
 </template>
@@ -125,7 +125,7 @@ export default {
   top: 0px;
   right: 0px;
   margin: 10px;
-  /* display: none; */
+  display: none;
   color: white;
   cursor: pointer;
   transition: ease 0.3s;
@@ -134,6 +134,10 @@ export default {
 .searchbox {
   /* margin: 10px; */
   padding: 0;
+}
+
+.content {
+  padding-top:70px;
 }
 
 #srch {

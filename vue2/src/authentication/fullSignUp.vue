@@ -1,219 +1,220 @@
 <template>
   <div class="innercont">
     <b-form @submit.prevent="register">
-      <div class="col-sm-4">
-        <p class="sign">Sign Up</p>
-        <label>
-          <p class="label-txt1">USERNAME</p>
-          <input type="text" class="input" required v-model="username" v-on:keyup="checkUsername">
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
-          <transition name="slide-fade">
-            <span class="err" v-if="err">Username already taken!</span>
-          </transition>
-        </label>
-        <label>
-          <p class="label-txt1">PASSWORD</p>
-          <input type="password" class="input" required v-model="password">
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
-          <transition name="slide-fade">
-            <span
-              class="err"
-              v-show=" password.length < 8 && password  != ''"
-            >must be at least 8 characters!</span>
-          </transition>
-        </label>
-        <label>
-          <p class="label-txt1">CONFIRM PASSWORD</p>
-          <input type="password" class="input" required v-model="confirmpassword">
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
-          <transition name="slide-fade">
-            <span
-              class="err"
-              v-show="confirmpassword != password && confirmpassword && password"
-            >Password doesn't match!</span>
-          </transition>
-        </label>
-      </div>
-      <div id="perinfo" class="col-sm-8">
-        <p class="sign2">Personal Information</p>
-        <table>
-          <td>
-            <div class="fname">
-              <label class="ln">
-                <p class="label-txt">FIRST NAME</p>
-                <input type="text" class="input" required v-model="firstname">
-                <div class="line-box">
-                  <div class="line"></div>
-                </div>
-              </label>
+      <b-row>
+        <b-col class="signup" sm="4">
+          <p class="sign">Sign Up</p>
+          <label>
+            <p class="label-txt1">USERNAME</p>
+            <input type="text" class="input" required v-model="username" v-on:keyup="checkUsername">
+            <div class="line-box">
+              <div class="line"></div>
             </div>
-          </td>
-          <td>
-            <div class="lname">
-              <label class="ln">
-                <p class="label-txt">LAST NAME</p>
-                <input type="text" class="input" required v-model="lastname">
-                <div class="line-box">
-                  <div class="line"></div>
-                </div>
-              </label>
+            <transition name="slide-fade">
+              <span class="err" v-if="err">Username already taken!</span>
+            </transition>
+          </label>
+          <label>
+            <p class="label-txt1">PASSWORD</p>
+            <input type="password" class="input" required v-model="password">
+            <div class="line-box">
+              <div class="line"></div>
             </div>
-          </td>
-        </table>
-        <label>
-          <p class="label-txt">ADDRESS</p>
-          <input type="text" class="input" required v-model="address">
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
-        </label>
-        <table class="srow">
-          <td>
-            <div class="fname">
-              <label class="ln">
-                <p class="label-txt">AGE</p>
-                <input type="number" class="input" required v-model="age" min="12">
-                <div class="line-box">
-                  <div class="line"></div>
-                </div>
-              </label>
+            <transition name="slide-fade">
+              <span
+                class="err"
+                v-show=" password.length < 8 && password  != ''"
+              >must be at least 8 characters!</span>
+            </transition>
+          </label>
+          <label>
+            <p class="label-txt1">CONFIRM PASSWORD</p>
+            <input type="password" class="input" required v-model="confirmpassword">
+            <div class="line-box">
+              <div class="line"></div>
             </div>
-          </td>
-          <td>
-            <div class="fname">
-              <label class="ln">
-                <p id="gend" class="label-txt">BIRTHDATE</p>
-                <table class="bday">
-                  <td>
-                    <input
-                      autocomplete="off"
-                      type="text"
-                      class="BD"
-                      id="mnth"
-                      placeholder="Month"
-                      min="1"
-                      max="12"
-                      required
-                      v-model="birthdate.month"
-                    >
-                    <div class="month">
-                      <h5 @click="month('January')">January</h5>
-                      <h5 @click="month('February')">February</h5>
-                      <h5 @click="month('March')">March</h5>
-                      <h5 @click="month('April')">April</h5>
-                      <h5 @click="month('May')">May</h5>
-                      <h5 @click="month('June')">June</h5>
-                      <h5 @click="month('July')">July</h5>
-                      <h5 @click="month('August')">August</h5>
-                      <h5 @click="month('September')">September</h5>
-                      <h5 @click="month('October')">October</h5>
-                      <h5 @click="month('November')">November</h5>
-                      <h5 @click="month('December')">December</h5>
-                    </div>
-                  </td>
-                  <td id="day">
-                    <input
-                      type="number"
-                      class="BD"
-                      placeholder="Day"
-                      min="1"
-                      max="32"
-                      required
-                      v-model="birthdate.day"
-                    >
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      class="BD"
-                      placeholder="Year"
-                      min="1990"
-                      max="2019"
-                      required
-                      v-model="birthdate.year"
-                    >
-                  </td>
-                </table>
-                <div class="line-box">
-                  <div class="line"></div>
-                </div>
-              </label>
-            </div>
-          </td>
-          <td>
-            <div class="lname">
-              <label class="ln">
-                <p id="gend" class="label-txt">GENDER</p>
-                <table class="gg">
-                  <td>
-                    <input
-                      type="radio"
-                      class="rad"
-                      value="Male"
-                      name="gender"
-                      required
-                      v-model="gender"
-                    >
-                    <span class="gender">MALE</span>
-                  </td>
-                  <td>
-                    <input type="radio" class="rad" value="Female" name="gender" v-model="gender">
-                    <span class="gender">FEMALE</span>
-                  </td>
-                </table>
-                <div class="line-box">
-                  <div class="line"></div>
-                </div>
-              </label>
-            </div>
-          </td>
-        </table>
-
-        <label>
-          <p class="label-txt">EMAIL ADDRESS</p>
-          <input type="email" class="input" required v-model="email">
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
-        </label>
-
-        <table class="lastrow">
-          <td>
-            <label class="ln">
-              <p class="label-txt">OCCUPATION</p>
-              <input type="text" class="input" required v-model="occupation">
-              <div class="line-box">
-                <div class="line"></div>
+            <transition name="slide-fade">
+              <span
+                class="err"
+                v-show="confirmpassword != password && confirmpassword && password"
+              >Password doesn't match!</span>
+            </transition>
+          </label>
+        </b-col>
+        <b-col id="perinfo" sm="8">
+          <p class="sign2">Personal Information</p>
+          <table>
+            <td>
+              <div class="fname">
+                <label class="ln">
+                  <p class="label-txt">FIRST NAME</p>
+                  <input type="text" class="input" required v-model="firstname">
+                  <div class="line-box">
+                    <div class="line"></div>
+                  </div>
+                </label>
               </div>
-            </label>
-          </td>
-          <td id="years">
-            <label class="ln">
-              <p class="label-txt">YEARS</p>
-              <input type="number" class="input" required v-model="years" min="1">
-              <div class="line-box">
-                <div class="line"></div>
+            </td>
+            <td>
+              <div class="lname">
+                <label class="ln">
+                  <p class="label-txt">LAST NAME</p>
+                  <input type="text" class="input" required v-model="lastname">
+                  <div class="line-box">
+                    <div class="line"></div>
+                  </div>
+                </label>
               </div>
-            </label>
-          </td>
-        </table>
-        <button type="submit">submit</button>
-      </div>
+            </td>
+          </table>
+          <label>
+            <p class="label-txt">ADDRESS</p>
+            <input type="text" class="input" required v-model="address">
+            <div class="line-box">
+              <div class="line"></div>
+            </div>
+          </label>
+          <table class="srow">
+            <td>
+              <div class="fname">
+                <label class="ln">
+                  <p class="label-txt">AGE</p>
+                  <input type="number" class="input" required v-model="age" min="12">
+                  <div class="line-box">
+                    <div class="line"></div>
+                  </div>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="fname">
+                <label class="ln">
+                  <p id="gend" class="label-txt">BIRTHDATE</p>
+                  <table class="bday">
+                    <td>
+                      <input
+                        autocomplete="off"
+                        type="text"
+                        class="BD"
+                        id="mnth"
+                        placeholder="Month"
+                        min="1"
+                        max="12"
+                        required
+                        v-model="birthdate.month"
+                      >
+                      <div class="month">
+                        <h5 @click="month('January')">January</h5>
+                        <h5 @click="month('February')">February</h5>
+                        <h5 @click="month('March')">March</h5>
+                        <h5 @click="month('April')">April</h5>
+                        <h5 @click="month('May')">May</h5>
+                        <h5 @click="month('June')">June</h5>
+                        <h5 @click="month('July')">July</h5>
+                        <h5 @click="month('August')">August</h5>
+                        <h5 @click="month('September')">September</h5>
+                        <h5 @click="month('October')">October</h5>
+                        <h5 @click="month('November')">November</h5>
+                        <h5 @click="month('December')">December</h5>
+                      </div>
+                    </td>
+                    <td id="day">
+                      <input
+                        type="number"
+                        class="BD"
+                        placeholder="Day"
+                        min="1"
+                        max="32"
+                        required
+                        v-model="birthdate.day"
+                      >
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="BD"
+                        placeholder="Year"
+                        min="1990"
+                        max="2019"
+                        required
+                        v-model="birthdate.year"
+                      >
+                    </td>
+                  </table>
+                  <div class="line-box">
+                    <div class="line"></div>
+                  </div>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="lname">
+                <label class="ln">
+                  <p id="gend" class="label-txt">GENDER</p>
+                  <table class="gg">
+                    <td>
+                      <input
+                        type="radio"
+                        class="rad"
+                        value="Male"
+                        name="gender"
+                        required
+                        v-model="gender"
+                      >
+                      <span class="gender">MALE</span>
+                    </td>
+                    <td>
+                      <input type="radio" class="rad" value="Female" name="gender" v-model="gender">
+                      <span class="gender">FEMALE</span>
+                    </td>
+                  </table>
+                  <div class="line-box">
+                    <div class="line"></div>
+                  </div>
+                </label>
+              </div>
+            </td>
+          </table>
+
+          <label>
+            <p class="label-txt">EMAIL ADDRESS</p>
+            <input type="email" class="input" required v-model="email">
+            <div class="line-box">
+              <div class="line"></div>
+            </div>
+          </label>
+
+          <table class="lastrow">
+            <td>
+              <label class="ln">
+                <p class="label-txt">OCCUPATION</p>
+                <input type="text" class="input" required v-model="occupation">
+                <div class="line-box">
+                  <div class="line"></div>
+                </div>
+              </label>
+            </td>
+            <td id="years">
+              <label class="ln">
+                <p class="label-txt">YEARS</p>
+                <input type="number" class="input" required v-model="years" min="1">
+                <div class="line-box">
+                  <div class="line"></div>
+                </div>
+              </label>
+            </td>
+          </table>
+          <button type="submit">submit</button>
+        </b-col>
+      </b-row>
     </b-form>
   </div>
 </template>
 
 <script>
-
 import axios from "axios";
 import $ from "jquery";
-import { required, minLength } from 'vuelidate/lib/validators';
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "FullSignUp",
@@ -229,14 +230,14 @@ export default {
       address: "",
       occupation: "",
       gender: "",
-      birthdate: {month: "", day: "", year: "" },
+      birthdate: { month: "", day: "", year: "" },
       isValid: false,
       years: "",
       err: false,
       isLoggedIn: this.$store.getters.isLoggedIn
     };
   },
-  
+
   methods: {
     register() {
       let userInfo = {
@@ -258,9 +259,8 @@ export default {
       ) {
         this.$store
           .dispatch("fullsignup", userInfo)
-          .then(() => this.$router.push("/landingpage"))
+          .then(() => this.$router.push("/user"))
           .catch(err => console.log(err));
-        alert("successfully registered");
       } else {
         alert("invalid credentials!");
       }
@@ -320,7 +320,6 @@ export default {
     );
   },
   mounted() {
-    
     $(".input").focus(function() {
       $(this)
         .parent()
@@ -386,7 +385,7 @@ hr {
   padding: 0;
 }
 
-.col-sm-4 {
+.signup {
   overflow: auto;
   background: #e3e3e3;
   padding: 40px;
@@ -537,7 +536,7 @@ table {
   padding: 0;
   border-radius: 2px;
   border: 1px solid #bdbebf;
-  overflow: visible;
+  overflow: hidden;
   width: 970px;
   height: 650px;
 }
