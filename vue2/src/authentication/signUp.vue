@@ -154,7 +154,7 @@ export default {
   border: 1px solid lightgrey;
   width: 380px;
   height: 500px;
-  margin-top: 90px;
+  margin-top: 60px;
   margin-bottom: 40px;
   margin-right: 10%;
   margin-left: 10%;
@@ -169,6 +169,7 @@ export default {
 }
 
 .input {
+  text-align: left;
   font-weight: normal;
 }
 

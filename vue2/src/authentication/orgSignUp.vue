@@ -109,7 +109,7 @@ export default {
       isValid: false,
       years: "",
       err: false,
-      isLoggedIn: this.$store.getters.isLoggedIn
+      type:""
     };
   },
 
@@ -124,7 +124,8 @@ export default {
         address: this.address,
         occupation: this.occupation,
         gender: this.gender,
-        age: this.age
+        age: this.age,
+        type:"Organization"
       };
       if (
         this.isValid &&

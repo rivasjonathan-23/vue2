@@ -25,7 +25,7 @@ export default {
 .col-sm-3 {
   border: 1px solid lightgrey;
   width: 400px;
-  margin-top: 90px;
+  /* margin-top: 85px; */
   margin-bottom: 40px;
   margin-right: 10%;
   margin-left: 10%;
@@ -49,6 +49,7 @@ body {
 }
 
 .outercont {
+  margin-top: 0;
   width: 100%;
   padding-left:0;
   padding-right:0;

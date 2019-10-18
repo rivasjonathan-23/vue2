@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     login() {
+    
       let cred = { username: this.username, password: this.password };
        this.$store.dispatch("signup", cred)
         .then(() => this.$router.push("/landingpage"))

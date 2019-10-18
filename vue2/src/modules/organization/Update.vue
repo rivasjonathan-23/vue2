@@ -8,14 +8,14 @@
             
             <label>
               <p class="label-txt">Name</p>
-              <input type="text" class="input" required v-model="name" placeholder="Organization name">
+              <input type="text" class="input" required v-model="name">
               <div class="line-box">
                 <div class="line"></div>
               </div>
             </label>
             <label>
               <p class="label-txt">Username</p>
-              <input type="text" class="input" required v-model="username" placeholder="username">
+              <input type="text" class="input" required v-model="username">
               <div class="line-box">
                 <div class="line"></div>
               </div>
@@ -24,7 +24,7 @@
               <td>
                 <label class="ln">
                   <p class="label-txt">Address</p>
-                  <input type="text" class="input" v-model="address" placeholder="address">
+                  <input type="text" class="input" v-model="address">
                   <div class="line-box">
                     <div class="line"></div>
                   </div>
@@ -34,7 +34,7 @@
 
             <label>
               <p class="label-txt">Email Address</p>
-              <input type="email" class="input" required v-model="email" placeholder="email">
+              <input type="email" class="input" required v-model="email">
               <div class="line-box">
                 <div class="line"></div>
               </div>
@@ -399,7 +399,7 @@ button:hover {
   margin-bottom: 60px;
 }
 
-::placeholder{
+/* ::placeholder{
   text-align: center;
-}
+} */
 </style>

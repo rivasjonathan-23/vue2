@@ -204,7 +204,7 @@
               </label>
             </td>
           </table>
-          <button type="submit">submit</button>
+          <button type="submit" @click="get">submit</button>
         </b-col>
       </b-row>
     </b-form>
@@ -215,31 +215,33 @@
 import axios from "axios";
 import $ from "jquery";
 import { required, minLength } from "vuelidate/lib/validators";
+import {mapGetters} from 'vuex';
 
 export default {
   name: "FullSignUp",
   data() {
     return {
-      username: "",
-      password: "",
-      confirmpassword: "",
-      firstname: "",
-      lastname: "",
-      email: "",
-      age: "",
-      address: "",
-      occupation: "",
-      gender: "",
-      birthdate: { month: "", day: "", year: "" },
+      username: "jrivas23",
+      password: "12345678",
+      confirmpassword: "12345678",
+      firstname: "Jonathan",
+      lastname: "Rivas",
+      email: "rivas@gmail.com",
+      age: "21",
+      address: "Sa imong heart ayeehh",
+      occupation: "Programmer kuno hahah",
+      gender: "Lalaki ako",
+      birthdate: { month: "September", day: "23", year: "1998" },
       isValid: false,
-      years: "",
+      years: "10000",
       err: false,
-      isLoggedIn: this.$store.getters.isLoggedIn
+      type: ""
     };
   },
 
   methods: {
     register() {
+     
       let userInfo = {
         username: this.username,
         password: this.password,
@@ -250,7 +252,8 @@ export default {
         address: this.address,
         occupation: this.occupation,
         gender: this.gender,
-        age: this.age
+        age: this.age,
+        type: "Regular user"
       };
       if (
         this.isValid &&
@@ -292,9 +295,13 @@ export default {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/");
       });
+    },
+    get() {
+       alert(this.$store.getters.token)
     }
   },
   created() {
+   
     if (
       this.username != "" &&
       this.password != "" &&
@@ -353,6 +360,9 @@ export default {
         $(".month").slideUp();
       }
     });
+  },
+  computed: {
+    ...mapGetters(['authStatus'])
   }
 };
 </script>
@@ -402,6 +412,8 @@ hr {
 h5 {
   margin: 0;
   padding: 3px;
+  font-weight: normal;
+  font-size: 15px;
 }
 
 h5:hover {

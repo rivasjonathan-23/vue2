@@ -14,7 +14,9 @@ userRoute.route("/login").post(function (req, res) {
     console.log(token)
     if (req.body.username == "rivas" && req.body.password == "password") {
         var token = jwt.sign({
-            id: req.body.username,                            
+            username: req.body.username, 
+            password: req.body.password,
+            type: "Regular user"                           
         }, config.secret, {
             expiresIn: 86400 // expires in 24 hours
         });
@@ -150,7 +152,12 @@ userRoute.route('/signedup').get((req,res) => {
     res.status(200).json(user2)
 })
 
-
+userRoute.route('/userType').post((req,res) =>{
+    var user = jwt.decode(req.body.data)
+    console.log(user)
+    var type = user.type //example the user type is 'Regular user'
+    res.status(200).json({userType: type})
+})
 
 
 userRoute.route('/fullsignup').post((req,res) =>{
@@ -160,7 +167,8 @@ userRoute.route('/fullsignup').post((req,res) =>{
      user = req.body;
     var token = jwt.sign({
         username: user.username,
-        password: user.password
+        password: user.password,
+        type: user.type
     }, config.secret, {
         expiresIn: 86400 
     });
