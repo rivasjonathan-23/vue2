@@ -8,6 +8,7 @@
             <img src="@/assets/image.png" class>
             <h5>{{ badgename }}</h5>
             <p>{{ venue }}</p>
+            
           </b-card>
         </b-col>
         <b-col cols="8">
@@ -35,7 +36,7 @@
           </div>
           <b-table striped hover :items="people"></b-table>
         </b-col>
-        <b-modal class="modl" id="addRecipient-modal" title="Recepient Information" hide-footer>
+        <b-modal class="modl" id="addRecipient-modal" title="Recepient Information" centered no-close-on-esc no-close-on-backdrop hide-header-close hide-footer>
           <form class="addR" @submit.stop.prevent="handleSubmit">
             <b-label for="usernamei">Search Username</b-label>
             <b-input id="usernamei" v-model="s_username" @change="userExit = true" @keyup="suggest"/>
@@ -70,7 +71,7 @@
             </b-row>
           </form>
         </b-modal>
-        <b-modal class="modl" size="dm" id="certify-modal" title="Certify The Recipients" hide-footer>
+        <b-modal class="modl" size="dm" id="certify-modal" title="Certify The Recipients" centered no-close-on-esc no-close-on-backdrop hide-header-close hide-footer>
           <div class="text-center ifont">
             <form @submit.stop.prevent="handleCertificationSubmit">
               <span>This certificate of</span>
@@ -254,14 +255,18 @@ b-modal {
 .ifont {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  padding-top:100px;
+
 }
 
 
 #addRecipient-modal {
   padding-top:500px;
 }
+.modl {
+  position: relative;
+  margin-top:10% !important;
 
+}
 
 </style>
 

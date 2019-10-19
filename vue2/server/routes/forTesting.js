@@ -12,7 +12,7 @@ var data;
 userRoute.route("/login").post(function (req, res) {
   var token = req.headers["authorization"];
   console.log(token)
-  if (req.body.username == "rivas"&& req.body.password == "password") {
+  if (req.body.username == "rivas" && req.body.password == "password") {
     var token = jwt.sign({
       username: req.body.username,
       password: req.body.password,
@@ -25,7 +25,7 @@ userRoute.route("/login").post(function (req, res) {
       token: token,
       message: "login successful"
     });
-    console.log("this is the "+ token)
+    console.log("this is the " + token)
   } else {
     console.log("wrong password")
     res.status(200).json({
@@ -190,6 +190,7 @@ userRoute.route("/fullsignup").post((req, res) => {
   });
 })
 
+
 //=========================FOR ORGANIZATION============================================================
 userRoute.route("/orgsignup").post((req, res) => {
   data = {}
@@ -210,24 +211,35 @@ userRoute.route("/orgsignup").post((req, res) => {
     token: token
   });
 })
+
+
 var badges = []
 userRoute.route("/offerbadge").post((req, res) => {
-    console.log(req.body)
-    badges.push(req.body)
-  })
+  console.log(badges)
+  badges.push(req.body)
+})
 
+userRoute.route("/badges-org").post((req, res) => {
+  console.log(req.body.data)
+  var org = jwt.decode(req.body.data)
+  console.log(org.username)//gamiton ang username nga gikan sa token para makuha iyang mga badge sa database
+  if (org.username == "Jonathan") {
+    res.status(200).json({badges: badges})
+  }
+})
 
 //========================================================================================================
 
+
 userRoute.route("/userInfo").post((req, res) => { //to get the information of the user
   console.log(req.body.data)
-  var user = jwt.decode(req.body.data) //decode the token and use the username and password to search the information of that account
+  var user = jwt.decode(req.body
+    .data) //decode the token and use the username and password to search the information of that account
   //user.username and user.password will be used to retrieve information
   res.status(200).json({
-    data: userInfo //to be replaced by the data from database
-  }) 
+    data: userInfo //wil be replaced by the data from database
+  })
 })
-
 
 
 

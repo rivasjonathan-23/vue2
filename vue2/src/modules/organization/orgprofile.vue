@@ -3,10 +3,10 @@
     <div class="text-center">
       <br>
       <br>
-      <img :src="image"alt class="border rounded-circle border-dark"id="profile">
+      <img :src="image" alt class="border rounded-circle border-dark" id="profile">
       <div class="card-header">
-        <h3>{{orginfo.orgname }}</h3>
-        <button v-on:click="InsideMethod"class="btn btn-primary btn-block">Update Profile</button>
+        <h4>{{orginfo.orgName }}</h4>
+        <button v-on:click="InsideMethod" class="btn btn-primary btn-block">Update Profile</button>
       </div>
       <b-card>
         <!-- <h5>Organization Details</h5> -->
@@ -32,11 +32,11 @@ export default {
   data() {
     return {
       orginfo: {},
-      image: require("@/assets/pn.png")
+      image: require('@/assets/pn.png')
     };
   },
   created() {
-    this.$store.dispatch("getUserInfo").then((resp) => {
+    this.$store.dispatch('getUserInfo').then((resp) => {
       this.orginfo = resp.data
     });
     // let uri_orgprofile = `http://localhost:4000/profile-org/${this.username}`;

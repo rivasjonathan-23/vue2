@@ -1,5 +1,6 @@
 <template>
   <div id="badges">
+    <h3 class="temp">You haven't offered badges yet</h3>
     <div v-for="(datapass, index) in by3Data" :key="index">
       <Bythree :data="datapass"></Bythree>
       <br />
@@ -11,6 +12,8 @@
 </template>
 <script>
 import Bythree from "./bythree";
+import axios from 'axios';
+import $ from 'jquery';
 export default {
   name: "badges",
   components: {
@@ -25,10 +28,12 @@ export default {
   },
 
   created() {
-    let uri_orgbadges = `http://localhost:4000/badges-org/${this.username}`;
-    this.axios.post(uri_orgbadges).then(response => {
-      var allData = response.data;
+   
+    axios.post("http://localhost:8081/user/badges-org", {data: this.$store.getters.token}).then(response => {
+      var allData = response.data.badges;
+      console.log(allData)
       for (let i = 0; i < allData.length; ++i) {
+         $(".temp").remove();
         if ((i + 1) % 3 == 0) {
           this.temp.push(allData[i]);
           this.by3Data.push(this.temp);
@@ -42,6 +47,7 @@ export default {
           this.excessData.push(allData[i]);
         }
       }
+      this.by3Data.reverse();
     });
   }
 };
@@ -57,5 +63,9 @@ export default {
 .ifont {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.temp {
+  margin-top:250px;
 }
 </style>

@@ -5,8 +5,9 @@
           <b-col class="text-center">
             <b-card>
               <img src="@/assets/image.png" class />
-              <h5>{{badge.bandgename}}</h5>
+              <h5>{{badge.badgename}}</h5>
               <p>{{badge.venue}}</p>
+              <p>{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
             </b-card>
           </b-col>
         </div>

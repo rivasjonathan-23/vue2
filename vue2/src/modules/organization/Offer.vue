@@ -4,8 +4,9 @@
             <img src="@/assets/image.png" class>
             <h5>{{ badgename }}</h5>
             <p>{{ venue }}</p>
+            <p>{{ date.month+" "+date.day+" "+date.year }}</p>
         </div>
-      <form class="signupform" @submit.prevent="OfferBadge">
+      <form class="signupform" @submit.prevent="offerBadge">
         <center>
           <h1 class="sign">Offer A Badge</h1>
         </center>
@@ -125,9 +126,16 @@ export default {
       let badge = {
         badgename: this.badgename, 
         venue: this.venue,
-        date: this.date,
+        date: {month: this.date.month, day: this.date.day, year: this.date.year},
       }
       axios.post("http://localhost:8081/user/offerbadge", badge)
+      alert("Badge successfully posted!");
+      this.badgename = "";
+      this.venue = "",
+      this.date.month = "";
+      this.date.day = "";
+      this.date.year = "";
+      $("p").removeClass(".label-active");
     }
   },
   mounted() {
