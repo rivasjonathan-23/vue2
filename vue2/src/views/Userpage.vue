@@ -55,9 +55,7 @@ export default {
       isUpdateProfile: false,
     };
   },
-  created() {
-    //this.$root.$emit('method_emit')
-  },
+  
   methods: {
     gotoNewsfeed() {
       this.isNewsfeed = true;

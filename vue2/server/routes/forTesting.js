@@ -10,174 +10,221 @@ var data;
 
 
 userRoute.route("/login").post(function (req, res) {
-    var token = req.headers['authorization'];
-    console.log(token)
-    if (req.body.username == "rivas" && req.body.password == "password") {
-        var token = jwt.sign({
-            username: req.body.username, 
-            password: req.body.password,
-            type: "Regular user"                           
-        }, config.secret, {
-            expiresIn: 86400 // expires in 24 hours
-        });
-        res.status(200).json({
-            auth: true,
-            token: token,
-            message: "login successful"
-        });
-        console.log("this is the " + token)
-    } else {
-        console.log('wrong password')
-        res.status(200).json({
-            message: "login unsuccessful"
-        })
-    }
-    // User.findOne({
-    //         username: req.body.username
-    //     })
-    //     .then(doc => {
-    //         if (doc) {
-    //             console.log(doc)
-    //             bcrypt.compare(req.body.password, doc.password)
-    //                 .then(match => {
-    //                     if (match) {
-    //                         console.log("correct")
-    //                         var token = jwt.sign({
-    //                             id: doc._id,                            
-    //                         }, config.secret, {
-    //                             expiresIn: 86400 // expires in 24 hours
-    //                         });
-    //                         res.status(200).send({
-    //                             auth: true,
-    //                             token: token,
-    //                             message: "login successful"
-    //                         });
-    //                         console.log("this is the " + token)
-    //                     } else {
-    //                         console.log('wrong password')
-    //                         res.status(200).json({
-    //                             message: "Wrong password"
-    //                         })
-    //                     }
-    //                 })
-    //                 .catch(err => {
-    //                     if (err) {
-    //                         console.log(err)
-    //                         res.json(err)
-    //                     }
-    //                 })
-    //         }
-    //     })
+  var token = req.headers['authorization'];
+  console.log(token)
+  if (req.body.username == "rivas" && req.body.password == "password") {
+    var token = jwt.sign({
+      username: req.body.username,
+      password: req.body.password,
+      type: "Regular user"
+    }, config.secret, {
+      expiresIn: 86400 // expires in 24 hours
+    });
+    res.status(200).json({
+      auth: true,
+      token: token,
+      message: "login successful"
+    });
+    console.log("this is the " + token)
+  } else {
+    console.log('wrong password')
+    res.status(200).json({
+      message: "login unsuccessful"
+    })
+  }
+  // User.findOne({
+  //         username: req.body.username
+  //     })
+  //     .then(doc => {
+  //         if (doc) {
+  //             console.log(doc)
+  //             bcrypt.compare(req.body.password, doc.password)
+  //                 .then(match => {
+  //                     if (match) {
+  //                         console.log("correct")
+  //                         var token = jwt.sign({
+  //                             id: doc._id,                            
+  //                         }, config.secret, {
+  //                             expiresIn: 86400 // expires in 24 hours
+  //                         });
+  //                         res.status(200).send({
+  //                             auth: true,
+  //                             token: token,
+  //                             message: "login successful"
+  //                         });
+  //                         console.log("this is the " + token)
+  //                     } else {
+  //                         console.log('wrong password')
+  //                         res.status(200).json({
+  //                             message: "Wrong password"
+  //                         })
+  //                     }
+  //                 })
+  //                 .catch(err => {
+  //                     if (err) {
+  //                         console.log(err)
+  //                         res.json(err)
+  //                     }
+  //                 })
+  //         }
+  //     })
 })
 
 
 
 userRoute.route("/checkusername").post((req, res) => {
-    console.log(req.body)
+  console.log(req.body)
 
-    if (req.body.username == "rivas") {
-        res.status(200).json({message: "username already exist"})
-    } else {
-        res.status(200).json({message: "ok"})
-    }
-    // User.findOne({
-    //         username: req.body.username
-    //     })
-    //     .then(doc => {
-    //         if (doc) {
-    //             res.status(200).json({
-    //                 message: "username already exist"
-    //             })
-    //             //console.log(doc)
-    //         }
-    //         if (!doc) {
-    //             res.status(200).json({message: "ok"})
-    //         }
+  if (req.body.username == "rivas") {
+    res.status(200).json({
+      message: "username already exist"
+    })
+  } else {
+    res.status(200).json({
+      message: "ok"
+    })
+  }
+  // User.findOne({
+  //         username: req.body.username
+  //     })
+  //     .then(doc => {
+  //         if (doc) {
+  //             res.status(200).json({
+  //                 message: "username already exist"
+  //             })
+  //             //console.log(doc)
+  //         }
+  //         if (!doc) {
+  //             res.status(200).json({message: "ok"})
+  //         }
 
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //         if (err) {
-    //             res.status(200).json({
-    //                 message: err.name
-    //             })
-    //         }
-    //     })
+  //     })
+  //     .catch(err => {
+  //         console.log(err)
+  //         if (err) {
+  //             res.status(200).json({
+  //                 message: err.name
+  //             })
+  //         }
+  //     })
 })
 
 
-var user= { username: "", password: ""}
+var user = {
+  username: "",
+  password: ""
+}
 userRoute.route("/signup").post((req, res) => {
-    data = req.body
-    user = req.body;
-    res.status(200).end()
-    });
-    
-    // let user = new User(req.body)
-    // user.save()
-    //     .then(() => {
-    //         console.log('saved')
-    //         console.log("id" + user._id)
-    //         data = req.body
-    //         var token = jwt.sign({
-    //             username: user.username,
-    //             password: user.password
-    //         }, config.secret, {
-    //             expiresIn: 86400 // expires in 24 hours
-    //         });
-    //         res.status(200).send({
-    //             auth: true,
-    //             token: token
-    //             //user : 
-    //         });
-    //         console.log("this is the " + token)
-    //         // res.status(200).json({
-    //         //     message: "Sign up successfully"
-    //         // })
+  data = req.body
+  user = req.body;
+  res.status(200).end()
+});
 
-    //     })
-    //     .catch(err => {
-    //         if (err) {
-    //             res.status(200).json({
-    //                 message: "Unexpected error occured"
-    //             })
-    //         }
+// let user = new User(req.body)
+// user.save()
+//     .then(() => {
+//         console.log('saved')
+//         console.log("id" + user._id)
+//         data = req.body
+//         var token = jwt.sign({
+//             username: user.username,
+//             password: user.password
+//         }, config.secret, {
+//             expiresIn: 86400 // expires in 24 hours
+//         });
+//         res.status(200).send({
+//             auth: true,
+//             token: token
+//             //user : 
+//         });
+//         console.log("this is the " + token)
+//         // res.status(200).json({
+//         //     message: "Sign up successfully"
+//         // })
 
-    //     })
+//     })
+//     .catch(err => {
+//         if (err) {
+//             res.status(200).json({
+//                 message: "Unexpected error occured"
+//             })
+//         }
+
+//     })
 // })
 
-userRoute.route('/signedup').get((req,res) => {
-    user2 = data
-    data = {}
-    res.status(200).json(user2)
+userRoute.route('/signedup').get((req, res) => {
+  user2 = data
+  data = {}
+  res.status(200).json(user2)
 })
 
-userRoute.route('/userType').post((req,res) =>{
-    var user = jwt.decode(req.body.data)
-    console.log(user)
-    var type = user.type //example the user type is 'Regular user'
-    res.status(200).json({userType: type})
+userRoute.route('/userType').post((req, res) => {
+  console.log(req.body.data)
+  var user = jwt.decode(req.body.data)
+  console.log(user)
+  var type = user.type //example the user type is 'Regular user'
+  res.status(200).json({
+    userType: type
+  })
+})
+
+var userInfo; //temporary storage of information
+userRoute.route('/fullsignup').post((req, res) => {
+  data = {}
+  console.log("hello")
+  console.log(req.body)
+  userInfo = req.body
+  user = req.body;
+  var token = jwt.sign({
+    username: user.username,
+    password: user.password,
+    type: user.type
+  }, config.secret, {
+    expiresIn: 86400
+  });
+  res.status(200).send({
+    user: user,
+    auth: true,
+    token: token
+  });
+})
+
+//=========================FOR ORGANIZATION============================================================
+userRoute.route('/orgsignup').post((req, res) => {
+  data = {}
+  console.log("hello")
+  console.log(req.body)
+  user = req.body;
+  userInfo = req.body
+  var token = jwt.sign({
+    username: user.username,
+    password: user.password,
+    type: user.type
+  }, config.secret, {
+    expiresIn: 86400
+  });
+  res.status(200).send({
+    user: user,
+    auth: true,
+    token: token
+  });
+})
+//========================================================================================================
+
+userRoute.route('/userInfo').post((req, res) => { //to get the information of the user
+  console.log(req.body.data)
+  var user = jwt.decode(req.body.data) //decode the token and use the username and password to search the information of that account
+  //user.username and user.password will be used to retrieve information
+  res.status(200).json({
+    data: userInfo //to be replaced by the data from database
+  }) 
 })
 
 
-userRoute.route('/fullsignup').post((req,res) =>{
-    data = {}
-    console.log("hello")
-    console.log(req.body)
-     user = req.body;
-    var token = jwt.sign({
-        username: user.username,
-        password: user.password,
-        type: user.type
-    }, config.secret, {
-        expiresIn: 86400 
-    });
-    res.status(200).send({
-        user: user,
-        auth: true,
-        token: token
-    });
-})
+
+
+
 
 
 

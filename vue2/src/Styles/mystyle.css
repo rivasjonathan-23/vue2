@@ -21,14 +21,35 @@
     width: 80%;
     height: auto;
     margin-top: 0px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     background: white;
     text-align: center;
-    float: right;
-    -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    margin-right: 10px;
+    padding-left: 20px;
+    border-left: 1px solid lightgray;
+    float: left;
+    width:550px;
+    /* -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1); */
+    border-radius: 0;
     position: relative;
+  }
+
+  .badgePic {
+    padding:20px;
+    padding-top:60px;
+    width: 250px;
+    margin:5px;
+    float:left;
+  }
+
+  #postB {
+    width: 220px;
+    margin-top: 55px;
+    margin-left: 30px;
+    margin-bottom: 0;
+    
+    float:right;
   }
   
   .input {
@@ -64,6 +85,15 @@
     display: block;
     position: relative;
     margin: 40px 0px;
+  }
+
+  #perinfo {
+    overflow: auto;
+    padding: 40px;
+    margin: 0;
+    border-radius: 5px;
+    height: 100%;
+    text-align: left;
   }
   
   .label-txt {
@@ -142,4 +172,65 @@
     margin-right: 100%;
   }
 
+  .m {
+    margin: 0;
+    padding: 3px;
+    font-weight: normal;
+    font-size: 15px;
+  }
+  
+  .m:hover {
+    background-color: #0071ff;
+    color: white;
+  }
+  
+  .month {
+    padding: 0px;
+    display: none;
+    position: absolute;
+    border: 1px solid lightgray;
+    z-index: 9999;
+    background: #f7fafa;
+  }
+  
+  #mnth {
+    width: 100%;
+    margin-left: 0;
+  }
+  #gend {
+    font-size: 0.8em;
+  }
+  
+  .BD {
+    width: 100%;
+    border: none;
+    margin: 9px;
+    margin-right: 0;
+    font-weight: normal;
+  }
+  
+  .bd {
+    width: 100%;
+    background: red;
+  }
+  .srow {
+    margin-left: 0px;
+    width: 100%;
+  }
+  
+  #years {
+    width: 150px;
+    padding-left: 20px;
+  }
+  .bday {
+    width: 250px;
+    /* padding-top: 20px;
+    margin-top: 10px; */
+  }
+  
+  .bday td {
+    width: 15%;
+    padding-right: 10px;
+    padding-top: 15px;
+  }
   

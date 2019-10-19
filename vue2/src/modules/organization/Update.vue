@@ -61,12 +61,10 @@ import $ from "jquery";
 
 export default {
   name: "FullSignUp",
-  props: {
-    username: String
-  },
   data() {
     return {
       email: "",
+      username:"",
       address: "",
       name: "",
       description: "",
@@ -78,14 +76,27 @@ export default {
   methods: {
     
   },
-  mounted() {
-    let url = `http://localhost:8081/update-org/${this.username}`
-    axios.get(url).then(response => {
-      this.email = response.data.email
-      this.address = response.data.address
-      this.name = response.data.name // org name
-      this.description = response.data.description
+  created() {
+    this.$store.dispatch("getUserInfo").then(resp => {
+      var org = resp.data
+      this.username = org.username,
+      this.email = org.email,
+      this.address = org.address,
+      this.name = org.orgName,
+      this.description = org.description
+      $(".label-txt").addClass("label-active") .css({
+          color: "#555657"
+        });
     })
+  },
+  mounted() {
+    // let url = `http://localhost:8081/update-org/${this.username}`
+    // axios.get(url).then(response => {
+    //   this.email = response.data.email
+    //   this.address = response.data.address
+    //   this.name = response.data.name // org name
+    //   this.description = response.data.description
+    // })
     $(".input").focus(function() {
       $(this)
         .parent()

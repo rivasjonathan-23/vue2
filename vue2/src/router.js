@@ -8,7 +8,6 @@ import OrgSignUp from './authentication/orgSignUp'
 import TypeOfUser from './authentication/typeOfUser'
 import userpage from './views/Userpage'
 import orgpage from './views/Organizationpage'
-import axios from 'axios'
 
 Vue.use(Router)
 
@@ -53,57 +52,46 @@ let router = new Router({
     {
       path: '/user',
       component: userpage,
-      meta: {
-        requiresAuth: true
-      },
       props: (route) => ({
         name: route.query.name
-      })
+      }),
+      beforeEnter(to, from, next) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data)
+            if (data) {
+              next()
+            } else {
+              next("/login")
+            }
+          })
+        } else {
+          next("/login")
+        }
+      }
     },
     {
       path: '/organization',
       component: orgpage,
-      meta: {
-        requiresAuth: true
-      },
       props: (route) => ({
         name: route.query.name
-      })
+      }),
+      beforeEnter(to, from, next) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data)
+            if (!data) {
+              next()
+            } else {
+               next("/login")
+            }
+          })
+        } else {
+          next("/login")
+        }
+      }
     },
   ]
-})
-
-
-
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
-      console.log(store.getters.token)
-      var userType;
-      axios.post(
-          "http://localhost:8081/user/userType", {
-            data: store.getters.token
-          }
-        )
-        .then(resp => {
-          userType = resp.data.userType;
-          console.log(userType)
-          if (userType == "Regular user") {
-            next('/user')
-          }
-          
-          
-        })
-        .catch(err => {
-          console.log(err);
-        })
-     
-    }
-    return
-    next('/login')
-  } else {
-    next()
-  }
 })
 
 export default router

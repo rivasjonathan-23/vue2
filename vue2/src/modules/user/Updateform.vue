@@ -180,34 +180,33 @@ import axios from "axios";
 
 export default {
   name: "SignUp",
-  props:{
+  props: {
     username: String
   },
   data() {
     return {
-      newinfo: 
-        {//to be deleted
-          firstname: "Redgie",
-          lastname: "Gravador",
-          age: 22,
-          gender: "Male",
-          occupation: "Web Developer",
-          years: 5,
-          address: "Tamlamban Cebu",
-          email: "redgie@gmail.com",
-          username: "mrclay"
-        }
+      newinfo: {
+        firstname: "",
+        lastname: "",
+        age: "",
+        gender: "",
+        occupation: "",
+        years: 0,
+        address: "",
+        email: "",
+        username: ""
+      }
     };
   },
   methods: {
-    sendUpdate(event){
-      event.preventDefault()
-      alert("sending update")
-      let uri_update = `http://localhost:8081/update-regular/${this.username}`
+    sendUpdate(event) {
+      event.preventDefault();
+      alert("sending update");
+      let uri_update = `http://localhost:8081/update-regular/${this.username}`;
       axios.post(uri_update, this.newinfo).then(response => {
         /* eslint-disable */
         console.log(response.data);
-      })
+      });
     }
   },
   mounted() {
@@ -229,6 +228,22 @@ export default {
           .find(".label-txt")
           .removeClass("label-active");
       }
+    });
+  },
+  created() {
+    this.$store.dispatch("getUserInfo").then(response => {
+      var user = response.data;
+      this.newinfo = {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        age: user.age,
+        gender: user.gender,
+        occupation: user.occupation,
+        years: user.years,
+        address: user.address,
+        email: user.email,
+        username: user.username
+      };
     });
   }
 };
@@ -383,7 +398,7 @@ label {
   margin-right: 100%;
 }
 
-button{
+button {
   width: 250px;
 }
 </style>

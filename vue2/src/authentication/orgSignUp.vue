@@ -52,7 +52,7 @@
             <p class="sign2">About your organization</p>
             <label>
               <p class="label-txt">NAME OF THE ORGANIZATION</p>
-              <input type="text" class="input" required v-model="name">
+              <input type="text" class="input" required v-model="orgName">
               <div class="line-box">
                 <div class="line"></div>
               </div>
@@ -75,7 +75,7 @@
             <label>
               <p class="label-txt">
                 WHAT YOU DO? (
-                <i>Short description</i>)
+                Short description)
               </p>
               <input id="description" type="text" class="input" required v-model="description">
               <div class="line-box">
@@ -99,17 +99,16 @@ export default {
   name: "OrgSignUp",
   data() {
     return {
-      username: "",
-      password: "",
-      confirmpassword: "",
-      name: "",
-      email: "",
-      address: "",
-      description: "",
-      isValid: false,
-      years: "",
+      username: "Jonathan",
+      password: "12345678",
+      confirmpassword: "12345678",
+      orgName: "myOrg",
+      email: "org@gmail.com",
+      address: "asdfasdfasd",
+      description: "asdfasdfasdf",
+      isValid: true,
       err: false,
-      type:""
+      type: ""
     };
   },
 
@@ -118,22 +117,23 @@ export default {
       let userInfo = {
         username: this.username,
         password: this.password,
-        firstname: this.firstname,
-        lastname: this.lastname,
         email: this.email,
         address: this.address,
-        occupation: this.occupation,
-        gender: this.gender,
-        age: this.age,
-        type:"Organization"
+        orgName: this.orgName,
+        description: this.description,
+        type: "Organization"
       };
       if (
         this.isValid &&
         this.password != "" &&
         this.password == this.confirmpassword
       ) {
-        axios.post("http://localhost:8081/user/fullsignup", userInfo);
-        alert("successfully registered");
+        this.$store
+          .dispatch("fullsignup", userInfo)
+          .then(() => this.$router.push("/organization"))
+          .catch(err => console.log(err));
+        // axios.post("http://localhost:8081/user/fullsignup", userInfo);
+        // alert("successfully registered");
       } else {
         alert("invalid credentials!");
       }
@@ -165,12 +165,6 @@ export default {
     }
   },
   created() {
-    if (this.username != "") {
-      window.addEventListener(
-        "beforeunload",
-        alert("Are you sure you want to sign out?")
-      );
-    }
     if (
       this.username != "" &&
       this.password != "" &&
@@ -236,7 +230,7 @@ export default {
 }
 
 .bcont {
-  margin:0;
+  margin: 0;
   /* background:red; */
 }
 

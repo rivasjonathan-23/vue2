@@ -204,7 +204,7 @@
               </label>
             </td>
           </table>
-          <button type="submit" @click="get">submit</button>
+          <button type="submit">submit</button>
         </b-col>
       </b-row>
     </b-form>
@@ -215,7 +215,6 @@
 import axios from "axios";
 import $ from "jquery";
 import { required, minLength } from "vuelidate/lib/validators";
-import {mapGetters} from 'vuex';
 
 export default {
   name: "FullSignUp",
@@ -227,13 +226,13 @@ export default {
       firstname: "Jonathan",
       lastname: "Rivas",
       email: "rivas@gmail.com",
-      age: "21",
+      age: 21,
       address: "Sa imong heart ayeehh",
-      occupation: "Programmer kuno hahah",
-      gender: "Lalaki ako",
-      birthdate: { month: "September", day: "23", year: "1998" },
-      isValid: false,
-      years: "10000",
+      occupation: "POORgrammer",
+      gender: "Male",
+      birthdate: { month: "September", day: 23, year: 1998 },
+      isValid: true,
+      years: 10,
       err: false,
       type: ""
     };
@@ -252,6 +251,7 @@ export default {
         address: this.address,
         occupation: this.occupation,
         gender: this.gender,
+        years: this.years,
         age: this.age,
         type: "Regular user"
       };
@@ -296,9 +296,6 @@ export default {
         this.$router.push("/");
       });
     },
-    get() {
-       alert(this.$store.getters.token)
-    }
   },
   created() {
    
@@ -352,18 +349,12 @@ export default {
       if ($(".month").is(":hidden")) {
         $("#mnth").val("");
         $(".month").slideDown();
+      } else if  ($("#mnth").val() != "") {
+         $(".month").slideUp();
       }
     });
 
-    $("#mnth").click(function() {
-      if ($("#mnth").val() != "") {
-        $(".month").slideUp();
-      }
-    });
   },
-  computed: {
-    ...mapGetters(['authStatus'])
-  }
 };
 </script>
 
@@ -433,6 +424,9 @@ h5:hover {
 #mnth {
   width: 100%;
   margin-left: 0;
+}
+#gend {
+  font-size: 0.8em;
 }
 
 .BD {
@@ -576,9 +570,7 @@ label {
   margin-top: 15px;
 }
 
-#gend {
-  font-size: 0.8em;
-}
+
 
 .label-txt1 {
   position: absolute;

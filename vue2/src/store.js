@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
+    getInfo_status:''
   },
   mutations: {
     auth_request(state) {
@@ -24,6 +25,10 @@ export default new Vuex.Store({
       state.status = '';
       state.token = '';
     },
+    getInfoStatus(state, status) {
+      state.getInfo_status = status;
+    }
+    
   },
   actions: {
     login({
@@ -64,13 +69,33 @@ export default new Vuex.Store({
           })
           .then(resp => {
             const token = resp.data.token;
-            const user = resp.data.user;
-            // console.log(user)
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = token;
-            // console.log(token);
-            commit('auth_success', token, user);
-           
+            commit('auth_success', token);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit('auth_error');
+            localStorage.removeItem('token');
+            reject(err);
+          })
+      })
+    },
+    orgSignUp ({
+      commit
+    }, user) {
+      return new Promise((resolve, reject) => {
+        commit('auth_request');
+        axios({
+            url: 'http://localhost:8081/user/orgsignup',
+            data: user,
+            method: 'POST'
+          })
+          .then(resp => {
+            const token = resp.data.token;
+            localStorage.setItem('token', token);
+            axios.defaults.headers.common['Authorization'] = token;
+            commit('auth_success', token);
             resolve(resp);
           })
           .catch(err => {
@@ -90,11 +115,54 @@ export default new Vuex.Store({
         resolve();
       })
     },
+    identifyUser() {
+      return new Promise((resolve, reject) => {
+        axios({ url: "http://localhost:8081/user/userType", 
+          data: {data: this.getters.token},
+          method: "POST"
+        })
+        .then(resp => {
+          console.log(this.getters.token)
+          var userType = resp.data.userType;
+          if (userType == "Regular user") {
+            console.log(userType);
+            resolve(true);
+          } else {
+            resolve(false)
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err)
+        });
+      })
+    },
+    getUserInfo({
+      commit
+    }) {
+      return new Promise((resolve, reject) => {
+        axios({ url: "http://localhost:8081/user/userInfo", 
+          data: {data: this.getters.token},
+          method: "POST"
+        })
+        .then(resp => {
+          console.log(resp.data)
+          commit("getInfoStatus","success");
+          resolve(resp.data);
+        })
+        .catch(err => {
+          commit("getInfoStatus","error");
+          reject(err)
+        });
+      })
+    }
+
   },
   getters: {
     isLoggedIn: state => !!state.token,
     token: state => state.token,
-    authStatus: state => state.status
+    authStatus: state => state.status,
+    getInfoStatus: state => state.getInfo_status
   },
-  
+
 });

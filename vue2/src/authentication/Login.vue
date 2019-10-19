@@ -87,7 +87,7 @@ export default {
   border: 1px solid lightgrey;
   width: 400px;
   /* margin-top: 150px; */
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
   background: white;
   padding: 40px;
   text-align: center;
@@ -101,6 +101,7 @@ export default {
   margin: 0;
   padding-top: 150px;
   width: 100%;
+  height: 100%;
 }
 .input {
   font-weight: normal;

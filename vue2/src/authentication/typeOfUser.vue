@@ -50,9 +50,7 @@ export default {
         this.type = type;
       }
     },
-    close() {
-      this.$router.push("/");
-    }
+    
   }
 };
 </script>

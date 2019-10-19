@@ -3,15 +3,16 @@
     <div class="text-center">
       <br>
       <br>
-      <img :src="orginfo.image" alt class="border rounded-circle border-dark" id="profile">
+      <img :src="image" alt class="border rounded-circle border-dark" id="profile">
       <div class="card-header">
         <h3>{{orginfo.orgname }}</h3>
         <button v-on:click="InsideMethod" class="btn btn-primary btn-block">Update Profile</button>
       </div>
       <b-card>
-        <h5>Organization Details</h5>
+        <!-- <h5>Organization Details</h5> -->
         <div class="text-left">
-          <p>Username: {{orginfo.username}}</p>
+          <!-- <p>Username: {{orginfo.username}}</p> -->
+          <p>Organization name: {{orginfo.orgName}}</p>
           <p>Address: {{orginfo.address}}</p>
           <p>Email Address: {{orginfo.email}}</p>
           <p>Description: {{orginfo.description}}</p>
@@ -29,14 +30,18 @@ export default {
   },
   data() {
     return {
-      orginfo: {}
+      orginfo: {},
+      image: require("@/assets/pn.png")
     };
   },
   created() {
-    let uri_orgprofile = `http://localhost:4000/profile-org/${this.username}`;
-    this.axios.get(uri_orgprofile).then(response => {
-      this.orginfo = response.data;
-    });
+    this.$store.dispatch("getUserInfo").then(resp => {
+      this.orginfo = resp.data
+    })
+    // let uri_orgprofile = `http://localhost:4000/profile-org/${this.username}`;
+    // this.axios.get(uri_orgprofile).then(response => {
+    //   this.orginfo = response.data;
+    // });
   },
 
   methods: {

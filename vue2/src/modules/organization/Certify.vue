@@ -249,5 +249,9 @@ export default {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
+
+#addRecipient-modal {
+  padding-top: 500px;
+}
 </style>
 

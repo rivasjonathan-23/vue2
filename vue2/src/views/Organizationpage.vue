@@ -37,7 +37,7 @@ import Badges from "@/modules/organization/Badges.vue";
 import Certify from "@/modules/organization/Certify.vue";
 import Orgprofile from "@/modules/organization/orgprofile.vue";
 import Offer from "@/modules/organization/Offer.vue";
-import UpdateOrg from '@/modules/organization/Update.vue';
+import UpdateOrg from "@/modules/organization/Update.vue";
 
 export default {
   name: "orgpage",
@@ -61,27 +61,27 @@ export default {
       this.isBadges = true;
       this.isToCerfify = false;
       this.isOffer = false;
-      this.isUpdate = false
+      this.isUpdate = false;
     },
     gotoCertify() {
       this.isToCerfify = true;
       this.isBadges = false;
       this.isOffer = false;
-      this.isUpdate = false
+      this.isUpdate = false;
     },
     gotooffer() {
       this.isOffer = true;
       this.isToCerfify = false;
       this.isBadges = false;
-      this.isUpdate = false
+      this.isUpdate = false;
     },
-    gotoUpdate(){
-      this.isUpdate = true,
-      this.isOffer = false;
+    gotoUpdate() {
+      (this.isUpdate = true), (this.isOffer = false);
       this.isToCerfify = false;
       this.isBadges = false;
     }
-  }
+  },
+
 };
 </script>
 
