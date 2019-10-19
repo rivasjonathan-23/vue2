@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+/*eslint linebreak-style: ["error", "windows"]*/
 import Badges from "@/modules/organization/Badges.vue";
 import Certify from "@/modules/organization/Certify.vue";
 import Orgprofile from "@/modules/organization/orgprofile.vue";
@@ -79,7 +80,7 @@ export default {
       (this.isUpdate = true), (this.isOffer = false);
       this.isToCerfify = false;
       this.isBadges = false;
-    }
+    },
   },
 
 };
@@ -90,8 +91,8 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
 }
+
+#orgpage {
+  padding-top:90px;
+}
 </style>
-
-
-
-

@@ -1,7 +1,7 @@
  <template>
   <div id="certify">
     <b-card>
-      <b-row>
+      <b-row class="row">
         <b-col>
           <br>
           <b-card class="bg-light text-center">
@@ -35,8 +35,8 @@
           </div>
           <b-table striped hover :items="people"></b-table>
         </b-col>
-        <b-modal id="addRecipient-modal" title="Recepient Information" hide-footer>
-          <form @submit.stop.prevent="handleSubmit">
+        <b-modal class="modl" id="addRecipient-modal" title="Recepient Information" hide-footer>
+          <form class="addR" @submit.stop.prevent="handleSubmit">
             <b-label for="usernamei">Search Username</b-label>
             <b-input id="usernamei" v-model="s_username" @change="userExit = true" @keyup="suggest"/>
             <br>
@@ -70,7 +70,7 @@
             </b-row>
           </form>
         </b-modal>
-        <b-modal size="dm" id="certify-modal" title="Certify The Recipients" hide-footer>
+        <b-modal class="modl" size="dm" id="certify-modal" title="Certify The Recipients" hide-footer>
           <div class="text-center ifont">
             <form @submit.stop.prevent="handleCertificationSubmit">
               <span>This certificate of</span>
@@ -132,7 +132,7 @@ export default {
   data() {
     return {
       people: [],
-      options: [],
+      options: [{value: "speaker", text: "speaker"}],
       badgename: "",
       venue: "",
       date: new Date().toDateString(),
@@ -234,10 +234,16 @@ export default {
 .size50 {
   height: 50px;
   width: 50px;
+  margin-top:100px;
 }
 .red {
   color: red;
 }
+
+b-modal {
+  top:100px;
+}
+
 
 .inputline {
   background: transparent;
@@ -248,10 +254,14 @@ export default {
 .ifont {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  padding-top:100px;
 }
 
+
 #addRecipient-modal {
-  padding-top: 500px;
+  padding-top:500px;
 }
+
+
 </style>
 

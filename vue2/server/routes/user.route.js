@@ -1,16 +1,16 @@
-const express = require('express');
+const express = require("express");
 const userRoute = express.Router();
-const User = require('../models/User')
-const bcrypt = require('bcryptjs')
-const config = require('./config')
-const jwt = require('jsonwebtoken')
+const User = require("../models/User")
+const bcrypt = require("bcryptjs")
+const config = require("./config")
+const jwt = require("jsonwebtoken")
 
 var data;
 
 
 
 userRoute.route("/login").post(function (req, res) {
-    var token = req.headers['authorization'];
+    var token = req.headers["authorization"];
     console.log(token)
 
     User.findOne({
@@ -39,11 +39,11 @@ userRoute.route("/login").post(function (req, res) {
                                 token: token,
                                 message: "login successful"
                             });
-                            console.log("this is the " + token)
+                            console.log("this is the "+ token)
                             //res.session.token = token ;
                             // Passwords match
                         } else {
-                            console.log('wrong password')
+                            console.log("wrong password")
                             res.status(200).json({
                                 message: "Wrong password"
                             })
@@ -100,8 +100,8 @@ userRoute.route("/signup").post((req, res) => {
     let user = new User(req.body)
     user.save()
         .then(() => {
-            console.log('saved')
-            console.log("id" + user._id)
+            console.log("saved")
+            console.log("id"+ user._id)
             data = req.body
             var token = jwt.sign({
                 username: user.username,
@@ -114,7 +114,7 @@ userRoute.route("/signup").post((req, res) => {
                 token: token
                 //user : 
             });
-            console.log("this is the " + token)
+            console.log("this is the "+ token)
             // res.status(200).json({
             //     message: "Sign up successfully"
             // })
@@ -130,11 +130,11 @@ userRoute.route("/signup").post((req, res) => {
         })
 })
 
-userRoute.route('/signedup').post((req,res) => {
+userRoute.route("/signedup").post((req,res) => {
     res.json(data).send()
 })
 
-userRoute.route('/fullsignup').post((req,res) =>{
+userRoute.route("/fullsignup").post((req,res) =>{
     console.log("hello")
     console.log(req.body)
 })

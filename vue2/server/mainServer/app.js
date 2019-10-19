@@ -1,18 +1,18 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const morgan = require('morgan')
-const mongoose = require('mongoose')
+const express = require("express")
+const bodyParser = require("body-parser")
+const cors = require("cors")
+const morgan = require("morgan")
+const mongoose = require("mongoose")
 const app = express()
-app.use(morgan('combined'))
+app.use(morgan("combined"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: false
 }))
 
-const userRoute = require('../routes/forTesting')
+const userRoute = require("../routes/forTesting")
 
-// const config = require('./DB')
+// const config = require("./DB")
     
 // mongoose.Promise = global.Promise;   
 
@@ -21,10 +21,10 @@ const userRoute = require('../routes/forTesting')
 //     useUnifiedTopology: true
 // }).then(
 //     () => {
-//         console.log('Database is connected')
+//         console.log("Database is connected")
 //     },
 //     err => {
-//        console.log('Can not connect to the database' + err)
+//        console.log("Can not connect to the database" + err)
 //     }
 // );
 
@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 // app.post("/login", (req, res) => {
 //     console.log(req.body.accountinfo)
 //     console.log(req.body)
-//     if ("rivas" == req.body.username && req.body.password == "123") {
+//     if ("rivas"== req.body.username && req.body.password == "123") {
 //         res.status(200).end("login successful")
 //     } else {
 //         res.status(200).end("invalid credential")
@@ -51,8 +51,8 @@ app.get("/", (req, res) => {
 // })
 
 // app.post("/fullsignup", (req, res) => {
-//     user.username = ''
-//     user.password = ''
+//     user.username = ""
+//     user.password = ""
 //     console.log(req.body)
 // })
 
@@ -87,7 +87,7 @@ app.get("/", (req, res) => {
 // app.get("/signedup", (req, res) => {
    
 //     var data = user
-//     if (data.username != '') {
+//     if (data.username != "") {
 //         res.status(200).json({"data": data})
 //     } else {
 //         res.status(200).json({"data":"error"})

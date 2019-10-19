@@ -32,15 +32,19 @@
     </div>
   </div>
 </template>
+
 <script>
-import Mybadge from "@/modules/user/Mybadge.vue";
-import Newsfeed from "@/modules/user/Newsfeed.vue";
-import Profile from "@/modules/user/Profile.vue";
+/*eslint linebreak-style: ["error", "windows"]*/
+import Mybadge from '@/modules/user/Mybadge.vue';
+import Newsfeed from '@/modules/user/Newsfeed.vue';
+import Profile from '@/modules/user/Profile.vue';
 import Updateform from '@/modules/user/Updateform.vue';
+
+
 export default {
   name: "userpage",
-  props:{
-    username: String,
+  props: {
+    username: String
   },
   components: {
     Mybadge,
@@ -52,10 +56,10 @@ export default {
     return {
       isBadgeList: false,
       isNewsfeed: true,
-      isUpdateProfile: false,
+      isUpdateProfile: false
     };
   },
-  
+
   methods: {
     gotoNewsfeed() {
       this.isNewsfeed = true;
@@ -75,17 +79,23 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 #profile {
   height: 200px;
 }
+
 .pd-side {
   padding-left: 20px;
   padding-right: 20px;
 }
 
-div {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+#userpage {
+  padding-top: 90px;
 }
+
+div {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
 </style>

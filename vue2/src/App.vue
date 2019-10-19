@@ -13,7 +13,6 @@
             <li>
               <b-nav-form id="search" @submit.prevent="search">
                 <div class="searchbox">
-                  <!-- <span class="material-icons">search</span> -->
                   <input
                     type="text"
                     id="srch"
@@ -51,6 +50,8 @@
 
 
 <script>
+ // eslint-disable-next-line
+ /* eslint-disable */
 import $ from "jquery";
 import axios from "axios";
 
@@ -96,7 +97,7 @@ export default {
       var win = $(this);
       if (win.width() >= 750) {
         $("ul").show();
-        $(".fa").hide();
+        $('.fa').hide();
       }
     });
 
@@ -107,7 +108,7 @@ export default {
         $(".fa").show();
       }
     });
-  }
+  },
 };
 </script>
 

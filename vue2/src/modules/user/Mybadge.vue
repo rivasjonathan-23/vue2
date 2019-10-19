@@ -44,7 +44,7 @@ export default {
     };
   },
   mounted() {
-    this.badgelist = [//to be deleted
+    this.badgelist = [
       {
         badgename: "Medical Mission",
         certificateCategory: "Appreciation",

@@ -5,7 +5,7 @@
             <h5>{{ badgename }}</h5>
             <p>{{ venue }}</p>
         </div>
-      <form class="signupform" @submit.prevent="Offer">
+      <form class="signupform" @submit.prevent="OfferBadge">
         <center>
           <h1 class="sign">Offer A Badge</h1>
         </center>
@@ -41,24 +41,8 @@
             </div>
           </div>
         </label>
-         <label>
-          <div class="fixedwidth">
-            <p class="label-txt">Description | Additional Information</p>
-            <input
-              type="text"
-              class="input"
-              name="venue"
-              v-model="additionalInfo"
-              autocomplete="off"
-              required
-            >
-            <div class="line-box">
-              <div class="line"></div>
-            </div>
-          </div>
-        </label>
         <label class="ln">
-          <p id="gend" class="label-txt">Date and time</p>
+          <p id="gend" class="label-txt">Date</p>
           <table class="bday">
             <td>
               <input
@@ -130,7 +114,6 @@ export default {
     return {
       badgename: "",
       venue: "",
-      additionalInfo: "",
       date: {month: "", day: "",year: ""}
     };
   },
@@ -138,6 +121,14 @@ export default {
      month(m) {
       this.date.month = m;
     },
+    offerBadge() {
+      let badge = {
+        badgename: this.badgename, 
+        venue: this.venue,
+        date: this.date,
+      }
+      axios.post("http://localhost:8081/user/offerbadge", badge)
+    }
   },
   mounted() {
     $(".input").focus(function() {

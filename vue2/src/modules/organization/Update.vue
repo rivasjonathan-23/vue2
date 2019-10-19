@@ -1,53 +1,59 @@
 <template>
-  <div class="container">
+  <div class='container'>
     <center>
-      <div class="innercont">
-        <form @submit.prevent="register">
-          <div id="perinfo" class="col-sm-8">
-            <p class="sign2">Update Organization Information</p>
-            
+      <div class='innercont'>
+        <form @submit.prevent='register'>
+          <div id='perinfo'class='col-sm-8'>
+            <p class='sign2'>Update Organization Information</p>
+
             <label>
-              <p class="label-txt">Name</p>
-              <input type="text" class="input" required v-model="name">
-              <div class="line-box">
-                <div class="line"></div>
+              <p class='label-txt'>Name</p>
+              <input type='text'class='input'required v-model='name'>
+              <div class='line-box'>
+                <div class='line'></div>
               </div>
             </label>
             <label>
-              <p class="label-txt">Username</p>
-              <input type="text" class="input" required v-model="username">
-              <div class="line-box">
-                <div class="line"></div>
+              <p class='label-txt'>Username</p>
+              <input type='text'class='input'required v-model='username'>
+              <div class='line-box'>
+                <div class='line'></div>
               </div>
             </label>
-            <table class="lastrow">
+            <table class='lastrow'>
               <td>
-                <label class="ln">
-                  <p class="label-txt">Address</p>
-                  <input type="text" class="input" v-model="address">
-                  <div class="line-box">
-                    <div class="line"></div>
+                <label class='ln'>
+                  <p class='label-txt'>Address</p>
+                  <input type='text'class='input'v-model='address'>
+                  <div class='line-box'>
+                    <div class='line'></div>
                   </div>
                 </label>
               </td>
             </table>
 
             <label>
-              <p class="label-txt">Email Address</p>
-              <input type="email" class="input" required v-model="email">
-              <div class="line-box">
-                <div class="line"></div>
+              <p class='label-txt'>Email Address</p>
+              <input type='email'class='input'required v-model='email'>
+              <div class='line-box'>
+                <div class='line'></div>
               </div>
             </label>
 
             <label>
-              <p class="label-txt">Description</p>
-              <input type="email" class="input" required v-model="description" placeholder="what do you do?">
-              <div class="line-box">
-                <div class="line"></div>
+              <p class='label-txt'>Description</p>
+              <input
+                type='email'
+                class='input'
+                required
+                v-model='description'
+                placeholder='what do you do?'
+              >
+              <div class='line-box'>
+                <div class='line'></div>
               </div>
             </label>
-            <button type="submit">submit</button>
+            <button type='submit'>submit</button>
           </div>
         </form>
       </div>
@@ -56,38 +62,38 @@
 </template>
 
 <script>
-import axios from "axios";
-import $ from "jquery";
+/*eslint linebreak-style: ['error', 'windows']*/
+import axios from 'axios';
+import $ from 'jquery';
 
 export default {
-  name: "FullSignUp",
+  name: 'FullSignUp',
   data() {
     return {
-      email: "",
-      username:"",
-      address: "",
-      name: "",
-      description: "",
+      email: '',
+      username: '',
+      address: '',
+      name: '',
+      description: '',
       isValid: false,
       err: false
     };
   },
 
-  methods: {
-    
-  },
   created() {
-    this.$store.dispatch("getUserInfo").then(resp => {
-      var org = resp.data
-      this.username = org.username,
-      this.email = org.email,
-      this.address = org.address,
-      this.name = org.orgName,
-      this.description = org.description
-      $(".label-txt").addClass("label-active") .css({
-          color: "#555657"
-        });
-    })
+    this.$store.dispatch('getUserInfo').then(resp => {
+      var org = resp.data;
+      (this.username = org.username),
+        (this.email = org.email),
+        (this.address = org.address),
+        (this.name = org.orgName),
+        (this.description = org.description),
+        $('.label-txt')
+          .addClass('label-active')
+          .css({
+            color: '#555657',
+          });
+    });
   },
   mounted() {
     // let url = `http://localhost:8081/update-org/${this.username}`
@@ -97,31 +103,31 @@ export default {
     //   this.name = response.data.name // org name
     //   this.description = response.data.description
     // })
-    $(".input").focus(function() {
+    $('.input').focus(function() {
       $(this)
         .parent()
-        .find("p")
-        .addClass("label-active")
+        .find('p')
+        .addClass('label-active')
         .css({
-          color: "#0071ff"
+          color: '#0071ff',
         });
     });
 
-    $(".input").focusout(function() {
-      if ($(this).val() == "") {
+    $('.input').focusout(function() {
+      if ($(this).val() == '') {
         $(this)
           .parent()
-          .find("p")
-          .removeClass("label-active");
+          .find('p')
+          .removeClass('label-active');
       }
       $(this)
         .parent()
-        .find("p")
+        .find('p')
         .css({
-          color: "#555657"
+          color: '#555657',
         });
     });
-  }
+  },
 };
 </script>
 

@@ -1,27 +1,28 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import store from './store.js'
-import Home from './authentication/home'
-import login from './authentication/Login'
-import FullSignUp from './authentication/fullSignUp'
-import OrgSignUp from './authentication/orgSignUp'
-import TypeOfUser from './authentication/typeOfUser'
-import userpage from './views/Userpage'
-import orgpage from './views/Organizationpage'
+import Vue from "vue";
+import Router from "vue-router";
+import store from "./store";
+import Home from "@/authentication/home.vue";
+import login from "@/authentication/Login.vue";
+import FullSignUp from "@/authentication/fullSignUp.vue";
+import OrgSignUp from "@/authentication/orgSignUp.vue";
+import TypeOfUser from "@/authentication/typeOfUser.vue";
+import userpage from "@/views/Userpage.vue";
+import orgpage from "@/views/Organizationpage.vue";
 
-Vue.use(Router)
-
+Vue.use(Router);
+// eslint-disable-next-line
+/* eslint-disable */
 // export default new Router({
 let router = new Router({
-  mode: 'history',
+  mode: "history",
 
   routes: [{
-      path: '/',
+      path: "/",
       component: Home
     },
 
     {
-      path: '/login',
+      path: "/login",
       component: login,
       props: (route) => ({
         name: route.query.name
@@ -29,28 +30,28 @@ let router = new Router({
     },
 
     {
-      path: '/signup',
+      path: "/signup",
       component: FullSignUp,
       props: (route) => ({
         name: route.query.name
       })
     },
     {
-      path: '/organizationsignup',
+      path: "/organizationsignup",
       component: OrgSignUp,
       props: (route) => ({
         name: route.query.name
       })
     },
     {
-      path: '/signUpAs',
+      path: "/signUpAs",
       component: TypeOfUser,
       props: (route) => ({
         name: route.query.name
       })
     },
     {
-      path: '/user',
+      path: "/user",
       component: userpage,
       props: (route) => ({
         name: route.query.name
@@ -60,18 +61,18 @@ let router = new Router({
           store.dispatch("identifyUser").then((data) => {
             console.log(data)
             if (data) {
-              next()
+              next();
             } else {
-              next("/login")
+              next("/login");
             }
           })
         } else {
-          next("/login")
+          next("/login");
         }
-      }
+      },
     },
     {
-      path: '/organization',
+      path: "/organization",
       component: orgpage,
       props: (route) => ({
         name: route.query.name
@@ -79,15 +80,15 @@ let router = new Router({
       beforeEnter(to, from, next) {
         if (store.getters.isLoggedIn) {
           store.dispatch("identifyUser").then((data) => {
-            console.log(data)
+            console.log(data);
             if (!data) {
-              next()
+              next();
             } else {
-               next("/login")
+              next("/login");
             }
           })
         } else {
-          next("/login")
+          next("/login");
         }
       }
     },
