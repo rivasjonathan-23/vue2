@@ -168,6 +168,38 @@ userRoute.route("/userType").post((req, res) => {
     userType: type
   })
 })
+var badges = [] //temporary storage for offered or posted badges
+
+
+userRoute.route("/availbadge").post((req, res) => {
+  console.log(req.body);
+  var availed =false;
+  for (var i=0;i<badges.length; ++i) {
+    if (badges[i].code == req.body.code) {
+      availed = true;
+      var user = jwt.decode(req.body.credentials);
+      badges[i].recipient.push({username: user.username, role: "role model haha"});
+      res.status(200).json({message: "successful"});
+    }
+  }
+  if (!availed) {
+    res.status(200).json({message: "incorrect code"})
+  }
+})
+
+userRoute.route("/certify").post((req, res) => {
+  var user = jwt.decode(req.body.credentials)
+  if (user.username == "Jonathan") { //as if gipangita nato sa database
+    console.log(badges);
+    res.status(200).json({badges: badges});
+  }
+})
+
+
+
+userRoute.route("/postbadges").get((req, res) => {
+  res.status(200).json({badges: badges})
+})
 
 var userInfo; //temporary storage of information
 userRoute.route("/fullsignup").post((req, res) => {
@@ -212,8 +244,6 @@ userRoute.route("/orgsignup").post((req, res) => {
   });
 })
 
-
-var badges = []
 userRoute.route("/offerbadge").post((req, res) => {
   console.log(badges)
   badges.push(req.body)

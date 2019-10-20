@@ -168,6 +168,7 @@
         <b-col>
           <br>
           <button class="btn btn-primary btn-block btn-lg" v-on:click="sendUpdate">Submit</button>
+          <button class="btn btn-danger btn-block btn-lg" v-on:click="sendUpdate">Cancel</button>
         </b-col>
       </b-row>
     </form>

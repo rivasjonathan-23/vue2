@@ -1,6 +1,8 @@
 <template>
   <div id="badges">
-    <h3 class="temp">You haven't offered badges yet</h3>
+     <b-card>
+    <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+    
     <div v-for="(datapass, index) in by3Data" :key="index">
       <Bythree :data="datapass"></Bythree>
       <br />
@@ -8,6 +10,7 @@
     <b-row>
       <Bythree :data="excessData"></Bythree>
     </b-row>
+  </b-card>
   </div>
 </template>
 <script>
@@ -28,12 +31,12 @@ export default {
   },
 
   created() {
-   
     axios.post("http://localhost:8081/user/badges-org", {data: this.$store.getters.token}).then(response => {
-      var allData = response.data.badges;
+      var allData = response.data.badges.reverse();
       console.log(allData)
+      var hasContent = false;
       for (let i = 0; i < allData.length; ++i) {
-         $(".temp").remove();
+        hasContent = true;
         if ((i + 1) % 3 == 0) {
           this.temp.push(allData[i]);
           this.by3Data.push(this.temp);
@@ -47,7 +50,9 @@ export default {
           this.excessData.push(allData[i]);
         }
       }
-      this.by3Data.reverse();
+      if (!hasContent) {
+         $(".temp").show();
+      }
     });
   }
 };

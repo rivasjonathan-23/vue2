@@ -123,9 +123,18 @@ export default {
       this.date.month = m;
     },
     offerBadge() {
+      var bcode = "";
+      var char = "abcdefghijklmnopqrstuvwxyz1234567890"
+      for (var i=0;i<6;++i) {
+        var index = Math.floor(Math.random() * char.length);
+        bcode += char.charAt(index);
+      }
+      alert(bcode)
       let badge = {
+        code: bcode,
         badgename: this.badgename, 
         venue: this.venue,
+        recipient: [],
         date: {month: this.date.month, day: this.date.day, year: this.date.year},
       }
       axios.post("http://localhost:8081/user/offerbadge", badge)

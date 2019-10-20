@@ -7,13 +7,13 @@
         </b-col>
         <b-col cols="9" class>
           <div class="bg-light text-center">
-            <div>
-              <h3>
+            <div class="nav">
+              <h4>
                 <b-tabs>
                   <b-tab v-on:click="gotoNewsfeed" title="News feed" active align="left"></b-tab>
                   <b-tab v-on:click="gotoBadgeList" title="Badge List" align="right"></b-tab>
                 </b-tabs>
-              </h3>
+              </h4>
             </div>
           </div>
           <div v-if="isBadgeList">
@@ -35,16 +35,22 @@
 
 <script>
 /*eslint linebreak-style: ["error", "windows"]*/
-import Mybadge from '@/modules/user/Mybadge.vue';
-import Newsfeed from '@/modules/user/Newsfeed.vue';
-import Profile from '@/modules/user/Profile.vue';
-import Updateform from '@/modules/user/Updateform.vue';
-
+import axios from 'axios';
+import Mybadge from "@/modules/user/Mybadge.vue";
+import Newsfeed from "@/modules/user/Newsfeed.vue";
+import Profile from "@/modules/user/Profile.vue";
+import Updateform from "@/modules/user/Updateform.vue";
+import $ from "jquery";
 
 export default {
   name: "userpage",
   props: {
-    username: String
+    username: String,
+  },
+  data() {
+    return {
+      badgeCode: "",
+    }
   },
   components: {
     Mybadge,
@@ -72,10 +78,11 @@ export default {
       this.isUpdateProfile = false;
     },
     gotoUpdateProfile() {
+      // $(".nav").hide();
       this.isUpdateProfile = true;
       this.isBadgeList = false;
       this.isNewsfeed = false;
-    }
+    },
   }
 };
 </script>
@@ -94,8 +101,18 @@ export default {
   padding-top: 90px;
 }
 
-div {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+#availbadge {
+  position: fixed;
+  top: 100px;
+  right: 110px;
+  width: 200px;
+  z-index: 9999;
 }
-
+.modl {
+  width: 300px;
+}
+div {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
 </style>
