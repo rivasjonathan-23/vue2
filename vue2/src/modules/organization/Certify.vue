@@ -1,16 +1,35 @@
  <template>
   <div id="certify">
-    <b-card>
-       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+    <b-button
+      id="createC"
+      variant="primary"
+      class="btn btn-block shadow rounded"
+      v-b-modal.offer
+    >Create new certificate</b-button>
+    <b-modal
+      size="lg"
+      id="offer"
+      title="Create new badge"
+      centered
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-header-close
+      hide-footer
+    >
+      <Offer></Offer>
+    </b-modal>
+    <b-card class="contain">
+      <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
       <div v-for="(badge, index) in badges" :key="index">
         <b-row class="row">
           <b-col>
             <br>
             <b-card class="bg-light text-center">
               <img src="@/assets/image.png" class>
-              <h5>{{ badge.badgename }}</h5>
-              <p>{{ badge.venue }}</p>
-              <p>{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+              <h5 class="binfo">{{ badge.badgename }}</h5>
+              <p class="binfo">{{ badge.venue }}</p>
+              <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+              <p class="binfo">Code:&nbsp;{{ badge.code }}</p>
             </b-card>
           </b-col>
           <b-col cols="8">
@@ -38,34 +57,32 @@
             </div>
             <b-table striped hover :items="badge.recipient"></b-table>
           </b-col>
-          <b-modal
-            class="modl"
-            id="addRecipient-modal"
-            title="Recepient Information"
-            centered
-            no-close-on-esc
-            no-close-on-backdrop
-            hide-header-close
-            hide-footer
-          >
-            <form class="addR" @submit.stop.prevent="handleSubmit">
-              <b-label for="usernamei">Search Username</b-label>
-              <b-input
-                id="usernamei"
-                v-model="s_username"
-                @change="userExit = true"
-                @keyup="suggest"
-              />
-              <br>
-              <b-label for="role">Pick Role</b-label>
+        </b-row>
+      </div>
+    </b-card>
+    <b-modal
+      class="modl"
+      id="addRecipient-modal"
+      title="Recepient Information"
+      centered
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-header-close
+      hide-footer
+    >
+      <form class="addR" @submit.stop.prevent="handleSubmit">
+        <label for="usernamei">Search Username</label>
+        <b-input id="usernamei" v-model="s_username" @change="userExit = true" @keyup="suggest"/>
+        <br>
+        <!-- <b-label for="role">Pick Role</b-label>
               <b-card>
                 <b-form-select v-model="selectedRole" :options="options" @change="removeWarning"></b-form-select>
                 <i>
                   <p class="text-center red">{{ warning }}</p>
                 </i>
               </b-card>
-              <br>
-              <b-card v-if="userExit">
+        <br>-->
+        <!-- <b-card v-if="userExit">
                 <b-row>
                   <b-col class="text-center">
                     <img src="@/assets/pro.png" rounded="circle" class="size50">
@@ -75,89 +92,90 @@
                     <p>Username: {{ s_username }}</p>
                   </b-col>
                 </b-row>
-              </b-card>
-              <br>
-              <b-row>
-                <b-col>
-                  <b-button v-on:click="handleCancel" variant="danger" class="btn btn-block">Cancel</b-button>
-                </b-col>
-                <b-col cols="8">
-                  <b-button type="submit" variant="primary" class="btn btn-block">Add Recipient</b-button>
-                </b-col>
-              </b-row>
-            </form>
-          </b-modal>
-          <b-modal
-            class="modl"
-            size="dm"
-            id="certify-modal"
-            title="Certify The Recipients"
-            centered
-            no-close-on-esc
-            no-close-on-backdrop
-            hide-header-close
-            hide-footer
-          >
-            <div class="text-center ifont">
-              <form @submit.stop.prevent="handleCertificationSubmit">
-                <span>This certificate of</span>
-                <br>
-                <input
-                  class="inputline"
-                  size="15"
-                  placeholder="Certificate Category"
-                  v-model="certificateCategory"
-                >
-                <br>
-                <br>
-                <span>is awarded to</span>
-                <br>
-                <p>
-                  (Names are auto generated)
-                  <br>for
-                </p>
-                <textarea
-                  name="description"
-                  id="description"
-                  cols="30"
-                  rows="3"
-                  placeholder="Description of the event"
-                  v-model="descriptions"
-                ></textarea>
-                <p>at</p>
-                <input class="inputline" size="30" placeholder="Venue of the event" v-model="venue">
-                <br>
-                <p>Given this {{ date }}</p>
-                <hr>
-                <b-row>
-                  <b-col>
-                    <b-button
-                      variant="danger"
-                      class="btn btn-block"
-                      v-on:click="resetCertification"
-                    >Cancel</b-button>
-                  </b-col>
-                  <b-col cols="8">
-                    <b-button variant="primary" class="btn btn-block" type="sumbit">Certify Now</b-button>
-                  </b-col>
-                </b-row>
-              </form>
-            </div>
-          </b-modal>
+        </b-card>-->
+        <br>
+        <b-row>
+          <b-col>
+            <b-button v-on:click="handleCancel" variant="danger" class="btn btn-block">Cancel</b-button>
+          </b-col>
+          <b-col cols="8">
+            <b-button type="submit" variant="primary" class="btn btn-block">Add Recipient</b-button>
+          </b-col>
         </b-row>
+      </form>
+    </b-modal>
+    <b-modal
+      class="modl"
+      size="dm"
+      id="certify-modal"
+      title="Certify The Recipients"
+      centered
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-header-close
+      hide-footer
+    >
+      <div class="text-center ifont">
+        <form @submit.stop.prevent="handleCertificationSubmit">
+          <span>This certificate of</span>
+          <br>
+          <input
+            class="inputline"
+            size="15"
+            placeholder="Certificate Category"
+            v-model="certificateCategory"
+          >
+          <br>
+          <br>
+          <span>is awarded to</span>
+          <br>
+          <p>
+            (Names are auto generated)
+            <br>for
+          </p>
+          <textarea
+            name="description"
+            id="description"
+            cols="30"
+            rows="3"
+            placeholder="Description of the event"
+            v-model="descriptions"
+          ></textarea>
+          <p>at</p>
+          <input class="inputline" size="30" placeholder="Venue of the event" v-model="venue">
+          <br>
+          <p>Given this {{ date }}</p>
+          <hr>
+          <b-row>
+            <b-col>
+              <b-button
+                variant="danger"
+                class="btn btn-block"
+                v-on:click="resetCertification"
+              >Cancel</b-button>
+            </b-col>
+            <b-col cols="8">
+              <b-button variant="primary" class="btn btn-block" type="sumbit">Certify Now</b-button>
+            </b-col>
+          </b-row>
+        </form>
       </div>
-    </b-card>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import Offer from "./Offer";
 import axios from "axios";
-import $ from 'jquery';
+import $ from "jquery";
 
 export default {
   name: "certify",
   props: {
     username: String
+  },
+  components: {
+    Offer
   },
   data() {
     return {
@@ -258,6 +276,11 @@ export default {
       this.certificateCategory = "";
       this.$bvModal.hide("certify-modal");
     }
+  },
+   mounted() {
+     if (this.$store.getters.isSubmitted) {
+       alert("to close the modal");
+     }
   }
 };
 </script>
@@ -276,6 +299,12 @@ b-modal {
   top: 100px;
 }
 
+#createC {
+  margin-top:50px;
+  margin-bottom: 20px;
+  width:250px;
+}
+
 .inputline {
   background: transparent;
   border: none;
@@ -286,17 +315,31 @@ b-modal {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
+
 .temp {
-  margin-top:250px;
-  margin-bottom:250px;
+  margin-top: 250px;
+  margin-bottom: 250px;
+}
+
+.binfo {
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
 
 #addRecipient-modal {
   padding-top: 500px;
 }
+
+#certify {
+}
+
 .modl {
   position: relative;
   margin-top: 10% !important;
 }
+
+/* .contain {
+  margin-top: 100px;
+} */
 </style>
 

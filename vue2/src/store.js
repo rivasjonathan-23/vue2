@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
-    getInfo_status: ''
+    getInfo_status: '',
+    formStatus: false,
   },
   mutations: {
     auth_request(state) {
@@ -27,7 +28,10 @@ export default new Vuex.Store({
     },
     getInfoStatus(state, status) {
       state.getInfo_status = status;
-    }
+    },
+    form_submitted(state) {
+      state.formStatus = true;
+    },
 
   },
   actions: {
@@ -161,6 +165,9 @@ export default new Vuex.Store({
             reject(err);
           });
       })
+    },
+    submit({commit}) {
+      commit("form_submitted")
     }
 
   },
@@ -169,6 +176,7 @@ export default new Vuex.Store({
     token: state => state.token,
     authStatus: state => state.status,
     getInfoStatus: state => state.getInfo_status,
+    isSumbitted: state => state.formStatus,
   },
 
 });

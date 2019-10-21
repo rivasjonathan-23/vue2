@@ -1,15 +1,13 @@
 <template>
   <div id="bythree">
-    <b-row>
+    <b-row class="row">
         <div v-for="(badge, index) in this.data" :key="index">
-          <b-col class="text-center">
-            <b-card>
+            <b-card class="box">
               <img src="@/assets/image.png" class />
-              <h5>{{badge.badgename}}</h5>
-              <p>{{badge.venue}}</p>
-              <p>{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+              <h5 class="binfo">{{badge.badgename}}</h5>
+              <p class="binfo">{{badge.venue}}</p>
+              <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
             </b-card>
-          </b-col>
         </div>
     </b-row>
   </div>
@@ -22,3 +20,28 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .box {
+    margin:10px;
+    /* margin-bottom:10px;
+    margin-right: 5px;
+    margin-left: 5px; */
+    /* margin-bottom: 0;
+    margin-top:5px; */
+  }
+
+  .binfo {
+    margin-bottom: 2px;
+    margin-top:2px;
+  }
+
+  .text-center {
+    background:red;
+  }
+
+
+  .row {
+    border-color:white;
+  }
+</style>

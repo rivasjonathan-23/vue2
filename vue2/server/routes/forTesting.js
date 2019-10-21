@@ -178,7 +178,7 @@ userRoute.route("/availbadge").post((req, res) => {
     if (badges[i].code == req.body.code) {
       availed = true;
       var user = jwt.decode(req.body.credentials);
-      badges[i].recipient.push({username: user.username, role: "role model haha"});
+      badges[i].recipient.push({username: user.username, Fullname: "Jonathan Rivas"});
       res.status(200).json({message: "successful"});
     }
   }

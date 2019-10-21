@@ -8,13 +8,14 @@
       </b-col>
       <b-col cols="9">
         <div>
-          <h3>
+          <h4>
             <b-tabs>
-              <b-tab v-on:click="togoBadges" title="Badge Offers" active align="left"></b-tab>
+              <b-tab v-on:click="togoBadges" title="Badges offered" active align="left"></b-tab>
               <b-tab v-on:click="gotoCertify" title="Certify" align="right"></b-tab>
-              <b-tab v-on:click="gotooffer" title="Offer A Badge" align="right"></b-tab>
+              <!-- <b-tab v-on:click="gotooffer" title="Create badge" align="right"></b-tab> -->
+               <b-tab v-on:click="gotooffer" title="My newsfeed" align="right"></b-tab>
             </b-tabs>
-          </h3>
+          </h4>
         </div>
         <div v-if="isBadges">
           <Badges></Badges>

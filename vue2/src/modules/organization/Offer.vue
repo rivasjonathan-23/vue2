@@ -2,9 +2,9 @@
     <b-card>
        <div class="badgePic">
             <img src="@/assets/image.png" class>
-            <h5>{{ badgename }}</h5>
-            <p>{{ venue }}</p>
-            <p>{{ date.month+" "+date.day+" "+date.year }}</p>
+            <h5 class="b">{{ badgename }}</h5>
+            <p class="b">{{ venue }}</p>
+            <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>
         </div>
       <form class="signupform" @submit.prevent="offerBadge">
         <center>
@@ -131,6 +131,7 @@ export default {
       }
       alert(bcode)
       let badge = {
+        granted: false,
         code: bcode,
         badgename: this.badgename, 
         venue: this.venue,
@@ -145,6 +146,7 @@ export default {
       this.date.day = "";
       this.date.year = "";
       $("p").removeClass(".label-active");
+      this.$store.dispatch("submit");
     }
   },
   mounted() {
