@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <router-link to="/">
-            <h3 class="web-name" href="#">BadgeBook</h3>
+            <h3 class="web-name" href="#">BadgeBook*</h3>
           </router-link>
         </div>
 
@@ -232,7 +232,7 @@ body {
 .web-name {
   padding: 8px;
   color: white;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   margin: 5px;
 }
 

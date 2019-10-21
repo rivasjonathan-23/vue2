@@ -61,7 +61,9 @@
               </b-row>
               <br>
             </div>
-            <b-table striped hover :items="badge.recipient"></b-table>
+            <b-card class="recipient">
+              <b-table striped hover :items="badge.recipient"></b-table>
+            </b-card>
           </b-col>
         </b-row>
       </div>
@@ -79,26 +81,6 @@
       <form class="addR" @submit.stop.prevent="handleSubmit">
         <label for="usernamei">Search Username</label>
         <b-input id="usernamei" v-model="s_username" @change="userExit = true" @keyup="suggest"/>
-        <br>
-        <!-- <b-label for="role">Pick Role</b-label>
-              <b-card>
-                <b-form-select v-model="selectedRole" :options="options" @change="removeWarning"></b-form-select>
-                <i>
-                  <p class="text-center red">{{ warning }}</p>
-                </i>
-              </b-card>
-        <br>-->
-        <!-- <b-card v-if="userExit">
-                <b-row>
-                  <b-col class="text-center">
-                    <img src="@/assets/pro.png" rounded="circle" class="size50">
-                  </b-col>
-                  <b-col cols="9" class="border-left">
-                    <p>Role : {{ selectedRole }}</p>
-                    <p>Username: {{ s_username }}</p>
-                  </b-col>
-                </b-row>
-        </b-card>-->
         <br>
         <b-row>
           <b-col>
@@ -136,8 +118,8 @@
           <span>is awarded to</span>
           <br>
           <p>
-            (Names are auto generated)
-            <br>for
+            (participant/s' name)
+            <br>
           </p>
           <textarea
             name="description"
@@ -147,7 +129,6 @@
             placeholder="Description of the event"
             v-model="descriptions"
           ></textarea>
-          <p>at</p>
           <input class="inputline" size="30" placeholder="Venue of the event" v-model="venue">
           <br>
           <p>Given this {{ date }}</p>
@@ -187,12 +168,6 @@ export default {
     return {
       noBadges: false,
       badges: [],
-      people: [],
-      options: [{ value: "speaker", text: "speaker" }],
-      badgename: "",
-      venue: "",
-      date: new Date().toDateString(),
-      selectedRole: "No role selected",
       s_username: "",
       s_src: "",
       warning: "",
@@ -215,7 +190,7 @@ export default {
       });
   },
   methods: {
-    //to continued
+    
     suggest() {
       axios.post(`http://localhost:4000/suggest`).then(response => {
         for (let i = 0; i < response.length; ++i) {
@@ -303,6 +278,11 @@ export default {
 </script>
 
 <style scoped>
+.recipient {
+  padding:0;
+  height:240px;
+  overflow:auto;
+}
 .size50 {
   height: 50px;
   width: 50px;
@@ -324,7 +304,7 @@ b-modal {
 }
 
 #createC {
-  margin-top:50px;
+  margin-top:30px;
   margin-bottom: 20px;
   width:250px;
 }
@@ -342,6 +322,7 @@ b-modal {
 
 .temp {
   margin-top: 250px;
+  margin-left:250px;
   margin-bottom: 250px;
 }
 
@@ -355,7 +336,9 @@ b-modal {
 }
 
 #certify {
+  text-align: left;
 }
+
 
 .modl {
   position: relative;

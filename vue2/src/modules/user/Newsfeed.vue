@@ -14,35 +14,6 @@
         </div>
       </b-row>
       <h3 class="temp" style="display:none">There's no offered badges yet</h3>
-      <b-modal
-        size="sm"
-        class="modl"
-        id="availBadge-modal"
-        title="Avail badge"
-        centered
-        no-close-on-esc
-        no-close-on-backdrop
-        hide-header-close
-        hide-footer
-      >
-        <form class="addR" @submit.prevent="searchBadge">
-          <label for="bcode">Enter badge code</label>
-          <b-input id="bcode" v-model="badgeCode" autocomplete="off" required/>
-          <br>
-          <b-row>
-            <b-col>
-              <b-button
-                @click="$bvModal.hide('availBadge-modal')"
-                variant="danger"
-                class="btn btn-block"
-              >Cancel</b-button>
-            </b-col>
-            <b-col cols="6">
-              <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
-            </b-col>
-          </b-row>
-        </form>
-      </b-modal>
     </div>
   </div>
 </template>
@@ -62,26 +33,7 @@ export default {
     };
   },
   methods: {
-    availBadge() {
-      this.$bvModal.show("availBadge-modal");
-    },
-    searchBadge() {
-      axios
-        .post("http://localhost:8081/user/availbadge", {
-          code: this.badgeCode,
-          credentials: this.$store.getters.token
-        })
-        .then(resp => {
-          if (resp.data.message == "successful") {
-            alert("You successfully availed the badge");
-            this.$bvModal.hide("availBadge-modal");
-          } else {
-            alert(
-              "Badge is no longer available or the code you entered is incorrect!"
-            );
-          }
-        });
-    }
+   
   },
   created() {
     axios.get("http://localhost:8081/user/postbadges").then(res => {
