@@ -17,6 +17,12 @@
       hide-footer
     >
       <Offer></Offer>
+       <b-button
+      id="closeM"
+      variant="danger"
+      class="btn btn-block shadow rounded"
+      v-on:click="closeCreate"
+    >Exit</b-button>
     </b-modal>
     <b-card class="contain">
       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
@@ -275,6 +281,17 @@ export default {
       this.descriptions = "";
       this.certificateCategory = "";
       this.$bvModal.hide("certify-modal");
+    },
+    closeCreate() {
+      this.$bvModal.hide("offer");
+       axios
+      .post("http://localhost:8081/user/certify", {
+        credentials: this.$store.getters.token
+      })
+      .then(resp => {
+        this.badges = resp.data.badges;
+        $(".temp").hide();
+      });
     }
   },
    mounted() {
@@ -293,6 +310,13 @@ export default {
 }
 .red {
   color: red;
+}
+
+#closeM {
+  width: 100px;
+  float:left;
+  margin:5px;
+  margin-bottom: 0;
 }
 
 b-modal {
