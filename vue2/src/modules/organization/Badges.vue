@@ -31,6 +31,7 @@ export default {
 
   created() {
     axios.post("http://localhost:8081/user/badges-org", {data: this.$store.getters.token}).then(response => {
+      this.by3Data = [];
       this.by3Data = response.data.badges.reverse();
       if (this.by3Data.length == 0) {
         $(".temp").show();

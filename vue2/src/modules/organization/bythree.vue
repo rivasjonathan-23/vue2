@@ -17,7 +17,8 @@ export default {
   name: "bythree",
   props: {
     data: Array
-  }
+  },
+  
 };
 </script>
 

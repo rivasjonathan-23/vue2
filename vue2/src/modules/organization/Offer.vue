@@ -12,7 +12,7 @@
         </center>
         <label>
           <div class="fixedwidth">
-            <p class="label-txt">Name of the event</p>
+            <p class="label-txt">Certificate name</p>
             <input
               type="text"
               class="input"
@@ -28,7 +28,7 @@
         </label>
         <label>
           <div class="fixedwidth">
-            <p class="label-txt">Venue</p>
+            <p class="label-txt">Name of the event</p>
             <input
               type="text"
               class="input"
@@ -138,7 +138,7 @@ export default {
         recipient: [],
         date: {month: this.date.month, day: this.date.day, year: this.date.year},
       }
-      axios.post("http://localhost:8081/user/offerbadge", badge)
+      axios.post("http://localhost:8081/user/offerbadge", {user: this.$store.getters.token, badges: badge} )
       alert("Badge successfully posted!");
       this.badgename = "";
       this.venue = "",

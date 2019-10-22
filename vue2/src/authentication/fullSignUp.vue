@@ -221,8 +221,8 @@ export default {
   data() {
     return {
       username: "jrivas23",
-      password: "12345678",
-      confirmpassword: "12345678",
+      password: "jrivas2398",
+      confirmpassword: "jrivas2398",
       firstname: "Jonathan",
       lastname: "Rivas",
       email: "rivas@gmail.com",
@@ -298,7 +298,6 @@ export default {
     },
   },
   created() {
-   
     if (
       this.username != "" &&
       this.password != "" &&
@@ -324,6 +323,7 @@ export default {
     );
   },
   mounted() {
+    $(".label-txt").addClass("label-active").css({ color: "#555657" });
     $(".input").focus(function() {
       $(this)
         .parent()

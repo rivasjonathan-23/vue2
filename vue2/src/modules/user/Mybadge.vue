@@ -99,23 +99,23 @@ export default {
     }
   },
   mounted() {
-    this.badgelist = [
-      {
-        badgename: "Medical Mission",
-        certificateCategory: "Appreciation",
-        description:
-          "The active voluntarism offered during the medical mission for free vacination",
-        venue: "Talamban health center",
-        date: "Mon Oct 14 2019",
-        time: "9 AM",
-        organization: "Passerelles Numeriques",
-        recepient: "Redgie Gravador"
-      }
-    ];
-    let uri_badgelist = `http://localhost:8081/regular-badgelist/${this.username}`;
-    this.axios.get(uri_badgelist).then(response => {
-      this.badgelist = response.data;
-    });
+    // this.badgelist = [
+    //   {
+    //     badgename: "Medical Mission",
+    //     certificateCategory: "Appreciation",
+    //     description:
+    //       "The active voluntarism offered during the medical mission for free vacination",
+    //     venue: "Talamban health center",
+    //     date: "Mon Oct 14 2019",
+    //     time: "9 AM",
+    //     organization: "Passerelles Numeriques",
+    //     recepient: "Redgie Gravador"
+    //   }
+    // ];
+    // let uri_badgelist = `http://localhost:8081/regular-badgelist/${this.username}`;
+    // this.axios.get(uri_badgelist).then(response => {
+    //   this.badgelist = response.data;
+    // });
   }
 };
 </script>

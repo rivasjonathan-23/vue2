@@ -7,31 +7,44 @@ const jwt = require("jsonwebtoken")
 
 var data;
 
-
+var accounts = [];
 
 userRoute.route("/login").post(function (req, res) {
-  var token = req.headers["authorization"];
-  console.log(token)
-  if (req.body.username == "rivas" && req.body.password == "password") {
-    var token = jwt.sign({
-      username: req.body.username,
-      password: req.body.password,
-      type: "Regular user"
-    }, config.secret, {
-      expiresIn: 86400 // expires in 24 hours
-    });
-    res.status(200).json({
-      auth: true,
-      token: token,
-      message: "login successful"
-    });
-    console.log("this is the " + token)
-  } else {
+  console.log(accounts)
+  sent = false;
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].username == req.body.username && accounts[i].password == req.body
+      .password) {
+      console.log("HELLO PEOPLE")
+      var token = req.headers["authorization"];
+      console.log(token)
+
+      var token = jwt.sign({
+        username: req.body.username,
+        password: req.body.password,
+        type: accounts[i].type
+      }, config.secret, {
+        expiresIn: 86400 // expires in 24 hours
+      });
+      sent = true;
+      res.status(200).json({
+        auth: true,
+        type: accounts[i].type,
+        token: token,
+        message: "login successful"
+      });
+      console.log("this is the " + token)
+    }
+
+  }
+  if (true) {
     console.log("wrong password")
     res.status(200).json({
       message: "login unsuccessful"
     })
+
   }
+
   // User.findOne({
   //         username: req.body.username
   //     })
@@ -173,32 +186,48 @@ var badges = [] //temporary storage for offered or posted badges
 
 userRoute.route("/availbadge").post((req, res) => {
   console.log(req.body);
-  var availed =false;
-  for (var i=0;i<badges.length; ++i) {
-    if (badges[i].code == req.body.code) {
-      availed = true;
-      var user = jwt.decode(req.body.credentials);
-      badges[i].recipient.push({username: user.username, Fullname: "Jonathan Rivas"});
-      res.status(200).json({message: "successful"});
+  var availed = false;
+  for (var j = 0; j < accounts.length; ++j) {
+    if (accounts[j].type == "Organization") {
+      var bad = accounts[j].badges;
+      for (var i = 0; i < bad.length; ++i) {
+        if (bad[i].code == req.body.code) {
+          availed = true;
+          var user = jwt.decode(req.body.credentials);
+          accounts[j].badges[i].recipient.push({
+            username: user.username,
+            Fullname: "Jonathan Rivas"
+          });
+          res.status(200).json({
+            message: "successful"
+          });
+        }
+      }
     }
   }
   if (!availed) {
-    res.status(200).json({message: "incorrect code"})
+    res.status(200).json({
+      message: "incorrect code"
+    })
   }
 })
 
 userRoute.route("/certify").post((req, res) => {
-  var user = jwt.decode(req.body.credentials)
-  if (user.username == "Jonathan") { //as if gipangita nato sa database
-    console.log(badges);
-    res.status(200).json({badges: badges});
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].type == "Organization") {
+      var bad = accounts[i].badges;
+      for (var j = 0; j < bad.length; ++j) {
+        if (bad[j].code == req.body.code) {
+          accounts[i].badges[j].granted = true;
+        }
+      }
+    }
   }
+
 })
 
-
-
 userRoute.route("/postbadges").get((req, res) => {
-  res.status(200).json({badges: badges})
+
 })
 
 var userInfo; //temporary storage of information
@@ -208,6 +237,8 @@ userRoute.route("/fullsignup").post((req, res) => {
   console.log(req.body)
   userInfo = req.body
   user = req.body;
+  accounts.push(user);
+  console.log(accounts)
   var token = jwt.sign({
     username: user.username,
     password: user.password,
@@ -228,7 +259,9 @@ userRoute.route("/orgsignup").post((req, res) => {
   data = {}
   console.log("hello")
   console.log(req.body)
+
   user = req.body;
+  accounts.push(user);
   userInfo = req.body
   var token = jwt.sign({
     username: user.username,
@@ -245,22 +278,30 @@ userRoute.route("/orgsignup").post((req, res) => {
 })
 
 userRoute.route("/offerbadge").post((req, res) => {
-  console.log(badges)
-  badges.push(req.body)
+  var org = jwt.decode(req.body.user);
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].username == org.username) {
+      accounts[i].badges.push(req.body.badge);
+    }
+  }
 })
 
 userRoute.route("/badges-org").post((req, res) => {
   console.log(req.body.data)
   var org = jwt.decode(req.body.data)
-  console.log(org.username)//gamiton ang username nga gikan sa token para makuha iyang mga badge sa database
-  if (org.username == "Jonathan") {
-    res.status(200).json({badges: badges})
+  console.log(org
+    .username
+  ) //gamiton ang username nga gikan sa token para makuha iyang mga badge sa database
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].username == org.username) {
+      res.status(200).json(accounts[i].badges);
+    }
   }
 })
 
 
 userRoute.route("/certify").post((req, res) => {
-  
+
 })
 
 //========================================================================================================
@@ -268,9 +309,13 @@ userRoute.route("/certify").post((req, res) => {
 
 userRoute.route("/userInfo").post((req, res) => { //to get the information of the user
   console.log(req.body.data)
-  var user = jwt.decode(req.body
-    .data) //decode the token and use the username and password to search the information of that account
+  var user = jwt.decode(req.body.data)
+  //decode the token and use the username and password to search the information of that account
   //user.username and user.password will be used to retrieve information
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].username == user.username && accounts[i].password == user.password)
+      userInfo = accounts[i];
+  }
   res.status(200).json({
     data: userInfo //wil be replaced by the data from database
   })

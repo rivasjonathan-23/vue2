@@ -26,7 +26,7 @@
     </b-modal>
     <b-card class="contain">
       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
-      <div v-for="(badge, index) in badges" :key="index">
+      <div v-for="(badge, index) in badges" v-if="!badge.granted">
         <b-row class="row">
           <b-col>
             <br>
@@ -63,6 +63,7 @@
             </div>
             <b-card class="recipient">
               <b-table striped hover :items="badge.recipient"></b-table>
+              <h5 class="norep" v-if="badge.recipient.length == 0">No recipient availed yet.</h5>
             </b-card>
           </b-col>
         </b-row>
@@ -104,7 +105,7 @@
       hide-footer
     >
       <div class="text-center ifont">
-        <form @submit.stop.prevent="handleCertificationSubmit">
+        <form @submit.stop.prevent="handleCertificationSubmit(badge.code)">
           <span>This certificate of</span>
           <br>
           <input
@@ -166,6 +167,7 @@ export default {
   },
   data() {
     return {
+      date: "",
       noBadges: false,
       badges: [],
       s_username: "",
@@ -173,7 +175,8 @@ export default {
       warning: "",
       certificateCategory: "",
       descriptions: "",
-      userExit: false
+      userExit: false,
+      venue: "",
     };
   },
 
@@ -232,24 +235,8 @@ export default {
         this.warning = "";
       }
     },
-    handleCertificationSubmit() {
-      var temp = [];
-      this.people.forEach(each => {
-        var newperson = {
-          username: each.username,
-          role: each.role,
-          badgename: this.badgename,
-          certificateCategory: this.certificateCategory,
-          venue: this.venue,
-          date: this.date
-        };
-        temp.push(newperson);
-      });
-      let uri_certify = `http://localhost:4000/certifynow/${this.username}`;
-      axios.post(uri_certify, temp).then(response => {
-        /* eslint-disable */
-        console.log(response.data);
-      });
+    handleCertificationSubmit(code) {
+      axios.post("http://localhost:8081/certify", code) 
       this.resetCertification();
     },
     resetCertification() {
@@ -301,6 +288,11 @@ export default {
 
 b-modal {
   top: 100px;
+}
+
+.norep {
+  margin-left:170px;
+  margin-top:70px;
 }
 
 #createC {

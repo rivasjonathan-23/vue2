@@ -36,12 +36,12 @@ export default {
    
   },
   created() {
-    axios.get("http://localhost:8081/user/postbadges").then(res => {
-      this.upcoming_list = res.data.badges.reverse();
-      if (this.upcoming_list.length == 0) {
-        $(".temp").show();
-      }
-    });
+    // axios.get("http://localhost:8081/user/postbadges").then(res => {
+    //   this.upcoming_list = res.data.badges.reverse();
+    //   if (this.upcoming_list.length == 0) {
+    //     $(".temp").show();
+    //   }
+    // });
   }
 };
 </script>

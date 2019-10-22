@@ -100,8 +100,8 @@ export default {
   data() {
     return {
       username: "Jonathan",
-      password: "12345678",
-      confirmpassword: "12345678",
+      password: "jrivas2398",
+      confirmpassword: "jrivas2398",
       orgName: "myOrg",
       email: "org@gmail.com",
       address: "asdfasdfasd",
@@ -121,7 +121,8 @@ export default {
         address: this.address,
         orgName: this.orgName,
         description: this.description,
-        type: "Organization"
+        type: "Organization",
+        badges: [],
       };
       if (
         this.isValid &&
@@ -165,6 +166,7 @@ export default {
     }
   },
   created() {
+    
     if (
       this.username != "" &&
       this.password != "" &&
@@ -187,6 +189,7 @@ export default {
     );
   },
   mounted() {
+    $(".label-txt").addClass("label-active").css({ color: "#555657" });
     $(".input").focus(function() {
       $(this)
         .parent()
