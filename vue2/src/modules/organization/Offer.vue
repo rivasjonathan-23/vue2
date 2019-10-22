@@ -136,10 +136,12 @@ export default {
         badgename: this.badgename, 
         venue: this.venue,
         recipient: [],
+        certificateName: "",
+        descriptions: "",
+        organization: "",
         date: {month: this.date.month, day: this.date.day, year: this.date.year},
       }
-      axios.post("http://localhost:8081/user/offerbadge", {user: this.$store.getters.token, badges: badge} )
-      alert("Badge successfully posted!");
+      axios.post("http://localhost:8081/user/offerbadge", {user: this.$store.getters.token, badge: badge} )
       this.badgename = "";
       this.venue = "",
       this.date.month = "";

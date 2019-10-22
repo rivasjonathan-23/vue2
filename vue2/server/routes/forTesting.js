@@ -24,8 +24,8 @@ userRoute.route("/login").post(function (req, res) {
         password: req.body.password,
         type: accounts[i].type
       }, config.secret, {
-        expiresIn: 86400 // expires in 24 hours
-      });
+          expiresIn: 86400 // expires in 24 hours
+        });
       sent = true;
       res.status(200).json({
         auth: true,
@@ -201,6 +201,7 @@ userRoute.route("/availbadge").post((req, res) => {
           res.status(200).json({
             message: "successful"
           });
+          break;
         }
       }
     }
@@ -213,12 +214,21 @@ userRoute.route("/availbadge").post((req, res) => {
 })
 
 userRoute.route("/certify").post((req, res) => {
+  console.log(req.body.badgeInfo)
+  var org = jwt.decode(req.body.user)
   for (var i = 0; i < accounts.length; ++i) {
-    if (accounts[i].type == "Organization") {
+    if (accounts[i].username == org.username) {
+      console.log("floop")
       var bad = accounts[i].badges;
       for (var j = 0; j < bad.length; ++j) {
-        if (bad[j].code == req.body.code) {
+        console.log("2")
+        if (bad[j].code == req.body.badgeInfo.bcode) {
+          console.log("3")
+          var badge = req.body.badgeInfo;
           accounts[i].badges[j].granted = true;
+          accounts[i].badges[j].descriptions = badge.descriptions;
+          accounts[i].badges[j].certificateName = badge.certificateName;
+          console.log(accounts[i].badges[j])
         }
       }
     }
@@ -226,7 +236,22 @@ userRoute.route("/certify").post((req, res) => {
 
 })
 
-userRoute.route("/postbadges").get((req, res) => {
+userRoute.route("/userbadges").post((req, res) => {
+  var user = jwt.decode(req.body.user);
+  console.log(user)
+  var badges = [];
+  
+  for (var i=0;i<accounts.length;++i) {
+    var bad = accounts[i].badges;
+    for (var j=0;j<bad.length;++j){
+      for (var h=0; h < bad[j].recipient.length;++h) {
+        if (bad[j].recipient[h].username == user.username && bad[j].granted) {
+          badges.push(bad)[j];
+        }
+      }
+    }
+  }
+  res.status(200).json({badges: badges});
 
 })
 
@@ -244,8 +269,8 @@ userRoute.route("/fullsignup").post((req, res) => {
     password: user.password,
     type: user.type
   }, config.secret, {
-    expiresIn: 86400
-  });
+      expiresIn: 86400
+    });
   res.status(200).send({
     user: user,
     auth: true,
@@ -268,8 +293,8 @@ userRoute.route("/orgsignup").post((req, res) => {
     password: user.password,
     type: user.type
   }, config.secret, {
-    expiresIn: 86400
-  });
+      expiresIn: 86400
+    });
   res.status(200).send({
     user: user,
     auth: true,
@@ -281,28 +306,28 @@ userRoute.route("/offerbadge").post((req, res) => {
   var org = jwt.decode(req.body.user);
   for (var i = 0; i < accounts.length; ++i) {
     if (accounts[i].username == org.username) {
+      req.body.badge.organization = accounts[i].orgName;
       accounts[i].badges.push(req.body.badge);
     }
   }
 })
 
 userRoute.route("/badges-org").post((req, res) => {
-  console.log(req.body.data)
-  var org = jwt.decode(req.body.data)
-  console.log(org
-    .username
-  ) //gamiton ang username nga gikan sa token para makuha iyang mga badge sa database
+  console.log(req.body.data);
+  var org = jwt.decode(req.body.data);
+  console.log("this badges org request");
+  console.log(org);
+  var orgbadge = [];
   for (var i = 0; i < accounts.length; ++i) {
     if (accounts[i].username == org.username) {
-      res.status(200).json(accounts[i].badges);
+      console.log("IM HERE")
+     orgbadge = accounts[i].badges;
     }
   }
+  res.status(200).json({badges: orgbadge});
 })
 
 
-userRoute.route("/certify").post((req, res) => {
-
-})
 
 //========================================================================================================
 
@@ -312,6 +337,8 @@ userRoute.route("/userInfo").post((req, res) => { //to get the information of th
   var user = jwt.decode(req.body.data)
   //decode the token and use the username and password to search the information of that account
   //user.username and user.password will be used to retrieve information
+  console.log("this the org")
+  console.log(user)
   for (var i = 0; i < accounts.length; ++i) {
     if (accounts[i].username == user.username && accounts[i].password == user.password)
       userInfo = accounts[i];

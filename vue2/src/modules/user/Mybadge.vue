@@ -19,13 +19,13 @@
                 <h2>
                   This certificate of
                   <br>
-                  {{badge.certificateCategory}}
+                  {{badge.certificateName}}
                 </h2>
                 <span>is awarded to</span>
                 <h3>{{badge.recepient}}</h3>
                 <p>for</p>
                 <p>{{badge.descriptions}}</p>
-                <p>Given this {{ badge.date }} at {{badge.venue}}</p>
+                <p>Given this {{ badge.date }}</p>
                 <div class="text-center byorg">
                   <p class="border-bottom">Certified by : {{badge.organization}}</p>
                 </div>
@@ -76,7 +76,8 @@ export default {
   },
   data() {
     return {
-      badgelist: []
+      badgelist: [],
+      badgeCode: "",
     };
   },
   methods: {
@@ -98,7 +99,12 @@ export default {
         });
     }
   },
-  mounted() {
+  created() {
+    axios.post("http://localhost:8081/user/userbadges", {user: this.$store.getters.token})
+    .then((res) => {
+      console.log(res.data.badges)
+      this.badgelist = res.data.badges;
+    })
     // this.badgelist = [
     //   {
     //     badgename: "Medical Mission",

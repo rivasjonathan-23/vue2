@@ -24,9 +24,10 @@
       v-on:click="closeCreate"
     >Exit</b-button>
     </b-modal>
+      <div v-for="(badge, index) in badges" :key="index">
+
     <b-card class="contain">
       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
-      <div v-for="(badge, index) in badges" v-if="!badge.granted">
         <b-row class="row">
           <b-col>
             <br>
@@ -63,11 +64,10 @@
             </div>
             <b-card class="recipient">
               <b-table striped hover :items="badge.recipient"></b-table>
-              <h5 class="norep" v-if="badge.recipient.length == 0">No recipient availed yet.</h5>
+            
             </b-card>
           </b-col>
         </b-row>
-      </div>
     </b-card>
     <b-modal
       class="modl"
@@ -112,7 +112,7 @@
             class="inputline"
             size="15"
             placeholder="Certificate Category"
-            v-model="certificateCategory"
+            v-model="certificateName"
           >
           <br>
           <br>
@@ -130,7 +130,7 @@
             placeholder="Description of the event"
             v-model="descriptions"
           ></textarea>
-          <input class="inputline" size="30" placeholder="Venue of the event" v-model="venue">
+          <!-- <input class="inputline" size="30" placeholder="Venue of the event" v-model="venue"> -->
           <br>
           <p>Given this {{ date }}</p>
           <hr>
@@ -149,6 +149,7 @@
         </form>
       </div>
     </b-modal>
+      </div>
   </div>
 </template>
 
@@ -167,25 +168,23 @@ export default {
   },
   data() {
     return {
-      date: "",
       noBadges: false,
       badges: [],
       s_username: "",
       s_src: "",
       warning: "",
-      certificateCategory: "",
-      descriptions: "",
-      userExit: false,
+      certificateName: "",
       venue: "",
+      date: new Date(),
+      descriptions: "",
+      userExit: false
     };
   },
 
   created() {
-    axios
-      .post("http://localhost:8081/user/certify", {
-        credentials: this.$store.getters.token
-      })
+    axios.post("http://localhost:8081/user/badges-org", {data: this.$store.getters.token})
       .then(resp => {
+        console.log(resp.data.badges)
         this.badges = resp.data.badges;
         if (this.badges.length == 0) {
           $(".temp").show();
@@ -235,8 +234,10 @@ export default {
         this.warning = "";
       }
     },
-    handleCertificationSubmit(code) {
-      axios.post("http://localhost:8081/certify", code) 
+    handleCertificationSubmit(bcode) {
+      console.log(bcode)
+      let badgeInfo = {bcode : bcode, certificateName: this.certificateName, descriptions: this.descriptions}
+      axios.post("http://localhost:8081/user/certify", {user: this.$store.getters.token, badgeInfo: badgeInfo})
       this.resetCertification();
     },
     resetCertification() {
@@ -246,13 +247,13 @@ export default {
     },
     closeCreate() {
       this.$bvModal.hide("offer");
-       axios
-      .post("http://localhost:8081/user/certify", {
-        credentials: this.$store.getters.token
-      })
+      axios.post("http://localhost:8081/user/badges-org", {data: this.$store.getters.token})
       .then(resp => {
+        console.log(resp.data.badges)
         this.badges = resp.data.badges;
-        $(".temp").hide();
+        if (this.badges.length != 0) {
+          $(".temp").hide();
+        }
       });
     }
   },
@@ -288,11 +289,6 @@ export default {
 
 b-modal {
   top: 100px;
-}
-
-.norep {
-  margin-left:170px;
-  margin-top:70px;
 }
 
 #createC {
