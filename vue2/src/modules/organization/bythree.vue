@@ -7,6 +7,7 @@
               <h5 class="binfo">{{badge.badgename}}</h5>
               <p class="binfo">{{badge.venue}}</p>
               <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+             
             </b-card>
         </div>
     </b-row>
@@ -18,7 +19,6 @@ export default {
   props: {
     data: Array
   },
-  
 };
 </script>
 
@@ -40,7 +40,6 @@ export default {
   .text-center {
     background:red;
   }
-
 
   .row {
     border-color:white;

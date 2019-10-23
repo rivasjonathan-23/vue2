@@ -24,8 +24,8 @@ userRoute.route("/login").post(function (req, res) {
         password: req.body.password,
         type: accounts[i].type
       }, config.secret, {
-          expiresIn: 86400 // expires in 24 hours
-        });
+        expiresIn: 86400 // expires in 24 hours
+      });
       sent = true;
       res.status(200).json({
         auth: true,
@@ -35,14 +35,12 @@ userRoute.route("/login").post(function (req, res) {
       });
       console.log("this is the " + token)
     }
-
   }
   if (true) {
     console.log("wrong password")
-    res.status(200).json({
+    res.status(401).json({
       message: "login unsuccessful"
     })
-
   }
 
   // User.findOne({
@@ -89,7 +87,7 @@ userRoute.route("/checkusername").post((req, res) => {
   console.log(req.body)
 
   if (req.body.username == "rivas") {
-    res.status(200).json({
+    res.status(400).json({
       message: "username already exist"
     })
   } else {
@@ -207,7 +205,7 @@ userRoute.route("/availbadge").post((req, res) => {
     }
   }
   if (!availed) {
-    res.status(200).json({
+    res.status(401).json({
       message: "incorrect code"
     })
   }
@@ -216,6 +214,7 @@ userRoute.route("/availbadge").post((req, res) => {
 userRoute.route("/certify").post((req, res) => {
   console.log(req.body.badgeInfo)
   var org = jwt.decode(req.body.user)
+  var success = false;
   for (var i = 0; i < accounts.length; ++i) {
     if (accounts[i].username == org.username) {
       console.log("floop")
@@ -224,6 +223,7 @@ userRoute.route("/certify").post((req, res) => {
         console.log("2")
         if (bad[j].code == req.body.badgeInfo.bcode) {
           console.log("3")
+          success = true;
           var badge = req.body.badgeInfo;
           accounts[i].badges[j].granted = true;
           accounts[i].badges[j].descriptions = badge.descriptions;
@@ -233,25 +233,74 @@ userRoute.route("/certify").post((req, res) => {
       }
     }
   }
+  if (success) {
+    res.status(200).json({message: "successful"});
+  } else {
+    res.status(500).json({message: "Something wrong happen!"});
+  }
+})
 
+userRoute.route('/addrecipient').post((req, res) => {
+  console.log(req.body)
+  var f = false;
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].username == req.body.username) {
+      console.log(req.body)
+      f = true;
+      var org = jwt.decode(req.body.org);
+      console.log("this badges org request");
+      console.log(org);
+      var orgbadge = [];
+      for (var h = 0; h < accounts.length; ++h) {
+        if (accounts[h].username == org.username) {
+          console.log("IM HERE")
+          orgbadge = accounts[h].badges;
+          for (var j = 0; j < orgbadge.length; ++j) {
+            if (orgbadge[j].code == req.body.code) {
+              accounts[h].badges[j].recipient.push({
+                username: accounts[i].username,
+                Fullname: accounts[i].firstname + " " + accounts[i].lastname
+              })
+            }
+          }
+        }
+      }
+
+    }
+  }
+  if (f) {
+    res.status(200).json({
+      badges: orgbadge
+    });
+  } else {
+    res.status(404).json({
+      message: "User not found!"
+    })
+  }
 })
 
 userRoute.route("/userbadges").post((req, res) => {
   var user = jwt.decode(req.body.user);
   console.log(user)
   var badges = [];
-  
-  for (var i=0;i<accounts.length;++i) {
-    var bad = accounts[i].badges;
-    for (var j=0;j<bad.length;++j){
-      for (var h=0; h < bad[j].recipient.length;++h) {
-        if (bad[j].recipient[h].username == user.username && bad[j].granted) {
-          badges.push(bad)[j];
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].type == "Organization") {
+      var bad = accounts[i].badges;
+      for (var j = 0; j < bad.length; ++j) {
+        for (var h = 0; h < bad[j].recipient.length; ++h) {
+          if (bad[j].recipient[h].username == user.username && bad[j].granted) {
+            badges.push(bad[j]);
+          }
         }
       }
     }
   }
-  res.status(200).json({badges: badges});
+  console.log("BADGES: ");
+  console.log(badges);
+  res.status(200).json({
+    badges: badges,
+    fullname: "Jonathan Rivas",
+  });
 
 })
 
@@ -269,8 +318,8 @@ userRoute.route("/fullsignup").post((req, res) => {
     password: user.password,
     type: user.type
   }, config.secret, {
-      expiresIn: 86400
-    });
+    expiresIn: 86400
+  });
   res.status(200).send({
     user: user,
     auth: true,
@@ -293,8 +342,8 @@ userRoute.route("/orgsignup").post((req, res) => {
     password: user.password,
     type: user.type
   }, config.secret, {
-      expiresIn: 86400
-    });
+    expiresIn: 86400
+  });
   res.status(200).send({
     user: user,
     auth: true,
@@ -312,6 +361,30 @@ userRoute.route("/offerbadge").post((req, res) => {
   }
 })
 
+userRoute.route("/pendingbadges").post((req, res) => {
+  console.log(req.body.data);
+  var org = jwt.decode(req.body.data);
+  console.log("this badges org request");
+  console.log(org);
+  var orgbadge = [];
+  for (var i = 0; i < accounts.length; ++i) {
+    if (accounts[i].username == org.username) {
+      console.log(accounts[i].badges)
+      if (accounts[i].type = "Organization") {
+        for (var j = 0; j < accounts[i].badges.length; ++j) {
+          if (!accounts[i].badges[j].granted) {
+            orgbadge.push(accounts[i].badges[j])
+          }
+        }
+      }
+    }
+  }
+  console.log(orgbadge)
+  res.status(200).json({
+    badges: orgbadge
+  });
+})
+
 userRoute.route("/badges-org").post((req, res) => {
   console.log(req.body.data);
   var org = jwt.decode(req.body.data);
@@ -320,13 +393,41 @@ userRoute.route("/badges-org").post((req, res) => {
   var orgbadge = [];
   for (var i = 0; i < accounts.length; ++i) {
     if (accounts[i].username == org.username) {
-      console.log("IM HERE")
-     orgbadge = accounts[i].badges;
+      console.log(accounts[i].badges)
+      if (accounts[i].type = "Organization") {
+            orgbadge = accounts[i].badges;
+        
+      }
     }
   }
-  res.status(200).json({badges: orgbadge});
+  res.status(200).json({
+    badges: orgbadge
+  });
 })
 
+
+userRoute.route("/validatecode").post((req, res) => {
+  var taken = false;
+  for (var i=i; i< accounts.length;++i) {
+    if (accounts[i].type == "Organization") {
+      for (var j=0; j< accounts[i].badges.length; ++j) {
+        if (accounts[i].badges[j].code == req.body) {
+          taken = true;
+          console.log("TAKEN")
+          res.status(400).json({
+            message: "Code is taken, regenerate new!"
+          })
+        }
+      }
+    }
+  }
+  if (!taken) {
+    console.log("NOT TAKEN!")
+    res.status(200).json({
+      message: "OK"
+    })
+  }
+})
 
 
 //========================================================================================================

@@ -274,17 +274,13 @@ export default {
           username: this.username
         })
         .then(
-          response => {
-            if (response.data.message != "username already exist") {
+          (response) => {
               this.err = false;
               this.isValid = true;
-            } else {
+          })
+          .catch((err) => {
               this.err = true;
               this.isValid = false;
-            }
-          },
-          err => {
-            console.log("error");
           }
         );
     },

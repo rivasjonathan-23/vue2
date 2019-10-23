@@ -25,7 +25,7 @@ export default {
     return {
       by3Data: [],
       temp: [],
-      excessData: []
+      excessData: [],
     };
   },
 

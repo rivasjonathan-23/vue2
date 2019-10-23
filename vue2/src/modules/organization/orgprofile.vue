@@ -42,7 +42,7 @@ export default {
     this.$store.dispatch("getUserInfo").then(resp => {
       this.orgName= resp.data.orgName;
       this.address= resp.data.address;
-      this.email= resp.data.email;
+      this.email= resp.data.email;  
       this.description= resp.data.description;
     });
   },

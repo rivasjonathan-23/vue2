@@ -103,20 +103,14 @@ export default {
         .post("http://localhost:8081/user/checkusername", {
           username: this.username
         })
-        .then(
-          response => {
-            if (response.data.message != "username already exist") {
-              this.err = false;
-              this.isValid = true;
-            } else {
-             this.err = true;
-              this.isValid = false;
-            }
-          },
-          err => {
-            console.log("error occured");
-          }
-        );
+        .then(response => {
+          this.err = false;
+          this.isValid = true;
+        })
+        .catch(err => {
+          this.err = true;
+          this.isValid = false;
+        });
     }
   },
   mounted() {

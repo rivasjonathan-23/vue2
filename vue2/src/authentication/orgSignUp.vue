@@ -122,7 +122,7 @@ export default {
         orgName: this.orgName,
         description: this.description,
         type: "Organization",
-        badges: [],
+        badges: []
       };
       if (
         this.isValid &&
@@ -144,20 +144,14 @@ export default {
         .post("http://localhost:8081/user/checkusername", {
           username: this.username
         })
-        .then(
-          response => {
-            if (response.data.message != "username already exist") {
-              this.err = false;
-              this.isValid = true;
-            } else {
-              this.err = true;
-              this.isValid = false;
-            }
-          },
-          err => {
-            console.log("error occured");
-          }
-        );
+        .then(response => {
+          this.err = false;
+          this.isValid = true;
+        })
+        .catch(err => {
+          this.err = true;
+          this.isValid = false;
+        });
     },
     logout() {
       this.$store.dispatch("logout").then(() => {
@@ -166,7 +160,6 @@ export default {
     }
   },
   created() {
-    
     if (
       this.username != "" &&
       this.password != "" &&
@@ -189,7 +182,9 @@ export default {
     );
   },
   mounted() {
-    $(".label-txt").addClass("label-active").css({ color: "#555657" });
+    $(".label-txt")
+      .addClass("label-active")
+      .css({ color: "#555657" });
     $(".input").focus(function() {
       $(this)
         .parent()

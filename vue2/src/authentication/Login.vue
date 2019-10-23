@@ -43,21 +43,18 @@ export default {
   },
   methods: {
     login() {
-    
       let cred = { username: this.username, password: this.password };
        this.$store.dispatch("login", cred)
-       
         .then((res) => {
            console.log(res)
           if (res == "Regular user") {
             console.log(res)
             this.$router.push("/user");
           } else {
-           
             this.$router.push("/organization");
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => alert("Invalid credentials!"));
       // axios.post("http://localhost:8081/user/login", cred).then(response => {
       //   if (response.data.message != "login unsuccessful") {
       //     console.log(response)
