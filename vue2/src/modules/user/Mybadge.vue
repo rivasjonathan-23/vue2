@@ -8,7 +8,7 @@
         v-b-modal.availBadge-modal
       >Avail new certificate</b-button>
       <hr>
-       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in this.badgelist" :key="index">
         <b-card class="bdgs">
           <b-row class="justify-content-md-center">
@@ -72,6 +72,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "Newsfeed",
   props: {
@@ -81,7 +82,8 @@ export default {
     return {
       badgelist: [],
       badgeCode: "",
-      fullname: ""
+      fullname: "",
+      hasData: false,
     };
   },
   methods: {
@@ -114,7 +116,7 @@ export default {
         this.fullname = res.data.fullname;
         this.badgelist = res.data.badges;
          if (this.badgelist.length == 0) {
-          $(".temp").show();
+          this.hasData = true;
         }
       });
     // this.badgelist = [
@@ -165,6 +167,6 @@ label {
 }
 
 #mybadge {
-  text-align: left;
+  text-align: center;
 }
 </style>
