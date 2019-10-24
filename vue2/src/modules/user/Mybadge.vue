@@ -10,6 +10,7 @@
       <hr>
        <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in this.badgelist" :key="index">
+        <div v-if="badge.granted">
         <b-card class="bdgs">
           <b-row class="justify-content-md-center">
             <b-col class="text-center">
@@ -36,6 +37,14 @@
             </b-col>
           </b-row>
         </b-card>
+        </div>
+        <div v-else>
+          <b-card class="bdgs">
+            <p class="pending">PENDING</p>
+            <h3 class="pending">{{badge.badgename}}</h3><hr>
+             <h5 class="pending">Waiting for ceritification from {{badge.organization}}</h5>
+          </b-card>
+        </div>
       </div>
     </div>
     <b-modal
@@ -160,6 +169,7 @@ label {
 
 .bdgs {
   margin-bottom: 10px;
+  background:#f2f5f5;
 }
 .temp {
   margin-top: 250px;
@@ -168,5 +178,10 @@ label {
 
 #mybadge {
   text-align: center;
+}
+
+.pending {
+  padding:0;
+  margin:0;
 }
 </style>

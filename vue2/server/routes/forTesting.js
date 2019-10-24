@@ -228,7 +228,7 @@ userRoute.route("/certify").post((req, res) => {
           accounts[i].badges[j].granted = true;
           accounts[i].badges[j].descriptions = badge.descriptions;
           accounts[i].badges[j].certificateName = badge.certificateName;
-          console.log(accounts[i].badges[j])
+          console.log(accounts[i].badges[j].recipient)
         }
       }
     }
@@ -292,15 +292,14 @@ userRoute.route("/userbadges").post((req, res) => {
       var bad = accounts[i].badges;
       for (var j = 0; j < bad.length; ++j) {
         for (var h = 0; h < bad[j].recipient.length; ++h) {
-          if (bad[j].recipient[h].username == user.username && bad[j].granted) {
-            badges.push(bad[j]);
+          if (bad[j].recipient[h].username == user.username) {
+            badges = bad[j];
           }
         }
       }
     }
   }
-  console.log("BADGES: ");
-  console.log(badges);
+  console.log(badges)
   res.status(200).json({
     badges: badges,
     fullname: "Jonathan Rivas",

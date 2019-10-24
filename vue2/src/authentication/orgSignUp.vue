@@ -122,7 +122,8 @@ export default {
         orgName: this.orgName,
         description: this.description,
         type: "Organization",
-        badges: []
+        badges: [],
+        posts: [],
       };
       if (
         this.isValid &&
