@@ -221,7 +221,7 @@ userRoute.route("/certify").post((req, res) => {
       var bad = accounts[i].badges;
       for (var j = 0; j < bad.length; ++j) {
         console.log("2")
-        if (bad[j].code == req.body.badgeInfo.bcode) {
+        if (bad[j].code == req.body.badgeInfo.code) {
           console.log("3")
           success = true;
           var badge = req.body.badgeInfo;
@@ -234,9 +234,13 @@ userRoute.route("/certify").post((req, res) => {
     }
   }
   if (success) {
-    res.status(200).json({message: "successful"});
+    res.status(200).json({
+      message: "successful"
+    });
   } else {
-    res.status(500).json({message: "Something wrong happen!"});
+    res.status(500).json({
+      message: "Something wrong happen!"
+    });
   }
 })
 
@@ -393,10 +397,9 @@ userRoute.route("/badges-org").post((req, res) => {
   var orgbadge = [];
   for (var i = 0; i < accounts.length; ++i) {
     if (accounts[i].username == org.username) {
-      console.log(accounts[i].badges)
       if (accounts[i].type = "Organization") {
-            orgbadge = accounts[i].badges;
-        
+        orgbadge = accounts[i].badges;
+
       }
     }
   }
@@ -407,25 +410,18 @@ userRoute.route("/badges-org").post((req, res) => {
 
 
 userRoute.route("/validatecode").post((req, res) => {
-  var taken = false;
-  for (var i=i; i< accounts.length;++i) {
-    if (accounts[i].type == "Organization") {
-      for (var j=0; j< accounts[i].badges.length; ++j) {
-        if (accounts[i].badges[j].code == req.body) {
-          taken = true;
-          console.log("TAKEN")
-          res.status(400).json({
-            message: "Code is taken, regenerate new!"
-          })
-        }
-      }
-    }
-  }
-  if (!taken) {
+  if (req.body.code != "badgecode") {
     console.log("NOT TAKEN!")
     res.status(200).json({
       message: "OK"
     })
+   
+  }
+ else {
+   console.log("TAKEN")
+  res.status(400).json({
+    message: "Code is taken, regenerate new!"
+  });
   }
 })
 

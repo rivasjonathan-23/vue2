@@ -112,14 +112,16 @@ export default {
   },
   methods: {
     validCode(code) {
-      axios
-        .post("http://localhost:8081/user/validatecode", code)
-        .then(res => {
-          return true;
-        })
-        .catch(err => {
-          return false;
-        });
+      return new Promise(resolve => {
+        axios
+          .post("http://localhost:8081/user/validatecode", { code: code })
+          .then(res => {
+            resolve(true);
+          })
+          .catch(err => {
+            resolve(false);
+          });
+      });
     },
     month(m) {
       this.date.month = m;
@@ -133,11 +135,12 @@ export default {
       }
       return bcode;
     },
-    offerBadge() {
+    async offerBadge() {
       var ok = false;
       var badgecode = this.generateCode();
       while (true) {
-        if (this.validCode(badgecode) == false) {
+        var status = await this.validCode(badgecode);
+        if (!status) {
           badgecode = this.generateCode();
         } else {
           ok = true;

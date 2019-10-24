@@ -34,24 +34,28 @@
               <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
             </b-card>
           </b-col>
-          <b-col cols="8">
+          <b-col cols="8" class="cerMenu">
             <hr>
-            <div class="text-center">
+            <div id="bmenu" class="text-center">
               <h2>Recipients</h2>
               <br>
               <b-row>
                 <b-col>
                   <b-button
+                    id="cer"
                     variant="primary"
                     class="btn btn-block shadow rounded"
                     v-b-modal.certify-modal
+                    v-on:click="getCode(badge.code)"
                   >Certify Recipients</b-button>
                 </b-col>
                 <b-col>
                   <b-button
+                    id="cer"
                     variant="primary"
                     class="btn btn-block shadow rounded"
                     v-b-modal.addRecipient-modal
+                    v-on:click="getCode(badge.code)"
                   >Add Recipient</b-button>
                 </b-col>
               </b-row>
@@ -65,85 +69,85 @@
         </b-row>
       </b-card>
     </div>
-       <b-modal
-        class="modl"
-        id="addRecipient-modal"
-        title="Recepient Information"
-        centered
-        no-close-on-esc
-        no-close-on-backdrop
-        hide-header-close
-        hide-footer
-      >
-        <form class="addR" @submit.prevent="addRecipient()">
-          <label for="usernamei">Search Username</label>
-          <b-input id="usernamei" v-model="s_username"/>
+    <b-modal
+      class="modl"
+      id="addRecipient-modal"
+      title="Recepient Information"
+      centered
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-header-close
+      hide-footer
+    >
+      <form class="addR" @submit.prevent="addRecipient()">
+        <label for="usernamei">Search Username</label>
+        <b-input id="usernamei" v-model="s_username"/>
+        <br>
+        <b-row>
+          <b-col>
+            <b-button v-on:click="handleCancel" variant="danger" class="btn btn-block">Cancel</b-button>
+          </b-col>
+          <b-col cols="8">
+            <b-button type="submit" variant="primary" class="btn btn-block">Add Recipient</b-button>
+          </b-col>
+        </b-row>
+      </form>
+    </b-modal>
+    <b-modal
+      class="modl"
+      size="dm"
+      id="certify-modal"
+      title="Certify The Recipients"
+      centered
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-header-close
+      hide-footer
+    >
+      <div class="text-center ifont">
+        <form @submit.stop.prevent="handleCertificationSubmit()">
+          <span>This certificate of</span>
           <br>
+          <input
+            class="inputline"
+            size="15"
+            placeholder="Certificate Category"
+            v-model="certificateName"
+          >
+          <br>
+          <br>
+          <span>is awarded to</span>
+          <br>
+          <p>
+            (participant/s' name)
+            <br>
+          </p>
+          <textarea
+            name="description"
+            id="description"
+            cols="30"
+            rows="3"
+            placeholder="Description of the event"
+            v-model="descriptions"
+          ></textarea>
+          <br>
+          <p>Given this {{ date }}</p>
+          <hr>
           <b-row>
             <b-col>
-              <b-button v-on:click="handleCancel" variant="danger" class="btn btn-block">Cancel</b-button>
+              <b-button
+                variant="danger"
+                class="btn btn-block"
+                v-on:click="resetCertification"
+              >Cancel</b-button>
             </b-col>
             <b-col cols="8">
-              <b-button type="submit" variant="primary" class="btn btn-block">Add Recipient</b-button>
+              <b-button variant="primary" class="btn btn-block" type="sumbit">Certify Now</b-button>
             </b-col>
           </b-row>
         </form>
-      </b-modal>
-      <b-modal
-        class="modl"
-        size="dm"
-        id="certify-modal"
-        title="Certify The Recipients"
-        centered
-        no-close-on-esc
-        no-close-on-backdrop
-        hide-header-close
-        hide-footer
-      >
-        <div class="text-center ifont">
-          <form @submit.stop.prevent="handleCertificationSubmit()">
-            <span>This certificate of</span>
-            <br>
-            <input
-              class="inputline"
-              size="15"
-              placeholder="Certificate Category"
-              v-model="certificateName"
-            >
-            <br>
-            <br>
-            <span>is awarded to</span>
-            <br>
-            <p>
-              (participant/s' name)
-              <br>
-            </p>
-            <textarea
-              name="description"
-              id="description"
-              cols="30"
-              rows="3"
-              placeholder="Description of the event"
-              v-model="descriptions"
-            ></textarea>
-            <br>
-            <p>Given this {{ date }}</p>
-            <hr>
-            <b-row>
-              <b-col>
-                <b-button
-                  variant="danger"
-                  class="btn btn-block"
-                  v-on:click="resetCertification"
-                >Cancel</b-button>
-              </b-col>
-              <b-col cols="8">
-                <b-button variant="primary" class="btn btn-block" type="sumbit">Certify Now</b-button>
-              </b-col>
-            </b-row>
-          </form>
-        </div>
-      </b-modal>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -189,6 +193,9 @@ export default {
       });
   },
   methods: {
+    getCode(bcode) {
+      this.code = bcode;
+    },
     resetModal() {
       this.s_username = "";
       this.selectedRole = "No role selected";
@@ -196,34 +203,44 @@ export default {
       this.warning = "";
     },
     addRecipient() {
-      axios.post("http://localhost:8081/user/addrecipient", {username: this.s_username, org: this.$store.getters.token, code: bcode}).then((res) => {
-        this.badges = res.data.badges;
-        this.resetModal();
-        this.$bvModal.hide("addRecipient-modal");
-      }).catch((err) => {
-        alert("Cannot find account!")
-      })
+      axios
+        .post("http://localhost:8081/user/addrecipient", {
+          username: this.s_username,
+          org: this.$store.getters.token,
+          code: this.code
+        })
+        .then(res => {
+          this.badges = res.data.badges;
+          this.resetModal();
+          this.$bvModal.hide("addRecipient-modal");
+          this.getData();
+        })
+        .catch(err => {
+          alert("Cannot find account!");
+        });
     },
     handleCancel() {
       this.resetModal();
       this.$bvModal.hide("addRecipient-modal");
     },
     handleCertificationSubmit() {
-      console.log(bcode);
       let badgeInfo = {
-        bcode: bcode,
+        code: this.code,
         certificateName: this.certificateName,
         descriptions: this.descriptions
       };
-      axios.post("http://localhost:8081/user/certify", {
-        user: this.$store.getters.token,
-        badgeInfo: badgeInfo
-      }).then((res) => {
-        this.resetCertification();
-      }).catch((err) => {
-        alert("Something gone wrong! Sorry")
-      });
-      
+      axios
+        .post("http://localhost:8081/user/certify", {
+          user: this.$store.getters.token,
+          badgeInfo: badgeInfo
+        })
+        .then(res => {
+          this.resetCertification();
+          this.getData();
+        })
+        .catch(err => {
+          alert("Something gone wrong! Sorry");
+        });
     },
     resetCertification() {
       this.descriptions = "";
@@ -232,15 +249,19 @@ export default {
     },
     closeCreate() {
       this.$bvModal.hide("offer");
+      this.getData();
+    },
+    getData() {
       axios
         .post("http://localhost:8081/user/pendingbadges", {
           data: this.$store.getters.token
         })
         .then(resp => {
-          console.log(resp.data.badges);
           this.badges = resp.data.badges;
           if (this.badges.length != 0) {
             $(".temp").hide();
+          } else {
+             $(".temp").show();
           }
         });
     }
