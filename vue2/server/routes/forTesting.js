@@ -1,7 +1,7 @@
 const express = require("express");
 const userRoute = express.Router();
-// const User = require("../models/User")
-// const bcrypt = require("bcryptjs")
+const User = require("../models/resUser")
+const bcrypt = require("bcryptjs")
 const config = require("./config")
 const jwt = require("jsonwebtoken")
 
@@ -36,7 +36,7 @@ userRoute.route("/login").post(function (req, res) {
       console.log("this is the " + token)
     }
   }
-  if (true) {
+  if (!sent) {
     console.log("wrong password")
     res.status(401).json({
       message: "login unsuccessful"
@@ -257,14 +257,14 @@ userRoute.route('/addrecipient').post((req, res) => {
       var orgbadge = [];
       for (var h = 0; h < accounts.length; ++h) {
         if (accounts[h].username == org.username) {
-          console.log("IM HERE")
           orgbadge = accounts[h].badges;
           for (var j = 0; j < orgbadge.length; ++j) {
             if (orgbadge[j].code == req.body.code) {
-              accounts[h].badges[j].recipient.push({
-                username: accounts[i].username,
-                Fullname: accounts[i].firstname + " " + accounts[i].lastname
-              })
+                accounts[h].badges[j].recipient.push({
+                  username: accounts[i].username,
+                  Fullname: accounts[i].firstname + " " + accounts[i].lastname
+                })
+              
             }
           }
         }
@@ -293,12 +293,13 @@ userRoute.route("/userbadges").post((req, res) => {
       for (var j = 0; j < bad.length; ++j) {
         for (var h = 0; h < bad[j].recipient.length; ++h) {
           if (bad[j].recipient[h].username == user.username) {
-            badges = bad[j];
+            badges.push(bad[j]);
           }
         }
       }
     }
   }
+  console.log("THIS IS THE USER BADGES")
   console.log(badges)
   res.status(200).json({
     badges: badges,
@@ -414,13 +415,12 @@ userRoute.route("/validatecode").post((req, res) => {
     res.status(200).json({
       message: "OK"
     })
-   
-  }
- else {
-   console.log("TAKEN")
-  res.status(400).json({
-    message: "Code is taken, regenerate new!"
-  });
+
+  } else {
+    console.log("TAKEN")
+    res.status(400).json({
+      message: "Code is taken, regenerate new!"
+    });
   }
 })
 

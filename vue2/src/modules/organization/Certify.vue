@@ -80,8 +80,8 @@
       hide-footer
     >
       <form class="addR" @submit.prevent="addRecipient()">
-        <label for="usernamei">Search Username</label>
-        <b-input id="usernamei" v-model="s_username"/>
+        <span class="error" v-show="error">Cannot find user or user already in the list!</span><br>
+        <b-input id="usernamei" v-model="s_username" placeholder="Enter username"/>
         <br>
         <b-row>
           <b-col>
@@ -175,7 +175,8 @@ export default {
       code: "",
       date: "",
       descriptions: "",
-      userExit: false
+      userExit: false,
+      error: false,
     };
   },
 
@@ -214,14 +215,16 @@ export default {
           this.resetModal();
           this.$bvModal.hide("addRecipient-modal");
           this.getData();
+          this.error = false;
         })
         .catch(err => {
-          alert("Cannot find account!");
+          this.error = true;
         });
     },
     handleCancel() {
       this.resetModal();
       this.$bvModal.hide("addRecipient-modal");
+      this.error= false;
     },
     handleCertificationSubmit() {
       let badgeInfo = {
@@ -298,6 +301,10 @@ export default {
   float: left;
   margin: 5px;
   margin-bottom: 0;
+}
+
+.error {
+  color:red;
 }
 
 b-modal {

@@ -8,41 +8,42 @@
         v-b-modal.availBadge-modal
       >Avail new certificate</b-button>
       <hr>
-       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
-      <div v-for="(badge, index) in this.badgelist" :key="index">
+      <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
+      <div v-for="(badge, index) in badgelist" :key="index">
         <div v-if="badge.granted">
-        <b-card class="bdgs">
-          <b-row class="justify-content-md-center">
-            <b-col class="text-center">
-              <img src="@/assets/image.png" class>
-              <h5>{{badge.badgename}}</h5>
-            </b-col>
-            <b-col cols="8" class="border-left">
-              <div class="text-center ifont">
-                <h4>
-                  This certificate of
+          <b-card class="bdgs">
+            <b-row class="justify-content-md-center">
+              <b-col class="text-center">
+                <img src="@/assets/image.png" class>
+                <h5>{{badge.badgename}}</h5>
+              </b-col>
+              <b-col cols="8" class="border-left">
+                <div class="text-center ifont">
+                  <h4>
+                    This certificate of
+                    <br>
+                    {{badge.certificateName}}
+                  </h4>
+                  <span>is awarded to</span>
+                  <h3>{{fullname}}</h3>
+                  <p>for</p>
+                  <h5>{{badge.descriptions}}</h5>
                   <br>
-                  {{badge.certificateName}}
-                </h4>
-                <span>is awarded to</span>
-                <h3>{{fullname}}</h3>
-                <p>for</p>
-                <h5>{{badge.descriptions}}</h5>
-                <br>
-                <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
-                <div class="text-center byorg">
-                  <p class="border-bottom">Certified by : {{badge.organization}}</p>
+                  <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
+                  <div class="text-center byorg">
+                    <p class="border-bottom">Certified by : {{badge.organization}}</p>
+                  </div>
                 </div>
-              </div>
-            </b-col>
-          </b-row>
-        </b-card>
+              </b-col>
+            </b-row>
+          </b-card>
         </div>
         <div v-else>
           <b-card class="bdgs">
             <p class="pending">PENDING</p>
-            <h3 class="pending">{{badge.badgename}}</h3><hr>
-             <h5 class="pending">Waiting for ceritification from {{badge.organization}}</h5>
+            <h3 class="pending">{{badge.badgename}}</h3>
+            <hr>
+            <h5 class="pending">Waiting for ceritification from {{badge.organization}}</h5>
           </b-card>
         </div>
       </div>
@@ -59,8 +60,14 @@
       hide-footer
     >
       <form class="addR" @submit.prevent="searchBadge">
-        <label for="bcode">Enter badge code</label>
-        <b-input id="bcode" v-model="badgeCode" autocomplete="off" required/>
+        <span class="error" v-show="error">Incorrect code</span>
+        <b-input
+          id="bcode"
+          v-model="badgeCode"
+          autocomplete="off"
+          placeholher="Enter badge code"
+          required
+        />
         <br>
         <b-row>
           <b-col>
@@ -68,6 +75,7 @@
               @click="$bvModal.hide('availBadge-modal')"
               variant="danger"
               class="btn btn-block"
+              v-on:click="error = false"
             >Cancel</b-button>
           </b-col>
           <b-col cols="6">
@@ -93,6 +101,7 @@ export default {
       badgeCode: "",
       fullname: "",
       hasData: false,
+      error: false
     };
   },
   methods: {
@@ -103,17 +112,15 @@ export default {
           credentials: this.$store.getters.token
         })
         .then(resp => {
-          alert("You successfully availed the badge");
+          this.error = false;
           this.$bvModal.hide("availBadge-modal");
           this.badgeCode = "";
         })
         .catch(error => {
-          alert(
-            "Badge is no longer available or the code you entered is incorrect!"
-          );
-           this.badgeCode = "";
+          this.error = true;
+          this.badgeCode = "";
         });
-    }
+    },
   },
   created() {
     axios
@@ -121,30 +128,14 @@ export default {
         user: this.$store.getters.token
       })
       .then(res => {
-        console.log(res.data.badges);
+        console.log("badgess"+res.data.badges);
         this.fullname = res.data.fullname;
         this.badgelist = res.data.badges;
-         if (this.badgelist.length == 0) {
+        console.log({badges: this.badgelist})
+        if (this.badgelist.length == 0) {
           this.hasData = true;
         }
       });
-    // this.badgelist = [
-    //   {
-    //     badgename: "Medical Mission",
-    //     certificateCategory: "Appreciation",
-    //     description:
-    //       "The active voluntarism offered during the medical mission for free vacination",
-    //     venue: "Talamban health center",
-    //     date: "Mon Oct 14 2019",
-    //     time: "9 AM",
-    //     organization: "Passerelles Numeriques",
-    //     recepient: "Redgie Gravador"
-    //   }
-    // ];
-    // let uri_badgelist = `http://localhost:8081/regular-badgelist/${this.username}`;
-    // this.axios.get(uri_badgelist).then(response => {
-    //   this.badgelist = response.data;
-    // });
   }
 };
 </script>
@@ -169,7 +160,7 @@ label {
 
 .bdgs {
   margin-bottom: 10px;
-  background:#f2f5f5;
+  background: #f2f5f5;
 }
 .temp {
   margin-top: 250px;
@@ -179,9 +170,12 @@ label {
 #mybadge {
   text-align: center;
 }
+.error {
+  color: red;
+}
 
 .pending {
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
 }
 </style>
