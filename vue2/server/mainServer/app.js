@@ -10,11 +10,26 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 
-const userRoute = require("../routes/forTesting")
+const userRoute = require("../routes/forTesting");
 
-// const config = require("./DB")
+const config = require("./DB");
     
-// mongoose.Promise = global.Promise;   
+// mongoose.Promise = global.Promise;
+mongoose.set('useCreateIndex', true)
+
+mongoose
+.connect('mongodb+srv://badgebookdb:badgebookdb2019@cluster0-pn3a6.mongodb.net/test?retryWrites=true&w=majority', {
+useUnifiedTopology: true,
+useNewUrlParser: true,
+})
+.then(() => console.log('DB Connected!'))
+.catch(err => {
+console.log("CONNECTION ERROR!");
+});
+
+// mongoose.connect('mongodb+srv://badgebookdb:badgebookdb2019@cluster0-pn3a6.mongodb.net/test?retryWrites=true&w=majority', {
+//   useNewUrlParser: true
+// });
 
 // mongoose.connect(config.DB, {
 //     useNewUrlParser: true,

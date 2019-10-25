@@ -12,7 +12,7 @@
                 class="input"
                 required
                 v-model="username"
-                v-on:keyup="checkUsername"
+                
               >
               <div class="line-box">
                 <div class="line"></div>
@@ -161,26 +161,26 @@ export default {
     }
   },
   created() {
-    if (
-      this.username != "" &&
-      this.password != "" &&
-      this.confirmpassword != ""
-    ) {
-      $(".label-txt1").addClass("label-active");
-    }
-    axios.get("http://localhost:8081/user/signedup").then(
-      response => {
-        if (response.data.username != null) {
-          this.username = response.data.username;
-          this.password = response.data.password;
-          this.confirmpassword = response.data.password;
-          $(".label-txt1").addClass("label-active");
-        }
-      },
-      err => {
-        console.log("error");
-      }
-    );
+    // if (
+    //   this.username != "" &&
+    //   this.password != "" &&
+    //   this.confirmpassword != ""
+    // ) {
+    //   $(".label-txt1").addClass("label-active");
+    // }
+    // axios.get("http://localhost:8081/user/signedup").then(
+    //   response => {
+    //     if (response.data.username != null) {
+    //       this.username = response.data.username;
+    //       this.password = response.data.password;
+    //       this.confirmpassword = response.data.password;
+    //       $(".label-txt1").addClass("label-active");
+    //     }
+    //   },
+    //   err => {
+    //     console.log("error");
+    //   }
+    // );
   },
   mounted() {
     $(".label-txt")
