@@ -1,6 +1,7 @@
 const express = require("express");
 const userRoute = express.Router();
 const User = require("../models/regUser")
+const Organization = require("../models/organization")
 const bcrypt = require("bcryptjs")
 const config = require("./config")
 const jwt = require("jsonwebtoken")
@@ -9,55 +10,100 @@ var data;
 
 var accounts = [];
 
+function findUser(username) {
+  return new Promise(function (resolve, reject) {
+    console.log("FINDING IN THE USER COLLECTION")
+    User.findOne({
+      username: username
+    })
+      .then(doc => {
+        if (doc) {
+          console.log("THE USER INFO: " + doc)
+          resolve(doc);
+        } else {
+          resolve("not found")
+        }
+      }).catch(err => {
+        resolve("error");
+        console.log(err)
+      })
+  })
+}
+
+async function findOrg(username) {
+  var status = await findUser(username);
+  return new Promise(function (resolve, reject) {
+    console.log("result from user: " + status);
+    if (status == "not found") {
+      console.log("FINDING IN ORGANIZATION COLLECTION");
+      Organization.findOne({
+        username: username
+      })
+        .then(doc => {
+          if (doc) {
+            console.log("THE ORGANIZATION INFO: " + doc);
+            resolve({ data: doc });
+          } else {
+            resolve({ data: "not found" });
+          }
+        }).catch(err => {
+          resolve({data: "error"});
+          console.log(err);
+        })
+    } else {
+      resolve({ data: status });
+    }
+  })
+}
+
 userRoute.route("/login").post(function (req, res) {
   console.log("LOGIN USER: " + req.body)
-  User.findOne({
-    username: req.body.username
-  })
-    .then(doc => {
-      if (doc) {
-        console.log("THE USER INFO: " + doc)
-        bcrypt.compare(req.body.password, doc.password)
-          .then(match => {
-            if (match) {
-              console.log("correct")
-              var token = jwt.sign({
-                  id: doc._id,
-                  type: doc.type,
-              }, config.secret, {
-                  expiresIn: 86400 // expires in 24 hours
-                });
-              res.status(200).send({
-                auth: true,
-                token: token,
-                type: doc.type,
-                message: "login successful"
+  getResult();
+
+  async function getResult() {
+    var fuser = await findOrg(req.body.username);
+    console.log("result: " + fuser);
+    console.log("finalizing request!")
+    if (fuser.data != "not found") {
+      bcrypt.compare(req.body.password, fuser.data.password)
+        .then(match => {
+          if (match) {
+            console.log("correct")
+            var token = jwt.sign({
+              id: fuser.data._id,
+              type: fuser.data.type,
+            }, config.secret, {
+                expiresIn: 86400 // expires in 24 hours
               });
-            } else {
-              console.log("wrong password")
-              res.status(401).json({
-                message: "Wrong password"
-              })
-            }
-          })
-          .catch(err => {
-            if (err) {
-              console.log(err)
-              res.status(500).json(err)
-            }
-          })
-      } else {
-        res.status(404).json({
-          message: "cannot find account!"
+            res.status(200).send({
+              auth: true,
+              token: token,
+              type: fuser.data.type,
+              message: "login successful"
+            });
+          } else {
+            console.log("wrong password")
+            res.status(401).json({
+              message: "Wrong password"
+            })
+          }
         })
-      }
-    }).catch(err => {
-      console.log(err);
-      res.status(500).json({
-        message: "an error occured",
-        error: err,
+        .catch(err => {
+          if (err) {
+            console.log(err)
+            res.status(500).json(err)
+          }
+        })
+    } else if (fuser.data == "not found") {
+      res.status(404).json({
+        message: "user not found!"
       })
-    })
+    } else {
+      res.status(500).json({
+        message: "Unexpected error occured!"
+      })
+    }
+  }
 })
 
 
@@ -78,11 +124,11 @@ userRoute.route("/signup").post((req, res) => {
 
 
 
-// userRoute.route("/signedup").get((req, res) => {
-//   user2 = data
-//   data = {}
-//   res.status(200).json(user2)
-// })
+userRoute.route("/signedup").get((req, res) => {
+  user2 = data
+  data = {}
+  res.status(200).json(user2)
+})
 
 userRoute.route("/userType").post((req, res) => {
   console.log(req.body.credential)
@@ -176,7 +222,7 @@ userRoute.route('/addrecipient').post((req, res) => {
             if (orgbadge[j].code == req.body.code) {
               accounts[h].badges[j].recipient.push({
                 username: accounts[i].username,
-                Fullname: accounts[i].firstname + " " + accounts[i].lastname
+                fullname: accounts[i].firstname + " " + accounts[i].lastname
               })
 
             }
@@ -222,70 +268,82 @@ userRoute.route("/userbadges").post((req, res) => {
 
 })
 
-userRoute.route("/fullsignup").post((req, res) => {
-  User.findOne({
-    username: req.body.username
-  })
-    .then(doc => {
-      if (doc) {
-        res.status(400).json({
-          message: "username already exist"
-        })
-      }
-      if (!doc) {
-        req.body.password = bcrypt.hashSync(req.body.password, 10);
-        const user = new User(req.body)
-        console.log(user)
-        user.save()
-          .then((data) => {
-            var token = jwt.sign({
-              username: user.username,
-              password: user.password,
-              type: user.type
-            }, config.secret, {
-                expiresIn: 86400
-              });
-            res.status(200).send({
-              auth: true,
-              token: token
-            });
-          })
-          .catch((err) => {
-            res.status(400).send(err);
-          })
-      }
 
-    })
-    .catch(err => {
-      console.log(err)
-      if (err) {
-        res.status(500).json(err)
+
+//REGULAR USER SIGN UP
+userRoute.route("/fullsignup").post((req, res) => {
+  getResult();
+
+  async function getResult() {
+    var result = await findOrg(req.body.username);
+    console.log("RESULT FROM ORG COLLECTION: "+result);
+    if (result.data == "not found") {
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+      const user = new User(req.body)
+      console.log(user)
+      user.save()
+        .then((data) => {
+          var token = jwt.sign({
+            id: user._id,
+            type: user.type
+          }, config.secret, {
+              expiresIn: 86400
+            });
+          res.status(200).send({
+            auth: true,
+            token: token
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send(err);
+        })
+      } else if (result.data == "error") {
+        res.status(500).json({ message: "Unexpected error occured!" })
+      } else {
+        console.log("RESPOND 400 ALREADY TAKEN")
+        res.status(400).json({ message: "Username is already taken!" })
       }
-    })
+  }
 })
 
 
 //=========================FOR ORGANIZATION============================================================
-userRoute.route("/orgsignup").post((req, res) => {
-  data = {}
-  console.log("hello")
-  console.log(req.body)
 
-  user = req.body;
-  accounts.push(user);
-  userInfo = req.body
-  var token = jwt.sign({
-    username: user.username,
-    password: user.password,
-    type: user.type
-  }, config.secret, {
-      expiresIn: 86400
-    });
-  res.status(200).send({
-    user: user,
-    auth: true,
-    token: token
-  });
+userRoute.route("/orgsignup").post((req, res) => {
+  getResult();
+
+  async function getResult() {
+    var result = await findOrg(req.body.username);
+    console.log("RESULT FROM ORG COLLECTION: "+result)
+    if (result.data == "not found") {
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+      const user = new Organization(req.body)
+      console.log(user)
+      user.save()
+        .then((data) => {
+          var token = jwt.sign({
+            id: user._id,
+            type: user.type
+          }, config.secret, {
+              expiresIn: 86400
+            });
+          res.status(200).send({
+            auth: true,
+            token: token
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send(err);
+        })
+    } else if (result.data == "error") {
+      res.status(500).json({ message: "Unexpected error occured!" })
+    } else {
+      console.log("RESPOND 400 ALREADY TAKEN")
+      res.status(400).json({ message: "Username is already taken!" })
+    }
+  }
 })
 
 userRoute.route("/offerbadge").post((req, res) => {
@@ -361,11 +419,11 @@ userRoute.route("/validatecode").post((req, res) => {
 //========================================================================================================
 
 
-userRoute.route("/userInfo").post((req, res) => { //to get the information of the user
+userRoute.route("/userInfo").post((req, res) => { 
   console.log(req.body.data)
-  var user = jwt.decode(req.body.data)
-  //decode the token and use the username and password to search the information of that account
-  //user.username and user.password will be used to retrieve information
+  var user = jwt.decode(req.body.data);
+  
+
   console.log("this the org")
   console.log(user)
   for (var i = 0; i < accounts.length; ++i) {
@@ -373,7 +431,7 @@ userRoute.route("/userInfo").post((req, res) => { //to get the information of th
       userInfo = accounts[i];
   }
   res.status(200).json({
-    data: userInfo //wil be replaced by the data from database
+    data: userInfo 
   })
 })
 

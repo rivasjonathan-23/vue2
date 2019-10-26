@@ -10,7 +10,6 @@
           class="input"
           name="username"
           v-model="username"
-          v-on:keyup="checkUsername"
           autocomplete="off" required
         >
         <div class="line-box">
@@ -71,7 +70,7 @@ export default {
       password: "",
       confirmpassword: "",
       err: false,
-      isValid: false
+      isValid: true
     };
   },
   methods: {

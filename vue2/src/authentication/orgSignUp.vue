@@ -14,7 +14,7 @@
                 v-model="username"
                 
               >
-              <div class="line-box">
+              <div id="unameErr" class="line-box">
                 <div class="line"></div>
               </div>
               <transition name="slide-fade">
@@ -131,11 +131,17 @@ export default {
         this.password == this.confirmpassword
       ) {
         this.$store
-          .dispatch("fullsignup", userInfo)
-          .then(() => this.$router.push("/organization"))
-          .catch(err => console.log(err));
-        // axios.post("http://localhost:8081/user/fullsignup", userInfo);
-        // alert("successfully registered");
+          .dispatch("orgSignUp", userInfo)
+          .then(() => {
+            this.err = false;
+            $("#unameErr").css({"background-color": "#555657"});
+            this.$router.push("/organization")
+            
+            })
+          .catch(err => {
+            this.err = true;
+            $("#unameErr").css({"background-color": "red"});
+          });
       } else {
         alert("invalid credentials!");
       }
@@ -291,7 +297,7 @@ hr {
 .err {
   font-weight: normal;
   color: red;
-  font-size: 12px;
+  font-size: 14px;
   position: absolute;
   left: 0px;
 }
