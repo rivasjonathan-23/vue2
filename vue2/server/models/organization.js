@@ -37,7 +37,7 @@ var orgSchema = new mongoose.Schema({
       required: true,
       unique: false,
     },
-    badges: {
+    badges:[{
         granted: Boolean,
         code: String,
         badgename: String,
@@ -51,7 +51,7 @@ var orgSchema = new mongoose.Schema({
           day: Number,
           year: Number,
         }
-    },
+    }],
     post: {
       type: String,
       required: false,

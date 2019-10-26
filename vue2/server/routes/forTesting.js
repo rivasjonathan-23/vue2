@@ -47,7 +47,7 @@ async function findOrg(username) {
             resolve({ data: "not found" });
           }
         }).catch(err => {
-          resolve({data: "error"});
+          resolve({ data: "error" });
           console.log(err);
         })
     } else {
@@ -70,7 +70,7 @@ userRoute.route("/login").post(function (req, res) {
           if (match) {
             console.log("correct")
             var token = jwt.sign({
-              id: fuser.data._id,
+              username: fuser.data.username,
               type: fuser.data.type,
             }, config.secret, {
                 expiresIn: 86400 // expires in 24 hours
@@ -276,7 +276,7 @@ userRoute.route("/fullsignup").post((req, res) => {
 
   async function getResult() {
     var result = await findOrg(req.body.username);
-    console.log("RESULT FROM ORG COLLECTION: "+result);
+    console.log("RESULT FROM ORG COLLECTION: " + result);
     if (result.data == "not found") {
       req.body.password = bcrypt.hashSync(req.body.password, 10);
       const user = new User(req.body)
@@ -284,46 +284,7 @@ userRoute.route("/fullsignup").post((req, res) => {
       user.save()
         .then((data) => {
           var token = jwt.sign({
-            id: user._id,
-            type: user.type
-          }, config.secret, {
-              expiresIn: 86400
-            });
-          res.status(200).send({
-            auth: true,
-            token: token
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).send(err);
-        })
-      } else if (result.data == "error") {
-        res.status(500).json({ message: "Unexpected error occured!" })
-      } else {
-        console.log("RESPOND 400 ALREADY TAKEN")
-        res.status(400).json({ message: "Username is already taken!" })
-      }
-  }
-})
-
-
-//=========================FOR ORGANIZATION============================================================
-
-userRoute.route("/orgsignup").post((req, res) => {
-  getResult();
-
-  async function getResult() {
-    var result = await findOrg(req.body.username);
-    console.log("RESULT FROM ORG COLLECTION: "+result)
-    if (result.data == "not found") {
-      req.body.password = bcrypt.hashSync(req.body.password, 10);
-      const user = new Organization(req.body)
-      console.log(user)
-      user.save()
-        .then((data) => {
-          var token = jwt.sign({
-            id: user._id,
+            username: user.username,
             type: user.type
           }, config.secret, {
               expiresIn: 86400
@@ -346,58 +307,111 @@ userRoute.route("/orgsignup").post((req, res) => {
   }
 })
 
+
+//ORGANIZATION SIGN UP
+userRoute.route("/orgsignup").post((req, res) => {
+  getResult();
+
+  async function getResult() {
+    var result = await findOrg(req.body.username);
+    console.log("RESULT FROM ORG COLLECTION: " + result)
+    if (result.data == "not found") {
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+      const user = new Organization(req.body)
+      console.log(user)
+      user.save()
+        .then((data) => {
+          var token = jwt.sign({
+            username: user.username,
+            type: user.type
+          }, config.secret, {
+              expiresIn: 86400
+            });
+          res.status(200).send({
+            auth: true,
+            token: token
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send(err);
+        })
+    } else if (result.data == "error") {
+      res.status(500).json({ message: "Unexpected error occured!" })
+    } else {
+      console.log("RESPOND 400 ALREADY TAKEN")
+      res.status(400).json({ message: "Username is already taken!" })
+    }
+  }
+})
+
+//************************************************************************************************************** */
+function orgInfo(username) {
+  return new Promise(function (resolve, reject) {
+    Organization.findOne({
+      username: username
+    }).then(doc => {
+      if (doc) {
+        resolve({ data: doc });
+      }
+    }).catch(err => {
+      resolve({ data: "ERROR HAS OCCURED!" });
+    })
+  })
+}
+
+
+
 userRoute.route("/offerbadge").post((req, res) => {
   var org = jwt.decode(req.body.user);
-  for (var i = 0; i < accounts.length; ++i) {
-    if (accounts[i].username == org.username) {
-      req.body.badge.organization = accounts[i].orgName;
-      accounts[i].badges.push(req.body.badge);
-    }
-  }
+  console.log(req.body.badge);
+  Organization.updateOne({username: org.username}, {$push: {badges: req.body.badge}})
+  .then(() => {
+    console.log("UPDATE SUCCESSFUL");
+    res.status(200).json({message: "successfull added"});
+  }).catch(err => {
+    res.status(500).json({message: "un error occured!"});
+    console.log(err);
+  })
 })
 
-userRoute.route("/pendingbadges").post((req, res) => {
-  console.log(req.body.data);
-  var org = jwt.decode(req.body.data);
-  console.log("this badges org request");
-  console.log(org);
-  var orgbadge = [];
-  for (var i = 0; i < accounts.length; ++i) {
-    if (accounts[i].username == org.username) {
-      console.log(accounts[i].badges)
-      if (accounts[i].type = "Organization") {
-        for (var j = 0; j < accounts[i].badges.length; ++j) {
-          if (!accounts[i].badges[j].granted) {
-            orgbadge.push(accounts[i].badges[j])
-          }
-        }
-      }
-    }
-  }
-  console.log(orgbadge)
-  res.status(200).json({
-    badges: orgbadge
-  });
-})
 
 userRoute.route("/badges-org").post((req, res) => {
-  console.log(req.body.data);
-  var org = jwt.decode(req.body.data);
-  console.log("this badges org request");
-  console.log(org);
-  var orgbadge = [];
-  for (var i = 0; i < accounts.length; ++i) {
-    if (accounts[i].username == org.username) {
-      if (accounts[i].type = "Organization") {
-        orgbadge = accounts[i].badges;
-
-      }
-    }
+  var user = jwt.decode(req.body.data);
+  console.log(user);
+  getOrgBadges();
+  async function getOrgBadges() {
+    var org = await orgInfo(user.username);
+    console.log("ORG BADGES: "+org.data.badges);
+    res.status(200).json({
+      badges: org.data.badges
+    })
   }
-  res.status(200).json({
-    badges: orgbadge
-  });
 })
+
+
+userRoute.route("/pendingbadges").post((req, res) => {
+  // var org = jwt.decode(req.body.data);
+  // var orgbadge = [];
+  // for (var i = 0; i < accounts.length; ++i) {
+  //   if (accounts[i].username == org.username) {
+  //     console.log(accounts[i].badges)
+  //     if (accounts[i].type = "Organization") {
+  //       for (var j = 0; j < accounts[i].badges.length; ++j) {
+  //         if (!accounts[i].badges[j].granted) {
+  //           orgbadge.push(accounts[i].badges[j])
+  //           res.status(200).json({message: "Successfully added!"})
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  // console.log(orgbadge)
+  // res.status(200).json({
+  //   badges: orgbadge
+  // });
+})
+
 
 
 userRoute.route("/validatecode").post((req, res) => {
@@ -418,27 +432,18 @@ userRoute.route("/validatecode").post((req, res) => {
 
 //========================================================================================================
 
-
-userRoute.route("/userInfo").post((req, res) => { 
-  console.log(req.body.data)
+userRoute.route("/userInfo").post((req, res) => {
   var user = jwt.decode(req.body.data);
-  
-
-  console.log("this the org")
-  console.log(user)
-  for (var i = 0; i < accounts.length; ++i) {
-    if (accounts[i].username == user.username && accounts[i].password == user.password)
-      userInfo = accounts[i];
+  getResult();
+  async function getResult() {
+    var result = await findOrg(user.username);
+    if (result.data != "not found" && result.data != "error") {
+      res.status(200).json({ data: result.data });
+    } else if (result.data == "error") {
+      res.status(500).json({ message: "Unexpected error occured!" });
+    }
   }
-  res.status(200).json({
-    data: userInfo 
-  })
 })
-
-
-
-
-
 
 
 module.exports = userRoute;

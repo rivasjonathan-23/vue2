@@ -163,17 +163,25 @@ export default {
             year: this.date.year
           }
         };
-        axios.post("http://localhost:8081/user/offerbadge", {
-          user: this.$store.getters.token,
-          badge: badge
-        });
-        this.badgename = "";
-        (this.venue = ""), (this.date.month = "");
-        this.date.day = "";
-        this.date.year = "";
-        $("p").removeClass(".label-active");
-        this.$emit("submit");
-        this.$store.dispatch("submit");
+        axios
+          .post("http://localhost:8081/user/offerbadge", {
+            user: this.$store.getters.token,
+            badge: badge
+          })
+          .then((res) => {
+            this.badgename = "";
+            this.venue = "";
+            this.date.month = "";
+            this.date.day = "";
+            this.date.year = "";
+            $("p").removeClass(".label-active");
+            this.$emit("submit");
+            this.$store.dispatch("submit");
+          })
+          .catch((err) => {
+            alert("ERROR OCCURED!");
+            console.log(err);
+          });
       }
     }
   },
