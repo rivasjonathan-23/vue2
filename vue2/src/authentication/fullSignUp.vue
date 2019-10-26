@@ -6,8 +6,8 @@
           <p class="sign">Sign Up</p>
           <label>
             <p class="label-txt1">USERNAME</p>
-            <input type="text" class="input" required v-model="username" v-on:keyup="checkUsername">
-            <div class="line-box">
+            <input type="text" class="input" required v-model="username">
+            <div id="unameErr" class="line-box">
               <div class="line"></div>
             </div>
             <transition name="slide-fade">
@@ -262,8 +262,14 @@ export default {
       ) {
         this.$store
           .dispatch("fullsignup", userInfo)
-          .then(() => this.$router.push("/user"))
-          .catch(err => console.log(err));
+          .then(() => {this.$router.push("/user");
+            this.err = false;
+            $("#unameErr").css({background: "#555657"});
+            })
+          .catch(err => {
+            $("#unameErr").css({background: "red"});
+            this.err = true;
+          });
       } else {
         alert("invalid credentials!");
       }
@@ -470,7 +476,7 @@ h5:hover {
 .err {
   font-weight: normal;
   color: red;
-  font-size: 12px;
+  font-size: 14px;
   position: absolute;
   left: 0px;
 }

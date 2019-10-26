@@ -10,18 +10,20 @@ var data;
 var accounts = [];
 
 userRoute.route("/login").post(function (req, res) {
+  console.log("LOGIN USER: " + req.body)
   User.findOne({
     username: req.body.username
   })
     .then(doc => {
       if (doc) {
-        console.log("THE USER"+doc)
+        console.log("THE USER INFO: " + doc)
         bcrypt.compare(req.body.password, doc.password)
           .then(match => {
             if (match) {
               console.log("correct")
               var token = jwt.sign({
-                id: doc._id,
+                  id: doc._id,
+                  type: doc.type,
               }, config.secret, {
                   expiresIn: 86400 // expires in 24 hours
                 });
@@ -41,7 +43,7 @@ userRoute.route("/login").post(function (req, res) {
           .catch(err => {
             if (err) {
               console.log(err)
-              res.json(err)
+              res.status(500).json(err)
             }
           })
       } else {
@@ -49,82 +51,19 @@ userRoute.route("/login").post(function (req, res) {
           message: "cannot find account!"
         })
       }
+    }).catch(err => {
+      console.log(err);
+      res.status(500).json({
+        message: "an error occured",
+        error: err,
+      })
     })
-  })
-  // console.log(accounts)
-  // sent = false;
-  // for (var i = 0; i < accounts.length; ++i) {
-  //   if (accounts[i].username == req.body.username && accounts[i].password == req.body
-  //     .password) {
-  //     console.log("HELLO PEOPLE")
-  //     var token = req.headers["authorization"];
-  //     console.log(token)
-
-  //     var token = jwt.sign({
-  //       username: req.body.username,
-  //       password: req.body.password,
-  //       type: accounts[i].type
-  //     }, config.secret, {
-  //         expiresIn: 86400 // expires in 24 hours
-  //       });
-  //     sent = true;
-  //     res.status(200).json({
-  //       auth: true,
-  //       type: accounts[i].type,
-  //       token: token,
-  //       message: "login successful"
-  //     });
-  //     console.log("this is the " + token)
-  //   }
-  // }
-  // if (!sent) {
-  //   console.log("wrong password")
-  //   res.status(401).json({
-  //     message: "login unsuccessful"
-  //   })
-  // }
-
-
-
-
-
-
-userRoute.route("/checkusername").post((req, res) => {
-  console.log(req.body)
-
-  if (req.body.username == "rivas") {
-    res.status(400).json({
-      message: "username already exist"
-    })
-  } else {
-    res.status(200).json({
-      message: "ok"
-    })
-  }
-  // User.findOne({
-  //         username: req.body.username
-  //     })
-  //     .then(doc => {
-  //         if (doc) {
-  //             res.status(200).json({
-  //                 message: "username already exist"
-  //             })
-  //             //console.log(doc)
-  //         }
-  //         if (!doc) {
-  //             res.status(200).json({message: "ok"})
-  //         }
-
-  //     })
-  //     .catch(err => {
-  //         console.log(err)
-  //         if (err) {
-  //             res.status(200).json({
-  //                 message: err.name
-  //             })
-  //         }
-  //     })
 })
+
+
+
+
+
 
 
 var user = {
@@ -284,25 +223,44 @@ userRoute.route("/userbadges").post((req, res) => {
 })
 
 userRoute.route("/fullsignup").post((req, res) => {
-  req.body.password = bcrypt.hashSync(req.body.password, 10);
-  const user = new User(req.body)
-  console.log(user)
-  user.save()
-    .then((data) => {
-      var token = jwt.sign({
-        username: user.username,
-        password: user.password,
-        type: user.type
-      }, config.secret, {
-          expiresIn: 86400
-        });
-      res.status(200).send({
-        auth: true,
-        token: token
-      });
+  User.findOne({
+    username: req.body.username
+  })
+    .then(doc => {
+      if (doc) {
+        res.status(400).json({
+          message: "username already exist"
+        })
+      }
+      if (!doc) {
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
+        const user = new User(req.body)
+        console.log(user)
+        user.save()
+          .then((data) => {
+            var token = jwt.sign({
+              username: user.username,
+              password: user.password,
+              type: user.type
+            }, config.secret, {
+                expiresIn: 86400
+              });
+            res.status(200).send({
+              auth: true,
+              token: token
+            });
+          })
+          .catch((err) => {
+            res.status(400).send(err);
+          })
+      }
+
     })
-    .catch((err) => {
-      res.status(400).send(err);
+    .catch(err => {
+      console.log(err)
+      if (err) {
+        res.status(500).json(err)
+      }
     })
 })
 
