@@ -220,9 +220,9 @@ export default {
   name: "FullSignUp",
   data() {
     return {
-      username: "jrivas23",
-      password: "jrivas2398",
-      confirmpassword: "jrivas2398",
+      username: "",
+      password: "",
+      confirmpassword: "",
       firstname: "Jonathan",
       lastname: "Rivas",
       email: "rivas@gmail.com",

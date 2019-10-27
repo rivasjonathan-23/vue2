@@ -1,10 +1,9 @@
 <template>
   <div class="outercont">
     <div class="con">
-      <SignUp></SignUp>
-      
+      <SignUp class="box"></SignUp>
+      <!-- <img :src="image" alt class="background"> -->
     </div>
-    <div class="posts"></div>
   </div>
 </template>
 
@@ -14,6 +13,11 @@ import SignUp from "./signUp";
 
 export default {
   name: "Home",
+  data() {
+    return {
+       image: require("@/assets/background.jpg")
+    }
+  },
   components: { 
     SignUp 
   },
@@ -22,6 +26,17 @@ export default {
 
 
 <style scoped>
+
+.background {
+  /* position:absolute; */
+  width:1000em;
+  height: auto;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+
+}
+
+
 .col-sm-3 {
   border: 1px solid lightgrey;
   width: 400px;
@@ -55,17 +70,23 @@ body {
   padding-right:0;
   margin-right:0;
   margin-left:0;
+  height: 100%;
+  background-image: url("~@/assets/background.jpg");
+  background-size: cover;
+  
 }
 
 .con {
+  position: relative;
   margin-right: 0;
   margin-left: 0;
-  background-image: linear-gradient(to bottom right, white, #d9dcde);
-  /* margin: 0; */
+  height: 850px;
   padding-top: 0;
-  height: 650px;
-  width: 100%;
+
+  /* height:100%; */
 }
+
+
 </style>
 
 

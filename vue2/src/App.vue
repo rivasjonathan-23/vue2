@@ -1,6 +1,25 @@
 <template>
   <div id="app">
     <b-navbar class="navbar" toggleable="lg" type="dark">
+      <b-navbar-brand class="web-name" @click="redirect('/')">BadgeBook*</b-navbar-brand>
+
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          
+        </b-navbar-nav>
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item v-if="!active" class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
+          <b-nav-item v-if="!active" class="opt" @click="redirect('/login')">Sign in</b-nav-item>
+          <b-nav-item v-if="!active" class="opt" @click="redirect('/signUpAs')">Sign up</b-nav-item>
+          <b-nav-item v-if="active" class="opt" @click="redirect('/login')">Sign up</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    <!-- <b-navbar class="navbar" toggleable="lg" type="dark">
       <div class="container-fluid">
         <div class="navbar-header">
           <router-link to="/">
@@ -11,20 +30,8 @@
         <b-navbar-nav class="ml-auto">
           <ul id="nav" class="nav navbar-nav navbar-right">
             <li>
-              <b-nav-form id="search" @submit.prevent="search">
-                <div class="searchbox">
-                  <input
-                    type="text"
-                    id="srch"
-                    class="form-control"
-                    placeholder="Search"
-                    v-model="person"
-                  >
-                </div>
-              </b-nav-form>
-            </li>
-            <li>
               <div v-if="!this.$store.getters.isLoggedIn">
+                <div class="searchUser">Search</div>
                 <router-link class="btn btn-default" to="/signUpAs">
                   <p class="auth">Sign up</p>
                 </router-link>
@@ -41,7 +48,18 @@
         </b-navbar-nav>
         <span class="fa fa-bars">=</span>
       </div>
-    </b-navbar>
+    </b-navbar>-->
+    <b-modal id="searchUser" title="Search other user or organization"
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-header-close
+      centered
+      hide-footer>
+      <div class="d-block text-center">
+        <h3>Hello From This Modal!</h3>
+      </div>
+      <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
+    </b-modal>
     <center>
       <router-view class="content"/>
     </center>
@@ -50,8 +68,8 @@
 
 
 <script>
- // eslint-disable-next-line
- /* eslint-disable */
+// eslint-disable-next-line
+/* eslint-disable */
 import $ from "jquery";
 import axios from "axios";
 
@@ -59,10 +77,14 @@ export default {
   name: "app",
   data() {
     return {
-      person: ""
+      person: "",
+      active: this.$store.getters.isLoggedIn,
     };
   },
   methods: {
+    redirect(path) {
+      this.$router.push(path);
+    },
     search() {
       let user = { user: this.person };
       axios.post("http://localhost:8081/search", user).then(
@@ -97,7 +119,7 @@ export default {
       var win = $(this);
       if (win.width() >= 750) {
         $("ul").show();
-        $('.fa').hide();
+        $(".fa").hide();
       }
     });
 
@@ -108,11 +130,27 @@ export default {
         $(".fa").show();
       }
     });
-  },
+  }
 };
 </script>
 
 <style scoped>
+
+.closeSearch {
+  width: 90px;
+  float:right;
+}
+
+.opt {
+  margin:0;
+  padding:7px;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.opt:hover {
+  background:gray;
+}
 .icon {
   padding-top: 0;
   display: none;
@@ -138,7 +176,7 @@ export default {
 }
 
 .content {
-  padding-top:66px;
+  padding-top: 50px;
 }
 
 #srch {
@@ -182,10 +220,11 @@ p:hover {
   padding-left: 2%;
   margin-bottom: 0;
   background: #034e85;
-  padding-top: 5px;
-  padding-bottom: 3px;
+  padding-top: 0;
+  padding-bottom: 0;
   overflow: hidden;
 }
+
 
 .btn {
   float: right;
@@ -233,7 +272,7 @@ body {
   padding: 8px;
   color: white;
   letter-spacing: 3px;
-  margin: 5px;
+  margin: 2px;
 }
 
 .material-icons {

@@ -20,7 +20,8 @@
           </div>
         </label>
 
-        <button type="submit">submit</button>
+        <button v-show="!loading" type="submit">submit</button>
+        <span v-show="loading">Loading...</span>
       </form>
     </center>
   </div>
@@ -38,31 +39,29 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      loading: false
     };
   },
   methods: {
     login() {
+      this.loading = true;
       let cred = { username: this.username, password: this.password };
        this.$store.dispatch("login", cred)
         .then((res) => {
            console.log(res)
           if (res == "Regular user") {
             console.log(res)
+            this.loading = false;
             this.$router.push("/user");
           } else {
             this.$router.push("/organization");
           }
         })
-        .catch(err => alert("Invalid credentials!"));
-      // axios.post("http://localhost:8081/user/login", cred).then(response => {
-      //   if (response.data.message != "login unsuccessful") {
-      //     console.log(response)
-      //     alert("login successfull");
-      //   } else {
-      //     alert(response.data.message);
-      //   }
-      // });
+        .catch(err => {
+          this.loading = false;
+          alert("Invalid credentials!");
+        });
     }
   },
   mounted() {
