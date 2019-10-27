@@ -12,10 +12,10 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item v-if="!active" class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
-          <b-nav-item v-if="!active" class="opt" @click="redirect('/login')">Sign in</b-nav-item>
-          <b-nav-item v-if="!active" class="opt" @click="redirect('/signUpAs')">Sign up</b-nav-item>
-          <b-nav-item v-if="active" class="opt" @click="redirect('/login')">Sign up</b-nav-item>
+          <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
+          <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="redirect('/login')">Sign in</b-nav-item>
+          <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="redirect('/signUpAs')">Sign up</b-nav-item>
+          <b-nav-item v-show="this.$store.getters.isLoggedIn" class="opt" @click="signout">Sign out</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -78,7 +78,6 @@ export default {
   data() {
     return {
       person: "",
-      active: this.$store.getters.isLoggedIn,
     };
   },
   methods: {
@@ -130,6 +129,8 @@ export default {
         $(".fa").show();
       }
     });
+  },created() {
+    alert(this.$store.getters.isLoggedIn);
   }
 };
 </script>
@@ -143,6 +144,7 @@ export default {
 
 .opt {
   margin:0;
+  color: white;
   padding:7px;
   padding-left:5px;
   padding-right:5px;
@@ -219,7 +221,7 @@ p:hover {
   padding-right: 2%;
   padding-left: 2%;
   margin-bottom: 0;
-  background: #034e85;
+  background:rgb(3, 78, 133,0.9);
   padding-top: 0;
   padding-bottom: 0;
   overflow: hidden;

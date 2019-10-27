@@ -93,7 +93,7 @@ export default {
   border: 1px solid lightgrey;
   width: 400px;
   /* margin-top: 150px; */
-  /* margin-bottom: 40px; */
+  margin-bottom: 40px;
   background: white;
   padding: 40px;
   text-align: center;
@@ -103,9 +103,13 @@ export default {
 }
 
 .container {
+  position: relative;
   justify-content: center;
   margin: 0;
+  background-image: url("~@/assets/background2.jpg");
+  background-size: cover;
   padding-top: 150px;
+  padding-bottom: 100px;
   width: 100%;
   height: 100%;
 }

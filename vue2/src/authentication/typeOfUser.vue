@@ -57,6 +57,8 @@ export default {
 
 <style scoped>
 .contain {
+  /* background-image: url("~@/assets/background3.jpg");
+  background-size: cover; */
   text-align: center;
   padding-top:90px;
   text-align: center;
@@ -87,6 +89,7 @@ export default {
   width: 970px;
   /* margin-top: 80px; */
   text-align: right;
+  margin-bottom:0; 
 }
 .ch {
   font-size: 17px;

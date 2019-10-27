@@ -454,10 +454,11 @@ h5:hover {
 }
 
 #perinfo {
+  background: white;
   overflow: visible;
   padding: 40px;
   margin: 0;
-  border-radius: 5px;
+ 
   height: 100%;
   text-align: left;
 }

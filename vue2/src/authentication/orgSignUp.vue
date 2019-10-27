@@ -278,8 +278,9 @@ hr {
   overflow: auto;
   padding: 40px;
   margin: 0;
+  background:white;
   border-radius: 5px;
-  height: 100%;
+  height: 800px;
   text-align: left;
 }
 
