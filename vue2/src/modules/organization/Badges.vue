@@ -1,7 +1,8 @@
 <template>
   <div id="badges">
      <b-card class="b">
-    <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+    <h3 class="temp" v-show="noData">You haven't offered badges yet</h3>
+    <h3 class="loading" v-show="isLoading">Loading.....</h3>
     <!-- <div v-for="(datapass, index) in by3Data" :key="index"> -->
       <Bythree :data="by3Data"></Bythree>
       <br />
@@ -24,6 +25,8 @@ export default {
   data() {
     return {
       by3Data: [],
+      isLoading: true,
+      noData: false,
       temp: [],
       excessData: [],
     };
@@ -34,8 +37,10 @@ export default {
       this.by3Data = [];
       this.by3Data = response.data.badges.reverse();
       if (this.by3Data.length == 0) {
-        $(".temp").show();
+        this.noData = true;
       }
+      this.isLoading = false;
+
       // console.log(allData)
       // var hasContent = false;
       // for (let i = 0; i < allData.length; ++i) {
@@ -74,6 +79,11 @@ export default {
 }
 
 .temp {
+  margin-top:250px;
+  margin-bottom: 250px;
+}
+
+.loading {
   margin-top:250px;
   margin-bottom: 250px;
 }

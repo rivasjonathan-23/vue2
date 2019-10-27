@@ -6,7 +6,7 @@
       <p class="b">{{ venue }}</p>
       <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>
     </div>
-    <form class="signupform" @submit.prevent="offerBadge">
+    <form class="signupform" @submit.prevent="createBadge">
       <center>
         <h1 class="sign">Offer A Badge</h1>
       </center>
@@ -111,78 +111,82 @@ export default {
     };
   },
   methods: {
-    validCode(code) {
-      return new Promise(resolve => {
+    validCode() {
+      return new Promise(function(resolve, reject) {
+        var bcode = "";
+        var char = "abcdefghijklmnopqrstuvwxyz1234567890";
+        for (var i = 0; i < 6; ++i) {
+          var index = Math.floor(Math.random() * char.length);
+          bcode += char.charAt(index);
+        }
+        alert("code created: " + bcode);
         axios
-          .post("http://localhost:8081/user/validatecode", { code: code })
+          .post("http://localhost:8081/user/validatecode", { code: bcode })
           .then(res => {
-            resolve(true);
+            alert("not taken");
+            resolve(bcode);
           })
           .catch(err => {
-            resolve(false);
+            alert("taken");
+            resolve("CODE_ALREADY_TAKEN");
           });
       });
     },
     month(m) {
       this.date.month = m;
     },
-    generateCode() {
-      var bcode = "";
-      var char = "abcdefghijklmnopqrstuvwxyz1234567890";
-      for (var i = 0; i < 6; ++i) {
-        var index = Math.floor(Math.random() * char.length);
-        bcode += char.charAt(index);
-      }
-      return bcode;
-    },
     async offerBadge() {
       var ok = false;
-      var badgecode = this.generateCode();
+      var badgecode = await this.validCode();
       while (true) {
-        var status = await this.validCode(badgecode);
-        if (!status) {
-          badgecode = this.generateCode();
+        console.log("result from generating new: "+status);
+        if (status == "CODE_ALREADY_TAKEN") {
+          console.log("regenerating.....")
+          badgecode = this.validCode();
         } else {
-          ok = true;
-          break;
+          return new Promise(function(resolve, reject) {
+            resolve(badgecode);
+          });
         }
       }
-      if (ok) {
-        let badge = {
-          granted: false,
-          code: badgecode,
-          badgename: this.badgename,
-          venue: this.venue,
-          recipient: [],
-          certificateName: "",
-          descriptions: "",
-          organization: "",
-          date: {
-            month: this.date.month,
-            day: this.date.day,
-            year: this.date.year
-          }
-        };
-        axios
-          .post("http://localhost:8081/user/offerbadge", {
-            user: this.$store.getters.token,
-            badge: badge
-          })
-          .then((res) => {
-            this.badgename = "";
-            this.venue = "";
-            this.date.month = "";
-            this.date.day = "";
-            this.date.year = "";
-            $("p").removeClass(".label-active");
-            this.$emit("submit");
-            this.$store.dispatch("submit");
-          })
-          .catch((err) => {
-            alert("ERROR OCCURED!");
-            console.log(err);
-          });
-      }
+    },
+    async createBadge() {
+      var bdgcode = await this.offerBadge();
+      console.log("final result: "+bdgcode)
+      let badge = {
+        granted: false,
+        code: bdgcode,
+        badgename: this.badgename,
+        venue: this.venue,
+        recipient: [],
+        certificateName: "",
+        descriptions: "",
+        organization: "",
+        date: {
+          month: this.date.month,
+          day: this.date.day,
+          year: this.date.year
+        }
+      };
+      axios
+        .post("http://localhost:8081/user/offerbadge", {
+          user: this.$store.getters.token,
+          badge: badge
+        })
+        .then(res => {
+          this.badgename = "";
+          this.venue = "";
+          this.date.month = "";
+          this.date.day = "";
+          this.date.year = "";
+          $("p").removeClass(".label-active");
+          this.$emit("submit");
+          this.$store.dispatch("submit");
+        })
+        .catch(err => {
+          alert("ERROR OCCURED!");
+          console.log(err);
+        });
     }
   },
 

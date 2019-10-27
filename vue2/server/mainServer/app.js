@@ -27,10 +27,6 @@ mongoose
         console.log("CONNECTION ERROR!");
     });
 
-// mongoose.connect('mongodb+srv://badgebookdb:badgebookdb2019@cluster0-pn3a6.mongodb.net/test?retryWrites=true&w=majority', {
-//   useNewUrlParser: true
-// });
-
 // mongoose.connect(config.DB, {
 //     useNewUrlParser: true,
 //     useUnifiedTopology: true

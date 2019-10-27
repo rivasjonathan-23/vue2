@@ -80,7 +80,8 @@
       hide-footer
     >
       <form class="addR" @submit.prevent="addRecipient()">
-        <span class="error" v-show="error">Cannot find user or user already in the list!</span><br>
+        <span class="error" v-show="error">Cannot find user or user already in the list!</span>
+        <br>
         <b-input id="usernamei" v-model="s_username" placeholder="Enter username"/>
         <br>
         <b-row>
@@ -176,7 +177,7 @@ export default {
       date: "",
       descriptions: "",
       userExit: false,
-      error: false,
+      error: false
     };
   },
 
@@ -186,8 +187,7 @@ export default {
         data: this.$store.getters.token
       })
       .then(resp => {
-        console.log(resp.data.badges);
-        this.badges = resp.data.badges;
+        this.badges = resp.data.badges.reverse();
         if (this.badges.length == 0) {
           $(".temp").show();
         }
@@ -203,28 +203,37 @@ export default {
       this.userExit = false;
       this.warning = "";
     },
-    addRecipient() {
-      axios
-        .post("http://localhost:8081/user/addrecipient", {
-          username: this.s_username,
-          org: this.$store.getters.token,
-          code: this.code
-        })
-        .then(res => {
-          this.badges = res.data.badges;
-          this.resetModal();
-          this.$bvModal.hide("addRecipient-modal");
-          this.getData();
-          this.error = false;
-        })
-        .catch(err => {
-          this.error = true;
-        });
+    async addRecipient() {
+      var done = await this.add();
+      if (done) {
+        this.getData();
+      }
     },
+    add() {
+      return new Promise(resolve => {
+        axios
+          .post("http://localhost:8081/user/addrecipient", {
+            username: this.s_username,
+            org: this.$store.getters.token,
+            code: this.code
+          })
+          .then(res => {
+            this.badges = res.data.badges;
+            this.resetModal();
+            this.$bvModal.hide("addRecipient-modal");
+            this.error = false;
+            resolve(true);
+          })
+          .catch(err => {
+            this.error = true;
+          });
+      });
+    },
+
     handleCancel() {
       this.resetModal();
       this.$bvModal.hide("addRecipient-modal");
-      this.error= false;
+      this.error = false;
     },
     handleCertificationSubmit() {
       let badgeInfo = {
@@ -264,7 +273,7 @@ export default {
           if (this.badges.length != 0) {
             $(".temp").hide();
           } else {
-             $(".temp").show();
+            $(".temp").show();
           }
         });
     }
@@ -304,7 +313,7 @@ export default {
 }
 
 .error {
-  color:red;
+  color: red;
 }
 
 b-modal {
