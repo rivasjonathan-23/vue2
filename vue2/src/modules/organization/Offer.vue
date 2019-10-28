@@ -92,7 +92,8 @@
           <div class="line"></div>
         </div>
       </label>
-      <button id="postB" class="btn btn-primary btn-block btn-lg">Submit</button>
+      <button id="postB" v-if="!sending" class="btn btn-primary btn-block btn-lg">Submit</button>
+      <span v-else class="sending">Creating badge...</span>
     </form>
   </b-card>
 </template>
@@ -107,11 +108,13 @@ export default {
     return {
       badgename: "",
       venue: "",
-      date: { month: "", day: "", year: "" }
+      date: { month: "", day: "", year: "" },
+      sending: false,
     };
   },
   methods: {
     validCode() {
+      this.sending = true;
       return new Promise(function(resolve, reject) {
         var bcode = "";
         var char = "abcdefghijklmnopqrstuvwxyz1234567890";
@@ -119,15 +122,12 @@ export default {
           var index = Math.floor(Math.random() * char.length);
           bcode += char.charAt(index);
         }
-        alert("code created: " + bcode);
         axios
           .post("http://localhost:8081/user/validatecode", { code: bcode })
           .then(res => {
-            alert("not taken");
             resolve(bcode);
           })
           .catch(err => {
-            alert("taken");
             resolve("CODE_ALREADY_TAKEN");
           });
       });
@@ -181,6 +181,7 @@ export default {
           this.date.year = "";
           $("p").removeClass(".label-active");
           this.$emit("submit");
+          this.sending = false;
           this.$store.dispatch("submit");
         })
         .catch(err => {

@@ -34,6 +34,10 @@
     position: relative;
   }
 
+  .sending {
+    font-size: 24px;
+  }
+
   .badgePic {
     padding:5px;
     padding-top:60px;

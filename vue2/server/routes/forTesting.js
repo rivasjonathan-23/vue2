@@ -57,9 +57,9 @@ async function findOrg(username) {
 }
 
 userRoute.route("/login").post(function (req, res) {
+  tempdata = {};
   console.log("LOGIN USER: " + req.body)
   getResult();
-
   async function getResult() {
     var fuser = await findOrg(req.body.username);
     console.log("result: " + fuser);
@@ -112,22 +112,19 @@ userRoute.route("/login").post(function (req, res) {
 
 
 
-var user = {
+var tempdata = {
   username: "",
   password: ""
 }
 userRoute.route("/signup").post((req, res) => {
   data = req.body
-  user = req.body;
   res.status(200).end()
 });
 
 
 
 userRoute.route("/signedup").get((req, res) => {
-  user2 = data
-  data = {}
-  res.status(200).json(user2)
+  res.status(200).json(tempdata)
 })
 
 userRoute.route("/userType").post((req, res) => {
@@ -171,44 +168,73 @@ userRoute.route("/availbadge").post((req, res) => {
   }
 })
 
-userRoute.route("/certify").post((req, res) => {
-  console.log(req.body.badgeInfo)
-  var org = jwt.decode(req.body.user)
-  var success = false;
-  for (var i = 0; i < accounts.length; ++i) {
-    if (accounts[i].username == org.username) {
-      console.log("floop")
-      var bad = accounts[i].badges;
-      for (var j = 0; j < bad.length; ++j) {
-        console.log("2")
-        if (bad[j].code == req.body.badgeInfo.code) {
-          console.log("3")
-          success = true;
-          var badge = req.body.badgeInfo;
-          accounts[i].badges[j].granted = true;
-          accounts[i].badges[j].descriptions = badge.descriptions;
-          accounts[i].badges[j].certificateName = badge.certificateName;
-          console.log(accounts[i].badges[j].recipient)
+function findBadge(code) {
+  return new Promise(resolve => {
+    Organization.findOne({ badges: { code: code } })
+      .then((doc) => {
+        if (doc) {
+          resolve(doc);
+        } else {
+          resolve("not found");
         }
+      }).catch((err) => {
+        console.log(err);
+        resolve("error");
+      })
+  })
+}
+
+userRoute.route("/certify").post((req, res) => {
+  async function certify() {
+    var badge = req.body.badgeInfo;
+    var result = await findBadge(badge.code);
+    if (result == "error") {
+      res.status(500).json({ message: "Error occured!" });
+    } else if (result != "not found") {
+      for (var i = 0; i < result.badges.length; ++i) { }
+      if (result.badges[i].code == badge.code) {
+        result.badges[i].granted = true;
       }
     }
   }
-  if (success) {
-    res.status(200).json({
-      message: "successful"
-    });
-  } else {
-    res.status(500).json({
-      message: "Something wrong happen!"
-    });
-  }
+
+  // console.log(req.body.badgeInfo)
+  // var org = jwt.decode(req.body.user)
+  // var success = false;
+  // for (var i = 0; i < accounts.length; ++i) {
+  //   if (accounts[i].username == org.username) {
+  //     console.log("floop")
+  //     var bad = accounts[i].badges;
+  //     for (var j = 0; j < bad.length; ++j) {
+  //       console.log("2")
+  //       if (bad[j].code == req.body.badgeInfo.code) {
+  //         console.log("3")
+  //         success = true;
+  //         var badge = req.body.badgeInfo;
+  //         accounts[i].badges[j].granted = true;
+  //         accounts[i].badges[j].descriptions = badge.descriptions;
+  //         accounts[i].badges[j].certificateName = badge.certificateName;
+  //         console.log(accounts[i].badges[j].recipient)
+  //       }
+  //     }
+  //   }
+  // }
+  // if (success) {
+  //   res.status(200).json({
+  //     message: "successful"
+  //   });
+  // } else {
+  //   res.status(500).json({
+  //     message: "Something wrong happen!"
+  //   });
+  // }
 })
 
 function findRegUser(Username) {
   return new Promise(resolve => {
     User.findOne({
       username: Username
-    }).then(doc => {
+    }, { '_id': 0 }).then(doc => {
       if (doc) {
         resolve(doc);
       } else {
@@ -223,20 +249,42 @@ function findRegUser(Username) {
 
 userRoute.route('/addrecipient').post((req, res) => {
   async function add() {
-    var User = await findRegUser(req.body.username);
+    var data = req.body;
+    var User = await findRegUser(data.username);
     if (User != "not found") {
-      var org = jwt.decode(req.body.org);
-      var newRecipient = { username: req.body.username, fullname: User.firstname + " " + User.lastname };
-      Organization.findOne({badges: {$elemMatch: {code: req.body.code}}})
-        .then((doc) => {
-          console.log(doc);
-          console.log("BADGE CODE: "+req.body.code);
-          console.log("SUCCESSFULLY ADDED! "+User.firstname+" "+User.lastname);
-          res.status(200).json({ message: "User successfully added!" });
-        }).catch((err) => {
-          console.log(err)
-          res.status(500).json({ message: "Unexpected error occured!" });
-        })
+      var org = jwt.decode(data.org);
+      var newRecipient = { username: data.username, fullname: User.firstname + " " + User.lastname };
+      return new Promise(resolve => {
+        Organization.findOne({ badges: { $elemMatch: { code: data.code } } })
+          .then((doc) => {
+            var badges = doc.badges;
+            for (var i = 0; i < badges.length; ++i) {
+              if (badges[i].code == data.code) {
+                var obadge = badges[i].recipient;
+                var existed = false;
+                for (var j = 0; j < obadge.length; ++j) {
+                  if (obadge[j].username == data.username) {
+                    existed = true;
+                    res.status(400).json({ message: "User already exist in the list" });
+                    break;
+                  }
+                }
+                if (!existed) {
+                  doc.badges[i].recipient.push(newRecipient);
+                  console.log(doc.badges[i].recipient);
+                  Organization.updateOne({ badges: { $elemMatch: { code: data.code } } }, doc, { new: true })
+                    .then(() => {
+                      res.status(200).json({ message: "User successfully added" });
+                    }).catch((err) => { res.status(500).json({ message: "Error occured!" }); });
+                }
+              }
+            }
+
+          }).catch((err) => {
+            console.log(err)
+            res.status(500).json({ message: "Unexpected error occured!" });
+          })
+      })
     } else if (User == "not found") {
       res.status(404).json({ message: "User not found!" });
     } else {
@@ -248,10 +296,7 @@ userRoute.route('/addrecipient').post((req, res) => {
 
 function getBadges(username) {
   return new Promise(resolve => {
-    Organization.find({
-      'badges.recipient': { $in: { username: username } }
-    }, 'badges').then(docs => {
-      console.log("DOCS: "+docs);
+    Organization.find({}, "badges").then(docs => {
       resolve(docs);
     }).catch(err => {
       console.log(err);
@@ -265,7 +310,19 @@ userRoute.route("/userbadges").post((req, res) => {
     var user = jwt.decode(req.body.user);
     var result = await getBadges(user.username);
     if (result != "error") {
-
+      var badges = [];
+      result.forEach(function (b) {
+        b.badges.forEach(function (bdg) {
+          bdg.recipient.forEach(function(re) {
+            if (re.username==user.username) {
+              badges.push(bdg);
+            }
+          })
+         
+        })
+      })
+      console.log(badges);
+      res.status(200).json({ badges: badges });
 
     } else {
       res.status(500).json({
@@ -341,6 +398,7 @@ userRoute.route("/fullsignup").post((req, res) => {
       res.status(400).json({ message: "Username is already taken!" })
     }
   }
+  tempdata = {};
 })
 
 
@@ -378,6 +436,7 @@ userRoute.route("/orgsignup").post((req, res) => {
       res.status(400).json({ message: "Username is already taken!" })
     }
   }
+  tempdata = {};
 })
 
 //************************************************************************************************************** */
@@ -385,7 +444,7 @@ function orgInfo(username) {
   return new Promise(function (resolve, reject) {
     Organization.findOne({
       username: username
-    }).then(doc => {
+    }, { '_id': 0 }).then(doc => {
       if (doc) {
         resolve({ data: doc });
       }
@@ -399,16 +458,21 @@ function orgInfo(username) {
 
 
 userRoute.route("/offerbadge").post((req, res) => {
-  var org = jwt.decode(req.body.user);
-  console.log(req.body.badge);
-  Organization.updateOne({ username: org.username }, { $push: { badges: req.body.badge } })
-    .then(() => {
-      console.log("UPDATE SUCCESSFUL");
-      res.status(200).json({ message: "successfull added" });
-    }).catch(err => {
-      res.status(500).json({ message: "un error occured!" });
-      console.log(err);
-    })
+  async function offer() {
+    var org = jwt.decode(req.body.user);
+
+    var orginf = await orgInfo(org.username);
+    req.body.badge.organization = orginf.data.orgName;
+    Organization.updateOne({ username: org.username }, { $push: { badges: req.body.badge } })
+      .then(() => {
+        console.log("UPDATE SUCCESSFUL");
+        res.status(200).json({ message: "successfull added" });
+      }).catch(err => {
+        res.status(500).json({ message: "un error occured!" });
+        console.log(err);
+      })
+  }
+  offer();
 })
 
 
@@ -440,11 +504,17 @@ userRoute.route("/pendingbadges").post((req, res) => {
       var pendingbadges = [];
       badges.forEach(function (badge) {
         if (!badge.granted) {
+          var recipient = [];
+          badge.recipient.forEach(function (re) {
+            recipient.push({ username: re.username, fullname: re.fullname });
+          })
+          badge.recipient = recipient;
+          console.log(recipient);
+          console.log(badge);
           pendingbadges.push(badge);
         }
       });
       console.log("THE ORG HAS " + pendingbadges.length + " PENDING BADGES")
-      console.log(pendingbadges);
       res.status(200).json({
         badges: pendingbadges
       })

@@ -1,22 +1,27 @@
 <template>
   <div id="badges">
-     <b-card class="b">
-    <h3 class="temp" v-show="noData">You haven't offered badges yet</h3>
-    <h3 class="loading" v-show="isLoading">Loading.....</h3>
-    <!-- <div v-for="(datapass, index) in by3Data" :key="index"> -->
+    <b-card class="b">
+      <h3 class="temp" v-show="noData">You haven't offered badges yet</h3>
+      <div class="loading" v-show="isLoading">
+        <div class="text-center text-danger my-2">
+        <b-spinner class="align-middle"></b-spinner>
+        <!-- <strong>Loading...</strong> -->
+        </div>
+      </div>
+      <!-- <div v-for="(datapass, index) in by3Data" :key="index"> -->
       <Bythree :data="by3Data"></Bythree>
-      <br />
-    <!-- </div> -->
-    <b-row>
-      <Bythree :data="excessData"></Bythree>
-    </b-row>
-  </b-card>
+      <br>
+      <!-- </div> -->
+      <b-row>
+        <Bythree :data="excessData"></Bythree>
+      </b-row>
+    </b-card>
   </div>
 </template>
 <script>
 import Bythree from "./bythree";
-import axios from 'axios';
-import $ from 'jquery';
+import axios from "axios";
+import $ from "jquery";
 export default {
   name: "badges",
   components: {
@@ -28,37 +33,41 @@ export default {
       isLoading: true,
       noData: false,
       temp: [],
-      excessData: [],
+      excessData: []
     };
   },
 
   created() {
-    axios.post("http://localhost:8081/user/badges-org", {data: this.$store.getters.token}).then(response => {
-      this.by3Data = [];
-      this.by3Data = response.data.badges.reverse();
-      if (this.by3Data.length == 0) {
-        this.noData = true;
-      }
-      this.isLoading = false;
+    axios
+      .post("http://localhost:8081/user/badges-org", {
+        data: this.$store.getters.token
+      })
+      .then(response => {
+        this.by3Data = [];
+        this.by3Data = response.data.badges.reverse();
+        if (this.by3Data.length == 0) {
+          this.noData = true;
+        }
+        this.isLoading = false;
 
-      // console.log(allData)
-      // var hasContent = false;
-      // for (let i = 0; i < allData.length; ++i) {
-      //   hasContent = true;
-      //   if ((i + 1) % 3 == 0) {
-      //     this.temp.push(allData[i]);
-      //     this.by3Data.push(this.temp);
-      //     this.temp = [];
-      //   } else {
-      //     this.temp.push(allData[i]);
-      //   }
-      //   if (i - 1 == allData.length - (allData.length % 3)) {
-      //     this.excessData.push(allData[i]);
-      //   } else if (i == allData.length - (allData.length % 3)) {
-      //     this.excessData.push(allData[i]);
-      //   }
-      // }
-    });
+        // console.log(allData)
+        // var hasContent = false;
+        // for (let i = 0; i < allData.length; ++i) {
+        //   hasContent = true;
+        //   if ((i + 1) % 3 == 0) {
+        //     this.temp.push(allData[i]);
+        //     this.by3Data.push(this.temp);
+        //     this.temp = [];
+        //   } else {
+        //     this.temp.push(allData[i]);
+        //   }
+        //   if (i - 1 == allData.length - (allData.length % 3)) {
+        //     this.excessData.push(allData[i]);
+        //   } else if (i == allData.length - (allData.length % 3)) {
+        //     this.excessData.push(allData[i]);
+        //   }
+        // }
+      });
   }
 };
 </script>
@@ -75,16 +84,22 @@ export default {
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 .b {
-  border:none;
+  border: none;
 }
 
 .temp {
-  margin-top:250px;
+  margin-top: 250px;
   margin-bottom: 250px;
 }
 
+.align-middle {
+  color:rgb(3, 78, 133);
+  height: 75px;
+  width: 75px;
+}
+
 .loading {
-  margin-top:250px;
+  margin-top: 250px;
   margin-bottom: 250px;
 }
 </style>

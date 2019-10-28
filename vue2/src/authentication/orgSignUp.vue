@@ -99,9 +99,9 @@ export default {
   name: "OrgSignUp",
   data() {
     return {
-      username: "Jonathan",
-      password: "jrivas2398",
-      confirmpassword: "jrivas2398",
+      username: "",
+      password: "",
+      confirmpassword: "",
       orgName: "myOrg",
       email: "org@gmail.com",
       address: "asdfasdfasd",
@@ -167,26 +167,26 @@ export default {
     }
   },
   created() {
-    // if (
-    //   this.username != "" &&
-    //   this.password != "" &&
-    //   this.confirmpassword != ""
-    // ) {
-    //   $(".label-txt1").addClass("label-active");
-    // }
-    // axios.get("http://localhost:8081/user/signedup").then(
-    //   response => {
-    //     if (response.data.username != null) {
-    //       this.username = response.data.username;
-    //       this.password = response.data.password;
-    //       this.confirmpassword = response.data.password;
-    //       $(".label-txt1").addClass("label-active");
-    //     }
-    //   },
-    //   err => {
-    //     console.log("error");
-    //   }
-    // );
+    if (
+      this.username != "" &&
+      this.password != "" &&
+      this.confirmpassword != ""
+    ) {
+      $(".label-txt1").addClass("label-active");
+    }
+    axios.get("http://localhost:8081/user/signedup").then(
+      response => {
+        if (response.data.username != null) {
+          this.username = response.data.username;
+          this.password = response.data.password;
+          this.confirmpassword = response.data.password;
+          $(".label-txt1").addClass("label-active");
+        }
+      },
+      err => {
+        console.log("error");
+      }
+    );
   },
   mounted() {
     $(".label-txt")

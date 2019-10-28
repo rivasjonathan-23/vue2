@@ -11,8 +11,6 @@
       id="offer"
       title="Create new badge"
       centered
-      no-close-on-esc
-      no-close-on-backdrop
       hide-header-close
       hide-footer
     >
@@ -89,7 +87,8 @@
             <b-button v-on:click="handleCancel" variant="danger" class="btn btn-block">Cancel</b-button>
           </b-col>
           <b-col cols="8">
-            <b-button type="submit" variant="primary" class="btn btn-block">Add Recipient</b-button>
+            <b-button type="submit" v-if="!adding" variant="primary" class="btn btn-block">Add Recipient</b-button>
+            <span v-else><strong>Adding new recipient</strong></span>
           </b-col>
         </b-row>
       </form>
@@ -177,7 +176,8 @@ export default {
       date: "",
       descriptions: "",
       userExit: false,
-      error: false
+      error: false,
+      adding: false
     };
   },
 
@@ -193,6 +193,7 @@ export default {
         }
       });
   },
+
   methods: {
     getCode(bcode) {
       this.code = bcode;
@@ -206,10 +207,12 @@ export default {
     async addRecipient() {
       var done = await this.add();
       if (done) {
+        this.adding = false;
         this.getData();
       }
     },
     add() {
+      this.adding = true;
       return new Promise(resolve => {
         axios
           .post("http://localhost:8081/user/addrecipient", {
@@ -225,6 +228,7 @@ export default {
             resolve(true);
           })
           .catch(err => {
+            this.adding = false;
             this.error = true;
           });
       });
@@ -269,7 +273,7 @@ export default {
           data: this.$store.getters.token
         })
         .then(resp => {
-          this.badges = resp.data.badges;
+          this.badges = resp.data.badges.reverse();
           if (this.badges.length != 0) {
             $(".temp").hide();
           } else {

@@ -49,17 +49,18 @@
         <span class="fa fa-bars">=</span>
       </div>
     </b-navbar>-->
-    <b-modal id="searchUser" title="Search other user or organization"
+    <b-modal id="searchUser" title="Search other user | organization"
       no-close-on-esc
       no-close-on-backdrop
       hide-header-close
       centered
       hide-footer>
-      <div class="d-block text-center">
-        <h3>Hello From This Modal!</h3>
-      </div>
+      <b-form >
+       <b-form-input id="searchb" v-model="person" placeholder="Enter username"></b-form-input>
+      </b-form>
       <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
     </b-modal>
+
     <center>
       <router-view class="content"/>
     </center>
@@ -129,8 +130,6 @@ export default {
         $(".fa").show();
       }
     });
-  },created() {
-    alert(this.$store.getters.isLoggedIn);
   }
 };
 </script>
@@ -140,6 +139,16 @@ export default {
 .closeSearch {
   width: 90px;
   float:right;
+}
+
+.closeSearch:hover {
+  background-color:rgb(3, 78, 133,0.9);
+  border-color:1px solid rgb(3, 78, 133,0.9);
+}
+
+#searchb {
+  padding-left: 10px;
+  border: 1px solid gray;
 }
 
 .opt {

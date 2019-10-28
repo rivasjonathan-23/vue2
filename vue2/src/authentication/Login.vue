@@ -106,8 +106,8 @@ export default {
   position: relative;
   justify-content: center;
   margin: 0;
-  background-image: url("~@/assets/background2.jpg");
-  background-size: cover;
+  /* background-image: url("~@/assets/background2.jpg");
+  background-size: cover; */
   padding-top: 150px;
   padding-bottom: 100px;
   width: 100%;
