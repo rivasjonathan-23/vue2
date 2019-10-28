@@ -117,7 +117,7 @@ var tempdata = {
   password: ""
 }
 userRoute.route("/signup").post((req, res) => {
-  data = req.body
+  tempdata = req.body
   res.status(200).end()
 });
 
@@ -168,9 +168,10 @@ userRoute.route("/availbadge").post((req, res) => {
   }
 })
 
-function findBadge(code) {
+function findBadge(bcode) {
   return new Promise(resolve => {
-    Organization.findOne({ badges: { code: code } })
+    console.log("finding badge.................")
+    Organization.findOne({ badges: { $elemMatch: { code: bcode } } })
       .then((doc) => {
         if (doc) {
           resolve(doc);
@@ -189,45 +190,34 @@ userRoute.route("/certify").post((req, res) => {
     var badge = req.body.badgeInfo;
     var result = await findBadge(badge.code);
     if (result == "error") {
+      console.log("badge not found");
       res.status(500).json({ message: "Error occured!" });
     } else if (result != "not found") {
-      for (var i = 0; i < result.badges.length; ++i) { }
-      if (result.badges[i].code == badge.code) {
-        result.badges[i].granted = true;
+      console.log("badge found: ==> " + result.badges);
+      for (var i = 0; i < result.badges.length; ++i) {
+        if (result.badges[i].code == badge.code) {
+          console.log("updating badge.....");
+          result.badges[i].granted = true;
+          result.badges[i].certificateName = badge.certificateName;
+          result.badges[i].descriptions = badge.descriptions;
+          Organization.updateOne({ badges: { $elemMatch: { code: badge.code } } }, result)
+            .then(() => {
+              console.log(result.badges[i]);
+              res.status(200).json({
+                message: "Successfully ceritified"
+              })
+            }).catch(err => {
+              console.log("errror in certifying...")
+              console.log(err);
+              res.status(500).json({
+                message: "Unexpected error occured!"
+              })
+            })
+        }
       }
     }
   }
-
-  // console.log(req.body.badgeInfo)
-  // var org = jwt.decode(req.body.user)
-  // var success = false;
-  // for (var i = 0; i < accounts.length; ++i) {
-  //   if (accounts[i].username == org.username) {
-  //     console.log("floop")
-  //     var bad = accounts[i].badges;
-  //     for (var j = 0; j < bad.length; ++j) {
-  //       console.log("2")
-  //       if (bad[j].code == req.body.badgeInfo.code) {
-  //         console.log("3")
-  //         success = true;
-  //         var badge = req.body.badgeInfo;
-  //         accounts[i].badges[j].granted = true;
-  //         accounts[i].badges[j].descriptions = badge.descriptions;
-  //         accounts[i].badges[j].certificateName = badge.certificateName;
-  //         console.log(accounts[i].badges[j].recipient)
-  //       }
-  //     }
-  //   }
-  // }
-  // if (success) {
-  //   res.status(200).json({
-  //     message: "successful"
-  //   });
-  // } else {
-  //   res.status(500).json({
-  //     message: "Something wrong happen!"
-  //   });
-  // }
+  certify();
 })
 
 function findRegUser(Username) {
@@ -247,44 +237,57 @@ function findRegUser(Username) {
   })
 }
 
+function addAndAvailBadge(data, User) {
+  return new Promise(resolve => {
+    var newRecipient = { username: data.username, fullname: User.firstname + " " + User.lastname };
+    Organization.findOne({ badges: { $elemMatch: { code: data.code } } })
+      .then((doc) => {
+        var badges = doc.badges;
+        for (var i = 0; i < badges.length; ++i) {
+          if (badges[i].code == data.code) {
+            var obadge = badges[i].recipient;
+            var existed = false;
+            for (var j = 0; j < obadge.length; ++j) {
+              if (obadge[j].username == data.username) {
+                existed = true;
+                resolve("UserAlreadyInTheList");
+              }
+            }
+            if (!existed) {
+              doc.badges[i].recipient.push(newRecipient);
+              console.log(doc.badges[i].recipient);
+              Organization.updateOne({ badges: { $elemMatch: { code: data.code } } }, doc, { new: true })
+                .then(() => {
+                  resolve("Successful");
+                }).catch((err) => {
+                  console.log(err);
+                  resolve("Error");
+                });
+            }
+          }
+        }
+      }).catch((err) => {
+        console.log(err)
+        resolve("Error");
+      })
+  })
+}
+
 userRoute.route('/addrecipient').post((req, res) => {
   async function add() {
     var data = req.body;
     var User = await findRegUser(data.username);
     if (User != "not found") {
-      var org = jwt.decode(data.org);
-      var newRecipient = { username: data.username, fullname: User.firstname + " " + User.lastname };
-      return new Promise(resolve => {
-        Organization.findOne({ badges: { $elemMatch: { code: data.code } } })
-          .then((doc) => {
-            var badges = doc.badges;
-            for (var i = 0; i < badges.length; ++i) {
-              if (badges[i].code == data.code) {
-                var obadge = badges[i].recipient;
-                var existed = false;
-                for (var j = 0; j < obadge.length; ++j) {
-                  if (obadge[j].username == data.username) {
-                    existed = true;
-                    res.status(400).json({ message: "User already exist in the list" });
-                    break;
-                  }
-                }
-                if (!existed) {
-                  doc.badges[i].recipient.push(newRecipient);
-                  console.log(doc.badges[i].recipient);
-                  Organization.updateOne({ badges: { $elemMatch: { code: data.code } } }, doc, { new: true })
-                    .then(() => {
-                      res.status(200).json({ message: "User successfully added" });
-                    }).catch((err) => { res.status(500).json({ message: "Error occured!" }); });
-                }
-              }
-            }
-
-          }).catch((err) => {
-            console.log(err)
-            res.status(500).json({ message: "Unexpected error occured!" });
-          })
-      })
+      var result = await addAndAvailBadge(req.body, User);
+      if (result == "Successful") {
+        console.log("User successfully added")
+        res.status(200).json({ message: "User successfully added" });
+      } else if (result == "UserAlreadyInTheList") {
+        console.log("User already exist in the list!")
+        res.status(400).json({ message: "User already exist in the list!" });
+      } else {
+        res.status(500).json({ message: "Unexpected error occured" });
+      }
     } else if (User == "not found") {
       res.status(404).json({ message: "User not found!" });
     } else {
@@ -313,17 +316,15 @@ userRoute.route("/userbadges").post((req, res) => {
       var badges = [];
       result.forEach(function (b) {
         b.badges.forEach(function (bdg) {
-          bdg.recipient.forEach(function(re) {
-            if (re.username==user.username) {
+          bdg.recipient.forEach(function (re) {
+            if (re.username == user.username) {
               badges.push(bdg);
             }
           })
-         
+
         })
       })
-      console.log(badges);
       res.status(200).json({ badges: badges });
-
     } else {
       res.status(500).json({
         message: "Unexpected error occured!"

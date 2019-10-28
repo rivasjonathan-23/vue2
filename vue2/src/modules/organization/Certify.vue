@@ -251,6 +251,7 @@ export default {
           badgeInfo: badgeInfo
         })
         .then(res => {
+          alert("done");
           this.resetCertification();
           this.getData();
         })

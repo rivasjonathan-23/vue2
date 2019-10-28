@@ -12,7 +12,7 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
+          <b-nav-item v-show="this.$store.getters.isLoggedIn" class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
           <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="redirect('/login')">Sign in</b-nav-item>
           <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="redirect('/signUpAs')">Sign up</b-nav-item>
           <b-nav-item v-show="this.$store.getters.isLoggedIn" class="opt" @click="signout">Sign out</b-nav-item>

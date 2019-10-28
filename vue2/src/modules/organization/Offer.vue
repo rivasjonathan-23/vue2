@@ -118,7 +118,7 @@ export default {
       return new Promise(function(resolve, reject) {
         var bcode = "";
         var char = "abcdefghijklmnopqrstuvwxyz1234567890";
-        for (var i = 0; i < 6; ++i) {
+        for (var i = 0; i < 7; ++i) {
           var index = Math.floor(Math.random() * char.length);
           bcode += char.charAt(index);
         }
