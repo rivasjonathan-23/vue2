@@ -47,7 +47,7 @@ async function findOrg(username) {
             resolve({ data: "not found" });
           }
         }).catch(err => {
-          resolve({ data: "error" });
+          resolve({ data: err.message });
           console.log(err);
         })
     } else {
@@ -306,6 +306,21 @@ userRoute.route("/fullsignup").post((req, res) => {
     }
   }
 })
+
+userRoute.route('/update-regular/:username').post((req,res) => {
+   let filter = {username: req.body.username};
+   let update = req.body;
+  User.findOneAndUpdate(filter,update,{new: true})
+  .then(() =>{
+    res.status(200).json({message: 'Update Successfull'});
+  })
+  .catch(err =>{
+      if(err){
+        console.log(err.message)
+      }
+  })
+})
+
 
 
 //ORGANIZATION SIGN UP

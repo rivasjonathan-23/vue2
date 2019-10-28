@@ -203,7 +203,7 @@ export default {
     sendUpdate(event) {
       event.preventDefault();
       alert("sending update");
-      let uri_update = `http://localhost:8081/update-regular/${this.username}`;
+      let uri_update = `http://localhost:8081/user/update-regular/${this.username}`;
       axios.post(uri_update, this.newinfo).then(response => {
         /* eslint-disable */
         console.log(response.data);

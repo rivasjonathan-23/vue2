@@ -11,11 +11,13 @@ app.use(bodyParser.urlencoded({
 }))
 
 const userRoute = require("../routes/forTesting");
+//const userRoute = require('../routes/user.route');
 
 const config = require("./DB");
 
 // mongoose.Promise = global.Promise;
 mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false);
 
 mongoose
     .connect('mongodb+srv://badgebookdb:badgebookdb2019@cluster0-pn3a6.mongodb.net/test?retryWrites=true&w=majority', {
