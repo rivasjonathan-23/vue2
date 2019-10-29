@@ -11,7 +11,8 @@
       id="offer"
       title="Create new badge"
       centered
-      hide-header-close
+       no-close-on-esc
+      no-close-on-backdrop
       hide-footer
     >
       <Offer v-on:submit="closeCreate"></Offer>
@@ -87,8 +88,8 @@
             <b-button v-on:click="handleCancel" variant="danger" class="btn btn-block">Cancel</b-button>
           </b-col>
           <b-col cols="8">
-            <b-button type="submit" v-if="!adding" variant="primary" class="btn btn-block">Add Recipient</b-button>
-            <span v-else><strong>Adding new recipient</strong></span>
+            <b-button type="submit" v-if="!adding" variant="primary" autocomplete="" class="btn btn-block">Add Recipient</b-button>
+            <span v-else><strong class="add">Adding new recipient...</strong></span>
           </b-col>
         </b-row>
       </form>
@@ -323,6 +324,10 @@ export default {
 
 b-modal {
   top: 100px;
+}
+
+.add {
+  color: #0071ff;
 }
 
 #createC {

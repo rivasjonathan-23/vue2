@@ -53,7 +53,7 @@ export default {
           if (res == "Regular user") {
             console.log(res)
             this.loading = false;
-            this.$router.push("/user");
+            this.$router.push("/user/newsfeed");
           } else {
             this.$router.push("/organization");
           }

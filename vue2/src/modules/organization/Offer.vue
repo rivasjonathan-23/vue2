@@ -110,6 +110,7 @@ export default {
       venue: "",
       date: { month: "", day: "", year: "" },
       sending: false,
+      rep: 0
     };
   },
   methods: {
@@ -123,7 +124,7 @@ export default {
           bcode += char.charAt(index);
         }
         axios
-          .post("http://localhost:8081/user/validatecode", { code: bcode })
+          .post("http://localhost:8081/user/validatecode", { code: bcode})
           .then(res => {
             resolve(bcode);
           })
@@ -139,11 +140,12 @@ export default {
       var ok = false;
       var badgecode = await this.validCode();
       while (true) {
-        console.log("result from generating new: "+status);
-        if (status == "CODE_ALREADY_TAKEN") {
+        alert(badgecode);
+        if (badgecode == "CODE_ALREADY_TAKEN") {
           console.log("regenerating.....")
-          badgecode = this.validCode();
+          badgecode = await this.validCode();
         } else {
+          console.log("sending code")
           return new Promise(function(resolve, reject) {
             resolve(badgecode);
           });

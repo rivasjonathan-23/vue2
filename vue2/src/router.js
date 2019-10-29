@@ -9,6 +9,11 @@ import TypeOfUser from "@/authentication/typeOfUser.vue";
 import userpage from "@/views/Userpage.vue";
 import orgpage from "@/views/Organizationpage.vue";
 
+
+import UserUpdate from "./modules/user/Updateform.vue"
+import UserNewsfeed from "./modules/user/Newsfeed.vue"
+import UserBadgelist from "./modules/user/Mybadge.vue"
+
 Vue.use(Router);
 // eslint-disable-next-line
 /* eslint-disable */
@@ -26,7 +31,14 @@ let router = new Router({
       component: login,
       props: (route) => ({
         name: route.query.name
-      })
+      }),
+      beforeEnter(to, from, next) {
+        if (!store.getters.isLoggedIn) {
+          next();
+        } else {
+          next("/");
+        }
+      },
     },
 
     {
@@ -91,6 +103,69 @@ let router = new Router({
           next("/login");
         }
       }
+    },
+    {
+      path: "/user/update",
+      component: UserUpdate,
+      props: (route) => ({
+        name: route.query.name
+      }),
+      beforeEnter(to, from, next) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data)
+            if (data) {
+              next();
+            } else {
+              next("/login");
+            }
+          })
+        } else {
+          next("/login");
+        }
+      },
+    },
+    {
+      path: "/user/mybadge",
+      component: UserBadgelist,
+      props: (route) => ({
+        name: route.query.name
+      }),
+      beforeEnter(to, from, next) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data)
+            if (data) {
+              next();
+            } else {
+              next("/login");
+            }
+          })
+        } else {
+          next("/login");
+        }
+      },
+    },
+    {
+      path: "/user/newsfeed",
+      component: UserNewsfeed,
+      props: (route) => ({
+        name: route.query.name
+      }),
+      beforeEnter(to, from, next) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data)
+            if (data) {
+              next();
+            } else {
+              next("/login");
+            }
+          })
+        } else {
+          next("/login");
+        }
+      },
     },
   ]
 })

@@ -6,15 +6,21 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav>
-          
-        </b-navbar-nav>
+        <b-navbar-nav></b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item v-show="this.$store.getters.isLoggedIn" class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
-          <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="redirect('/login')">Sign in</b-nav-item>
-          <b-nav-item v-show="!this.$store.getters.isLoggedIn" class="opt" @click="redirect('/signUpAs')">Sign up</b-nav-item>
+          <b-nav-item class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
+          <b-nav-item
+            v-show="!this.$store.getters.isLoggedIn"
+            class="opt"
+            @click="redirect('/login')"
+          >Sign in</b-nav-item>
+          <b-nav-item
+            v-show="!this.$store.getters.isLoggedIn"
+            class="opt"
+            @click="redirect('/signUpAs')"
+          >Sign up</b-nav-item>
           <b-nav-item v-show="this.$store.getters.isLoggedIn" class="opt" @click="signout">Sign out</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -49,21 +55,46 @@
         <span class="fa fa-bars">=</span>
       </div>
     </b-navbar>-->
-    <b-modal id="searchUser" title="Search other user | organization"
+    <b-modal
+      id="searchUser"
+      title="Search other user | organization"
       no-close-on-esc
       no-close-on-backdrop
       hide-header-close
       centered
-      hide-footer>
-      <b-form >
-       <b-form-input id="searchb" v-model="person" placeholder="Enter username"></b-form-input>
+      hide-footer
+    >
+      <b-form>
+        <b-form-input id="searchb" v-model="person" placeholder="Enter username"></b-form-input>
       </b-form>
       <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
     </b-modal>
-
-    <center>
-      <router-view class="content"/>
-    </center>
+    
+    
+    
+    <div v-show="notlogin">
+      <center>
+        <router-view class="content"/>
+      </center>
+    </div>
+    <div v-show="isloginConfirm">
+      <br><br><br>
+      <b-row>
+        <b-col class="border-right">
+          <div v-show="isRUser">
+            <UserProfile v-on:created="getData"/>
+          </div>
+          <div v-show="isOrg">
+            <OrgProfile/>
+          </div>
+        </b-col>
+        <b-col cols="9">
+          <center>
+            <router-view :fullname="fullname" class="content"/>
+          </center>
+        </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
 
@@ -73,15 +104,29 @@
 /* eslint-disable */
 import $ from "jquery";
 import axios from "axios";
+import UserProfile from "./modules/user/Profile.vue";
+import OrgProfile from "./modules/organization/orgprofile.vue";
 
 export default {
   name: "app",
   data() {
     return {
       person: "",
+      notlogin: true,
+      isloginConfirm: false,
+      isRuser: false,
+      isOrg: false,
+      fullname: "",
     };
   },
+  components: {
+    UserProfile,
+    OrgProfile
+  },
   methods: {
+    getData(data) {
+      this.fullname = data;
+    },
     redirect(path) {
       this.$router.push(path);
     },
@@ -104,6 +149,10 @@ export default {
     signout() {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/login");
+        this.notlogin = true;
+        this.isloginConfirm = false;
+        this.isRuser = false;
+        this.isOrg = false;
       });
     }
   },
@@ -130,20 +179,33 @@ export default {
         $(".fa").show();
       }
     });
+  },
+  beforeUpdate() {
+    var url = window.location.href;
+    if (url.includes("/user")) {
+      this.notlogin = false;
+      this.isloginConfirm = true;
+      this.isRUser = true;
+      this.isOrg = false;
+    } else if (url.includes("organzation")) {
+      this.notlogin = false;
+      this.isloginConfirm = true;
+      this.isRUser = false;
+      this.isOrg = true;
+    }
   }
 };
 </script>
 
 <style scoped>
-
 .closeSearch {
   width: 90px;
-  float:right;
+  float: right;
 }
 
 .closeSearch:hover {
-  background-color:rgb(3, 78, 133,0.9);
-  border-color:1px solid rgb(3, 78, 133,0.9);
+  background-color: rgb(3, 78, 133, 0.9);
+  border-color: 1px solid rgb(3, 78, 133, 0.9);
 }
 
 #searchb {
@@ -152,15 +214,15 @@ export default {
 }
 
 .opt {
-  margin:0;
+  margin: 0;
   color: white;
-  padding:7px;
-  padding-left:5px;
-  padding-right:5px;
+  padding: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .opt:hover {
-  background:gray;
+  background: gray;
 }
 .icon {
   padding-top: 0;
@@ -230,12 +292,11 @@ p:hover {
   padding-right: 2%;
   padding-left: 2%;
   margin-bottom: 0;
-  background:rgb(3, 78, 133,0.9);
+  background: rgb(3, 78, 133, 0.9);
   padding-top: 0;
   padding-bottom: 0;
   overflow: hidden;
 }
-
 
 .btn {
   float: right;

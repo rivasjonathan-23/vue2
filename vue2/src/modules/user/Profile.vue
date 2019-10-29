@@ -6,20 +6,64 @@
       <img :src="image" class="border rounded-circle border-dark" id="profile">
       <div class="card-header">
         <h3>{{ userinfo.firstname }} {{userinfo.lastname}}</h3>
-        <button v-on:click="InsideMethod" class="btn btn-primary btn-block">Update Profile</button>
+       <b-row>
+          <b-col>
+            <button
+              v-on:click="redirect('/user/newsfeed')"
+              class="btn btn-primary btn-block"
+            >Newsfeed</button>
+          </b-col>
+          <b-col>
+            <button
+              v-on:click="redirect('/user/mybadge')"
+              class="btn btn-primary btn-block"
+            >Badge List</button>
+          </b-col>
+        </b-row>
+        <hr>
+        <b-row>
+          <button
+            v-on:click="redirect('/user/update')"
+            class="btn btn-primary btn-block"
+          >Update Profile</button>
+        </b-row>
       </div>
     </div>
     <div class="card-body">
       <!-- <h5 class="card-title">Personal Information</h5> -->
       <div class="card-text">
-        <p>Username:<strong> {{ userinfo.username }}</strong></p>
-        <p>Real name:<strong>  {{ userinfo.firstname+" "+userinfo.lastname }}</strong></p>
-        <p>Age:<strong>  {{userinfo.age}} years old</strong></p>
-        <p>Gender:<strong>  {{ userinfo.gender }}</strong></p>
-        <p>Occupation:<strong>  {{userinfo.occupation}}</strong></p>
-        <p>Work experience: <strong> {{ userinfo.years }} years</strong></p>
-        <p>Address:<strong>  {{userinfo.address}}</strong></p>
-        <p>Email:<strong>  {{ userinfo.email }}</strong></p>
+        <p>
+          Username:
+          <strong>{{ userinfo.username }}</strong>
+        </p>
+        <p>
+          Real name:
+          <strong>{{ userinfo.firstname+" "+userinfo.lastname }}</strong>
+        </p>
+        <p>
+          Age:
+          <strong>{{userinfo.age}} years old</strong>
+        </p>
+        <p>
+          Gender:
+          <strong>{{ userinfo.gender }}</strong>
+        </p>
+        <p>
+          Occupation:
+          <strong>{{userinfo.occupation}}</strong>
+        </p>
+        <p>
+          Work experience:
+          <strong>{{ userinfo.years }} years</strong>
+        </p>
+        <p>
+          Address:
+          <strong>{{userinfo.address}}</strong>
+        </p>
+        <p>
+          Email:
+          <strong>{{ userinfo.email }}</strong>
+        </p>
       </div>
     </div>
   </div>
@@ -39,28 +83,32 @@ export default {
   },
   created() {
     this.$store.dispatch("getUserInfo").then(response => {
-      var user = response.data
+        var user = response.data;
+       this.$emit("created", user.firstname+" "+ user.lastname);
       this.userinfo = {
         firstname: user.firstname,
-        lastname:  user.lastname,
-        age:  user.age,
-        gender:  user.gender,
-        occupation:  user.occupation,
-        years:  user.years,
-        address:  user.address,
-        email:  user.email,
-        username:  user.username
-      }
-    })
-    
-      if (this.$store.getters.getInfoStatus=="error") {
-        alert("An error occured! Please try again later")
-      }
+        lastname: user.lastname,
+        age: user.age,
+        gender: user.gender,
+        occupation: user.occupation,
+        years: user.years,
+        address: user.address,
+        email: user.email,
+        username: user.username
+      };
+    });
+   
+    if (this.$store.getters.getInfoStatus == "error") {
+      alert("An error occured! Please try again later");
+    }
   },
 
   methods: {
     InsideMethod() {
       this.$emit("InsideMethod");
+    },
+    redirect(path) {
+      this.$router.push({ path: path });
     }
   }
 };

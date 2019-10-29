@@ -39,7 +39,7 @@ var orgSchema = new mongoose.Schema({
   },
   badges: [{
     granted: Boolean,
-    code: String,
+    code: { type: String, unique: true, sparse: true },
     badgename: String,
     venue: String,
     recipient: [{ username: String, fullname: String }],

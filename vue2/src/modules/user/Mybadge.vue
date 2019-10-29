@@ -60,22 +60,23 @@
       hide-footer
     >
       <form class="addR" @submit.prevent="searchBadge">
-        <span class="error" v-show="error">Incorrect code</span>
+        <span class="error" v-show="error">Incorrect code or badge is not available</span>
         <b-input
-          id="bcode"
+          class="binput"
           v-model="badgeCode"
           autocomplete="off"
-          placeholher="Enter badge code"
+          placeholder="Badge code"
           required
         />
-        <br>
+        
         <b-row>
           <b-col>
             <b-button
               @click="$bvModal.hide('availBadge-modal')"
               variant="danger"
               class="btn btn-block"
-              v-on:click="error = false"
+              v-on:click="reset"
+
             >Cancel</b-button>
           </b-col>
           <b-col cols="6">
@@ -89,19 +90,19 @@
 
 <script>
 import axios from "axios";
+import $ from 'jquery';
 
 export default {
   name: "Newsfeed",
   props: {
-    username: String
+    fullname: String
   },
   data() {
     return {
       badgelist: [],
       badgeCode: "",
-      fullname: "",
       hasData: false,
-      error: false
+      error: false,
     };
   },
   methods: {
@@ -112,15 +113,19 @@ export default {
           credentials: this.$store.getters.token
         })
         .then(resp => {
-          this.error = false;
+          this.reset();
           this.$bvModal.hide("availBadge-modal");
-          this.badgeCode = "";
         })
         .catch(error => {
+          $(".binput").css({"border-color":"red"})
           this.error = true;
-          this.badgeCode = "";
+          
         });
-    },
+    },reset() {
+      this.error = false;
+      this.badgeCode = "";
+       $(".binput").css({"border-color":"gray"})
+    }
   },
   created() {
     axios
@@ -128,10 +133,9 @@ export default {
         user: this.$store.getters.token
       })
       .then(res => {
-        console.log("badgess"+res.data.badges);
-        this.fullname = res.data.fullname;
+        console.log("badgess" + res.data.badges);
         this.badgelist = res.data.badges;
-        console.log({badges: this.badgelist})
+        console.log({ badges: this.badgelist });
         if (this.badgelist.length == 0) {
           this.hasData = true;
         }
@@ -172,7 +176,13 @@ label {
 }
 .error {
   color: red;
+  font-size: 13px;
 }
+
+.binput {
+  margin-bottom: 15px;
+}
+
 
 .pending {
   padding: 0;
