@@ -27,6 +27,9 @@ export default {
   components: {
     Bythree
   },
+  props: {
+    userInfo: Object
+  },
   data() {
     return {
       by3Data: [],

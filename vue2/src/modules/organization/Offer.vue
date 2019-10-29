@@ -93,7 +93,8 @@
         </div>
       </label>
       <button id="postB" v-if="!sending" class="btn btn-primary btn-block btn-lg">Submit</button>
-      <span v-else class="sending">Creating badge...</span>
+      <button id="postB" v-else class="btn btn-primary btn-block btn-lg">Creating&nbsp;<b-spinner class="align-middle"></b-spinner></button>
+      <!-- <span v-else  class="sending"><b-spinner class="align-middle"></b-spinner>&nbsp;Creating badge...</span> -->
     </form>
   </b-card>
 </template>
@@ -104,6 +105,9 @@ import axios from "axios";
 import "@/Styles/mystyle.css";
 export default {
   name: "SignUp",
+  props: {
+    userInfo: Object
+  },
   data() {
     return {
       badgename: "",
@@ -140,7 +144,6 @@ export default {
       var ok = false;
       var badgecode = await this.validCode();
       while (true) {
-        alert(badgecode);
         if (badgecode == "CODE_ALREADY_TAKEN") {
           console.log("regenerating.....")
           badgecode = await this.validCode();

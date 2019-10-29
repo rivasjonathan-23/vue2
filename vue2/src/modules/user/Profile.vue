@@ -6,27 +6,15 @@
       <img :src="image" class="border rounded-circle border-dark" id="profile">
       <div class="card-header">
         <h3>{{ userinfo.firstname }} {{userinfo.lastname}}</h3>
-       <b-row>
-          <b-col>
-            <button
-              v-on:click="redirect('/user/newsfeed')"
-              class="btn btn-primary btn-block"
-            >Newsfeed</button>
-          </b-col>
-          <b-col>
+        
             <button
               v-on:click="redirect('/user/mybadge')"
               class="btn btn-primary btn-block"
             >Badge List</button>
-          </b-col>
-        </b-row>
-        <hr>
-        <b-row>
           <button
             v-on:click="redirect('/user/update')"
             class="btn btn-primary btn-block"
           >Update Profile</button>
-        </b-row>
       </div>
     </div>
     <div class="card-body">
@@ -72,9 +60,6 @@
 <script>
 export default {
   name: "Profile",
-  props: {
-    username: String
-  },
   data() {
     return {
       userinfo: {},
@@ -83,8 +68,7 @@ export default {
   },
   created() {
     this.$store.dispatch("getUserInfo").then(response => {
-        var user = response.data;
-       this.$emit("created", user.firstname+" "+ user.lastname);
+      var user = response.data;
       this.userinfo = {
         firstname: user.firstname,
         lastname: user.lastname,
@@ -97,7 +81,7 @@ export default {
         username: user.username
       };
     });
-   
+    this.$emit("gotUserInfo", this.userinfo )
     if (this.$store.getters.getInfoStatus == "error") {
       alert("An error occured! Please try again later");
     }

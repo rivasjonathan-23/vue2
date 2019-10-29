@@ -182,7 +182,7 @@ import axios from "axios";
 export default {
   name: "SignUp",
   props: {
-    username: String
+    userInfo: Object
   },
   data() {
     return {

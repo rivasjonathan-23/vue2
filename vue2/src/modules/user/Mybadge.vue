@@ -31,7 +31,7 @@
                   <br>
                   <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
                   <div class="text-center byorg">
-                    <p class="border-bottom">Certified by : {{badge.organization}}</p>
+                    <p class="border-bottom">Certified by {{badge.organization}}</p>
                   </div>
                 </div>
               </b-col>
@@ -68,20 +68,23 @@
           placeholder="Badge code"
           required
         />
-        
-        <b-row>
+
+        <b-row  v-if="!availing">
           <b-col>
             <b-button
+             
               @click="$bvModal.hide('availBadge-modal')"
               variant="danger"
               class="btn btn-block"
               v-on:click="reset"
-
             >Cancel</b-button>
           </b-col>
           <b-col cols="6">
             <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
           </b-col>
+        </b-row>
+        <b-row  class="add" v-else>
+           <span ><b-spinner class="align-middle"></b-spinner>&nbsp;<strong>Adding new recipient...</strong></span>
         </b-row>
       </form>
     </b-modal>
@@ -90,12 +93,13 @@
 
 <script>
 import axios from "axios";
-import $ from 'jquery';
+import $ from "jquery";
+import { userInfo } from "os";
 
 export default {
   name: "Newsfeed",
   props: {
-    fullname: String
+    userInfo: Object
   },
   data() {
     return {
@@ -103,28 +107,47 @@ export default {
       badgeCode: "",
       hasData: false,
       error: false,
+      fullname: "",
+      availing: false,
     };
   },
   methods: {
     searchBadge() {
+      this.availing = true;
       axios
         .post("http://localhost:8081/user/availbadge", {
           code: this.badgeCode,
           credentials: this.$store.getters.token
         })
         .then(resp => {
+          this. availing = false;
           this.reset();
           this.$bvModal.hide("availBadge-modal");
+          axios
+            .post("http://localhost:8081/user/userbadges", {
+              user: this.$store.getters.token
+            })
+            .then(res => {
+              alert("got updated data")
+              console.log("badgess" + res.data.badges);
+              this.badgelist = res.data.badges.reverse();
+              // this.fullname = userInfo.firstname+" "+userInfo.lastname;
+              console.log({ badges: this.badgelist });
+              if (this.badgelist.length == 0) {
+                this.hasData = true;
+              }
+            });
         })
         .catch(error => {
-          $(".binput").css({"border-color":"red"})
+          this.availing = false;
+          $(".binput").css({ "border-color": "red" });
           this.error = true;
-          
         });
-    },reset() {
+    },
+    reset() {
       this.error = false;
       this.badgeCode = "";
-       $(".binput").css({"border-color":"gray"})
+      $(".binput").css({ "border-color": "gray" });
     }
   },
   created() {
@@ -134,7 +157,8 @@ export default {
       })
       .then(res => {
         console.log("badgess" + res.data.badges);
-        this.badgelist = res.data.badges;
+        this.badgelist = res.data.badges.reverse();
+        // this.fullname = userInfo.firstname+" "+userInfo.lastname;
         console.log({ badges: this.badgelist });
         if (this.badgelist.length == 0) {
           this.hasData = true;
@@ -179,10 +203,17 @@ label {
   font-size: 13px;
 }
 
+
+.add {
+  color: #0071ff;
+  text-align: center;
+  margin-left:16px;
+}
+
+
 .binput {
   margin-bottom: 15px;
 }
-
 
 .pending {
   padding: 0;

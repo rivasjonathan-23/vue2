@@ -72,7 +72,7 @@
     
     
     
-    <div v-show="notlogin">
+    <div v-if="notlogin">
       <center>
         <router-view class="content"/>
       </center>
@@ -90,7 +90,7 @@
         </b-col>
         <b-col cols="9">
           <center>
-            <router-view :fullname="fullname" class="content"/>
+            <router-view :userInfo="info" class="content"/>
           </center>
         </b-col>
       </b-row>
@@ -109,6 +109,9 @@ import OrgProfile from "./modules/organization/orgprofile.vue";
 
 export default {
   name: "app",
+  props: {
+    info: Object
+  },
   data() {
     return {
       person: "",
@@ -116,7 +119,6 @@ export default {
       isloginConfirm: false,
       isRuser: false,
       isOrg: false,
-      fullname: "",
     };
   },
   components: {
@@ -125,7 +127,7 @@ export default {
   },
   methods: {
     getData(data) {
-      this.fullname = data;
+      this.info = data;
     },
     redirect(path) {
       this.$router.push(path);
@@ -180,13 +182,14 @@ export default {
       }
     });
   },
-  beforeUpdate() {
+  created() {
     var url = window.location.href;
     if (url.includes("/user")) {
       this.notlogin = false;
       this.isloginConfirm = true;
       this.isRUser = true;
       this.isOrg = false;
+      // this.$router.push("/user/mybadge")
     } else if (url.includes("organzation")) {
       this.notlogin = false;
       this.isloginConfirm = true;
@@ -250,6 +253,11 @@ export default {
 
 .content {
   padding-top: 50px;
+  height: 100vh;
+}
+
+#app, body, html {
+  height: 100vh;
 }
 
 #srch {

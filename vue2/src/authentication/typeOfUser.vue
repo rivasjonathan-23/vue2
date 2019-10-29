@@ -60,7 +60,7 @@ export default {
   /* background-image: url("~@/assets/background3.jpg");
   background-size: cover; */
   text-align: center;
-  padding-top:90px;
+  padding-top:65px;
   text-align: center;
   margin-top:0;
   margin-left: 0;

@@ -65,12 +65,12 @@ body {
 
 .outercont {
   margin-top: 0;
-  width: 100%;
+  width: 100vw;
   padding-left:0;
   padding-right:0;
   margin-right:0;
   margin-left:0;
-  height: 100%;
+  height: 100vh;
   background-image: url("~@/assets/background.jpg");
   background-size: cover;
   
@@ -80,7 +80,7 @@ body {
   position: relative;
   margin-right: 0;
   margin-left: 0;
-  height: 850px;
+  /* height: 100vh; */
   padding-top: 0;
 
   /* height:100%; */

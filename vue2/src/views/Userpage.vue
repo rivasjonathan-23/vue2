@@ -45,7 +45,7 @@ import $ from "jquery";
 export default {
   name: "userpage",
   props: {
-    username: String,
+    userInfo: Object
   },
   data() {
     return {
@@ -60,8 +60,8 @@ export default {
   },
   data() {
     return {
-      isBadgeList: false,
-      isNewsfeed: true,
+      isBadgeList: true,
+      isNewsfeed: false,
       isUpdateProfile: false
     };
   },

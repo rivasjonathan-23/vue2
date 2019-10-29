@@ -68,6 +68,9 @@ import $ from 'jquery';
 
 export default {
   name: 'FullSignUp',
+  props: {
+    userInfo: Object
+  },
   data() {
     return {
       email: '',

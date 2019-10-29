@@ -27,7 +27,7 @@
 export default {
   name: "Profile",
   props: {
-    username: String
+    userInfo: Object
   },
   data() {
     return {

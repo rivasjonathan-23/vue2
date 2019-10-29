@@ -29,7 +29,7 @@ var userSchema = new mongoose.Schema({
     },
     occupation: {
       type: String,
-      required: true,
+      required: false,
       unique: false,
     },
     gender: {
@@ -44,7 +44,7 @@ var userSchema = new mongoose.Schema({
     },
     years: {
       type: Number,
-      required: true,
+      required: false,
       unique: false,
     },
     age: {

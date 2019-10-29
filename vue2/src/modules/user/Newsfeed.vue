@@ -24,7 +24,7 @@ import $ from "jquery";
 export default {
   name: "Newsfeed",
   props: {
-    username: String
+    userInfo: Object
   },
   data() {
     return {

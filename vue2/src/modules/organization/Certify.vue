@@ -3,7 +3,7 @@
     <b-button
       id="createC"
       variant="primary"
-      class="btn btn-block shadow rounded"
+      class="btn btn-block"
       v-b-modal.offer
     >Create new certificate</b-button>
     <b-modal
@@ -19,7 +19,7 @@
     </b-modal>
     <hr>
     <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
-    <div v-for="(badge, index) in badges" v-if="!badge.granted">
+    <div v-for="(badge, index) in badges" v-if="!badge.granted" v-bind:key="index">
       <b-card class="contain">
         <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
         <b-row class="row">
@@ -43,26 +43,38 @@
                   <b-button
                     id="cer"
                     variant="primary"
-                    class="btn btn-block shadow rounded"
+                    class="btn btn-block"
                     v-b-modal.certify-modal
-                    v-on:click="getCode(badge.code)"
+                    v-on:click="getBadgeDetail(badge.code, badge.date)"
                   >Certify Recipients</b-button>
                 </b-col>
                 <b-col>
                   <b-button
                     id="cer"
                     variant="primary"
-                    class="btn btn-block shadow rounded"
+                    class="btn btn-block"
                     v-b-modal.addRecipient-modal
-                    v-on:click="getCode(badge.code)"
+                    v-on:click="getBadgeDetail(badge.code, badge.date)"
                   >Add Recipient</b-button>
                 </b-col>
               </b-row>
               <br>
             </div>
-            <b-card class="recipient">
-              <b-table striped hover :items="badge.recipient"></b-table>
-              <p class="noRec" v-show="badge.recipient.length == 0">No recipient had availed yet</p>
+            <b-card class="recipient" >
+               <table class="recip" v-if="badge.recipient.length > 0">
+                   <tr class="thead">
+                     <td class="imp"><p class="TH">Username</p></td>
+                     <td class="imp1"><p class="TH">Real name</p>
+                     <td class="nimp"></td>
+                   </tr>
+                   <tr  v-for="(recipient, index) in badge.recipient" :key="index"  @mouseover="mouseOver(recipient._id)" @mouseleave="mouseLeave">
+                     <td class="imp"><p>{{recipient.username}}</p></td>
+                     <td class="imp1"><p>{{recipient.fullname}}</p></td>
+                     <td class="nimp"><span v-show="hover == recipient._id">Delete</span></td>
+                   </tr>
+               </table>
+              <!-- <b-table striped hover :items="badge.recipient"></b-table> -->
+              <p class="noRec" v-else >No recipient had availed yet</p>
             </b-card>
           </b-col>
         </b-row>
@@ -81,15 +93,15 @@
       <form class="addR" @submit.prevent="addRecipient()">
         <span class="error" v-show="error">Cannot find user or user already in the list!</span>
         <br>
-        <b-input id="usernamei" v-model="s_username" placeholder="Enter username"/>
+        <b-input id="usernamei" required v-model="s_username" placeholder="Enter username"/>
         <br>
         <b-row>
           <b-col>
-            <b-button v-on:click="handleCancel" variant="danger" class="btn btn-block">Cancel</b-button>
+            <b-button v-on:click="handleCancel" v-if="!adding" variant="danger" class="btn btn-block">Cancel</b-button>
           </b-col>
           <b-col cols="8">
             <b-button type="submit" v-if="!adding" variant="primary" autocomplete="" class="btn btn-block">Add Recipient</b-button>
-            <span v-else><strong class="add">Adding new recipient...</strong></span>
+            <span v-else class="add"><b-spinner class="align-middle"></b-spinner>&nbsp;<strong>Adding new recipient...</strong></span>
           </b-col>
         </b-row>
       </form>
@@ -114,6 +126,7 @@
             size="15"
             placeholder="Certificate Category"
             v-model="certificateName"
+            required
           >
           <br>
           <br>
@@ -130,6 +143,7 @@
             rows="3"
             placeholder="Description of the event"
             v-model="descriptions"
+            required
           ></textarea>
           <br>
           <p>Given this {{ date }}</p>
@@ -137,14 +151,18 @@
           <b-row>
             <b-col>
               <b-button
+                v-if="!certifying | errorCertifying"
                 variant="danger"
                 class="btn btn-block"
                 v-on:click="resetCertification"
               >Cancel</b-button>
             </b-col>
             <b-col cols="8">
-              <b-button variant="primary" class="btn btn-block" type="sumbit">Certify Now</b-button>
+              <b-button variant="primary"  v-if="!certifying & !errorCertifying" class="btn btn-block" type="sumbit">Certify Now</b-button>  
+               <span class="errorC" v-if="errorCertifying & !certifying"><strong>No recipient to certify!</strong></span>
+              <span v-if="certifying" class="add"><b-spinner class="align-middle"></b-spinner>&nbsp;<strong>Certifying recipient...</strong></span>
             </b-col>
+            
           </b-row>
         </form>
       </div>
@@ -178,7 +196,11 @@ export default {
       descriptions: "",
       userExit: false,
       error: false,
-      adding: false
+      adding: false, 
+      certifying: false, 
+      errorCertifying: false,
+      hover: "",
+      tindex: 0
     };
   },
 
@@ -196,8 +218,15 @@ export default {
   },
 
   methods: {
-    getCode(bcode) {
+    mouseOver(index) {
+      this.hover = index;
+    },
+    mouseLeave(index) {
+      this.hover = null;
+    },
+    getBadgeDetail(bcode, date) {
       this.code = bcode;
+      this.date = date.month+" "+date.day+", "+date.year;
     },
     resetModal() {
       this.s_username = "";
@@ -224,11 +253,13 @@ export default {
           .then(res => {
             this.badges = res.data.badges;
             this.resetModal();
+             $("#usernamei").css({"border-color":"lightgrey"});
             this.$bvModal.hide("addRecipient-modal");
             this.error = false;
             resolve(true);
           })
           .catch(err => {
+            $("#usernamei").css({"border-color":"red"});
             this.adding = false;
             this.error = true;
           });
@@ -238,9 +269,11 @@ export default {
     handleCancel() {
       this.resetModal();
       this.$bvModal.hide("addRecipient-modal");
+       $("#usernamei").css({"border-color":"lightgrey"});
       this.error = false;
     },
     handleCertificationSubmit() {
+      this.certifying = true;
       let badgeInfo = {
         code: this.code,
         certificateName: this.certificateName,
@@ -252,17 +285,19 @@ export default {
           badgeInfo: badgeInfo
         })
         .then(res => {
-          alert("done");
+          this.certifying = false;
           this.resetCertification();
           this.getData();
         })
         .catch(err => {
-          alert("Something gone wrong! Sorry");
+          this.certifying = false;
+          this.errorCertifying = true;
         });
     },
     resetCertification() {
+      this.errorCertifying = false;
       this.descriptions = "";
-      this.certificateCategory = "";
+      this.certificateName = "";
       this.$bvModal.hide("certify-modal");
     },
     closeCreate() {
@@ -288,11 +323,68 @@ export default {
     if (this.$store.getters.isSubmitted) {
       alert("to close the modal");
     }
+
+    $("tr").on("mouseenter",function() {
+      alert($(this).find(".delete").text())
+      $(this).find(".delete").show();
+    })
   }
 };
 </script>
 
 <style scoped>
+.thead {
+  background:lightgrey;
+  color: #68707d;
+}
+.imp {
+  width: 40%;
+}
+
+.nimp {
+  width: 10%;
+}
+
+.imp1 {
+  width: 50%;
+}
+
+p {
+  padding:0;
+  margin:0;
+}
+
+.TH  {
+  font-size: 16px;
+}
+
+.recip {
+  
+  width: 100%;
+  text-align: center;
+  margin:0;
+}
+
+.recip td {
+  font-size: 15px;
+  border-bottom: 1px solid lightgrey;
+}
+
+.delete {
+  display: none;
+}
+
+tr:hover {
+  background-color: #e6e8ed;
+}
+
+.recip th {
+  width:100%;
+}
+.errorC {
+  color:red;
+  font-size: 20px;
+}
 .recipient {
   padding: 0;
   height: 240px;

@@ -5,11 +5,11 @@ const Organization = require("../models/organization")
 const bcrypt = require("bcryptjs")
 const config = require("./config")
 const jwt = require("jsonwebtoken")
-
+ 
 var data;
-
+ 
 var accounts = [];
-
+ 
 function findUser(username) {
   return new Promise(function (resolve, reject) {
     console.log("FINDING IN THE USER COLLECTION")
@@ -24,109 +24,117 @@ function findUser(username) {
           resolve("not found")
         }
       }).catch(err => {
-        resolve("error");
+        reject(err);
         console.log(err)
       })
   })
 }
-
+ 
 async function findOrg(username) {
-  var status = await findUser(username);
-  return new Promise(function (resolve, reject) {
-    console.log("result from user: " + status);
-    if (status == "not found") {
-      console.log("FINDING IN ORGANIZATION COLLECTION");
-      Organization.findOne({
-        username: username
-      })
-        .then(doc => {
-          if (doc) {
-            // console.log("THE ORGANIZATION INFO: " + doc);
-            resolve({ data: doc });
-          } else {
-            resolve({ data: "not found" });
-          }
-        }).catch(err => {
-          resolve({ data: "error" });
-          console.log(err);
+  try {
+    var status = await findUser(username);
+    return new Promise(function (resolve, reject) {
+      console.log("result from user: " + status);
+      if (status == "not found") {
+        console.log("FINDING IN ORGANIZATION COLLECTION");
+        Organization.findOne({
+          username: username
         })
-    } else {
-      resolve({ data: status });
-    }
-  })
+          .then(doc => {
+            if (doc) {
+              // console.log("THE ORGANIZATION INFO: " + doc);
+              resolve({ data: doc });
+            } else {
+              resolve({ data: "not found" });
+            }
+          }).catch(err => {
+            reject(err);
+            console.log(err);
+          })
+      } else {
+        resolve({ data: status });
+      }
+    })
+  } catch (err) {
+    reject(err);
+    console.log("Unexpected error occured!!!");
+  }
 }
-
+ 
 userRoute.route("/login").post(function (req, res) {
   tempdata = {};
   console.log("LOGIN USER: " + req.body)
   getResult();
   async function getResult() {
-    var fuser = await findOrg(req.body.username);
-    console.log("result: " + fuser);
-    console.log("finalizing request!")
-    if (fuser.data != "not found") {
-      bcrypt.compare(req.body.password, fuser.data.password)
-        .then(match => {
-          if (match) {
-            console.log("correct")
-            var token = jwt.sign({
-              username: fuser.data.username,
-              type: fuser.data.type,
-            }, config.secret, {
-                expiresIn: 86400 // expires in 24 hours
+    try {
+      var fuser = await findOrg(req.body.username);
+      console.log("result: " + fuser);
+      console.log("finalizing request!")
+      if (fuser.data != "not found") {
+        bcrypt.compare(req.body.password, fuser.data.password)
+          .then(match => {
+            if (match) {
+              console.log("correct")
+              var token = jwt.sign({
+                username: fuser.data.username,
+                type: fuser.data.type,
+              }, config.secret, {
+                  expiresIn: 86400 // expires in 24 hours
+                });
+              res.status(200).send({
+                auth: true,
+                token: token,
+                type: fuser.data.type,
+                message: "login successful"
               });
-            res.status(200).send({
-              auth: true,
-              token: token,
-              type: fuser.data.type,
-              message: "login successful"
-            });
-          } else {
-            console.log("wrong password")
-            res.status(401).json({
-              message: "Wrong password"
-            })
-          }
-        })
-        .catch(err => {
-          if (err) {
-            console.log(err)
-            res.status(500).json(err)
-          }
-        })
-    } else if (fuser.data == "not found") {
-      res.status(404).json({
-        message: "user not found!"
-      })
-    } else {
+            } else {
+              console.log("wrong password")
+              res.status(401).json({
+                message: "Wrong password"
+              })
+            }
+          })
+          .catch(err => {
+            if (err) {
+              console.log(err)
+              res.status(500).json(err)
+            }
+          })
+        } else if (fuser.data == "not found") {
+          res.status(404).json({
+            message: "user not found!"
+          })
+        }
+    } catch(err) {
+      console.log("Unexpected error occured!!!!");
       res.status(500).json({
         message: "Unexpected error occured!"
       })
     }
   }
 })
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 var tempdata = {
   username: "",
   password: ""
 }
 userRoute.route("/signup").post((req, res) => {
   tempdata = req.body
-  res.status(200).end()
+  res.status(200).end();
 });
-
-
-
+ 
+ 
+ 
 userRoute.route("/signedup").get((req, res) => {
   res.status(200).json(tempdata)
 })
-
+ 
 userRoute.route("/userType").post((req, res) => {
   console.log(req.body.credential)
   var user = jwt.decode(req.body.credential)
@@ -137,9 +145,9 @@ userRoute.route("/userType").post((req, res) => {
   })
 })
 var badges = [] //temporary storage for offered or posted badges
-
+ 
 function addAndAvailBadge(data, User) {
-  return new Promise(resolve => {
+  return new Promise(function (resolve, reject) {
     var newRecipient = { username: User.username, fullname: User.firstname + " " + User.lastname };
     Organization.findOne({ badges: { $elemMatch: { code: data.code, granted: false } } })
       .then((doc) => {
@@ -163,7 +171,7 @@ function addAndAvailBadge(data, User) {
                     resolve("Successful");
                   }).catch((err) => {
                     console.log(err);
-                    resolve("Error");
+                    reject(err);
                   });
               }
             }
@@ -173,66 +181,47 @@ function addAndAvailBadge(data, User) {
         }
       }).catch((err) => {
         console.log(err)
-        resolve("Error");
+        reject(err);
       })
   })
 }
-
+ 
 userRoute.route("/availbadge").post((req, res) => {
   async function avail() {
     var data = req.body;
     var User = jwt.decode(data.credentials);
-    var userinfo = await findUser(User.username);
-    if (userinfo != "not found") {
-      var result = await addAndAvailBadge(data, userinfo);
-      if (result == "Successful") {
-        console.log("You successfully availed the badge with the code"+data.code)
-        res.status(200).json({message: "You successfully availed the badge with the code"+data.code});
-      } else if (result == "Badge is not found") {
-        console.log("Cannot find badge with the code "+data.code)
-        res.status(404).json({message: "Cannot find badge with the code "+data.code});
-      } else if (result == "User already exist in the list") {
-        console.log("You are already in the list!")
-        res.status(400).json({message: "You are already in the list!"});
+    try {
+      var userinfo = await findUser(User.username);
+      if (userinfo != "not found") {
+        try {
+          var result = await addAndAvailBadge(data, userinfo);
+          if (result == "Successful") {
+            console.log("You successfully availed the badge with the code"+data.code)
+            res.status(200).json({message: "You successfully availed the badge with the code"+data.code});
+          } else if (result == "Badge is not found") {
+            console.log("Cannot find badge with the code "+data.code)
+            res.status(404).json({message: "Cannot find badge with the code "+data.code});
+          } else if (result == "User already exist in the list") {
+            console.log("You are already in the list!")
+            res.status(400).json({message: "You are already in the list!"});
+          }
+        } catch(err) {
+          res.status(500).json({message: "Unexpected error occured!"});
+        }
       } else {
-        res.status(500).json({message: "Unexpected error occured!"});
+        res.status(200).json({message: "User not found!"});
       }
-    } else {
+    } catch(err) {
+      console.log("Error occured!!!");
       res.status(500).json({message: "Unexpected error occured"})
     }
   }
   avail();
- 
 
-  // var availed = false;
-  // for (var j = 0; j < accounts.length; ++j) {
-  //   if (accounts[j].type == "Organization") {
-  //     var bad = accounts[j].badges;
-  //     for (var i = 0; i < bad.length; ++i) {
-  //       if (bad[i].code == req.body.code) {
-  //         availed = true;
-  //         var user = jwt.decode(req.body.credentials);
-  //         accounts[j].badges[i].recipient.push({
-  //           username: user.username,
-  //           Fullname: "Jonathan Rivas"
-  //         });
-  //         res.status(200).json({
-  //           message: "successful"
-  //         });
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }
-  // if (!availed) {
-  //   res.status(401).json({
-  //     message: "incorrect code"
-  //   })
-  // }
 })
-
+ 
 function findBadge(bcode) {
-  return new Promise(resolve => {
+  return new Promise(function(resolve, reject) {
     console.log("finding badge.................")
     Organization.findOne({ badges: { $elemMatch: { code: bcode } } })
       .then((doc) => {
@@ -243,19 +232,16 @@ function findBadge(bcode) {
         }
       }).catch((err) => {
         console.log(err);
-        resolve("error");
+        reject(err);
       })
   })
 }
-
+ 
 userRoute.route("/certify").post((req, res) => {
   async function certify() {
     var badge = req.body.badgeInfo;
-    var result = await findBadge(badge.code);
-    if (result == "error") {
-      console.log("badge not found");
-      res.status(500).json({ message: "Error occured!" });
-    } else if (result != "not found") {
+    try {
+      var result = await findBadge(badge.code);
       console.log("badge found: ==> " + result.badges);
       for (var i = 0; i < result.badges.length; ++i) {
         if (result.badges[i].code == badge.code) {
@@ -282,11 +268,13 @@ userRoute.route("/certify").post((req, res) => {
           }
         }
       }
+    } catch(err) {
+      res.status(500).json({message: "unexpected error occured!"});
     }
   }
   certify();
 })
-
+ 
 // function findRegUser(Username) {
 //   return new Promise(resolve => {
 //     User.findOne({
@@ -303,51 +291,56 @@ userRoute.route("/certify").post((req, res) => {
 //     })
 //   })
 // }
-
-
+ 
+ 
 userRoute.route('/addrecipient').post((req, res) => {
   async function add() {
     var data = req.body;
-    var User = await findUser(data.username);
-    if (User != "not found") {
-      var result = await addAndAvailBadge(req.body, User);
-      if (result == "Successful") {
-        console.log("User successfully added")
-        res.status(200).json({ message: "User successfully added" });
-      } else if (result == "User already exist in the list") {
-        console.log("User already exist in the list!")
-        res.status(400).json({ message: "User already exist in the list!" });
-      } else if (result == "Error") {
-        res.status(500).json({ message: "Unexpected error occured" });
-      } else {
-        console.log("Badge not found!");
-        res.status(404).json({message: "Badge not found"});
+    try {
+      var User = await findUser(data.username);
+      if (User != "not found") {
+        var result = await addAndAvailBadge(req.body, User);
+        if (result == "Successful") {
+          console.log("User successfully added")
+          res.status(200).json({ message: "User successfully added" });
+        } else if (result == "User already exist in the list") {
+          console.log("User already exist in the list!")
+          res.status(400).json({ message: "User already exist in the list!" });
+        } else if (result == "Error") {
+          res.status(500).json({ message: "Unexpected error occured" });
+        } else {
+          console.log("Badge not found!");
+          res.status(404).json({message: "Badge not found"});
+        }
+      } else if (User == "not found") {
+        res.status(404).json({ message: "User not found!" });
       }
-    } else if (User == "not found") {
-      res.status(404).json({ message: "User not found!" });
-    } else {
+        
+    } catch(err) {
+      console.log("ERRROR IN ADDING!!")
       res.status(500).json({ message: "Unexpected error occured" });
     }
+    
   }
   add();
 })
-
+ 
 function getBadges(username) {
-  return new Promise(resolve => {
+  return new Promise(function(resolve, reject) {
     Organization.find({}, "badges").then(docs => {
       resolve(docs);
     }).catch(err => {
       console.log(err);
-      resolve("error");
+      reject(error);
     })
   })
 }
-
+ 
 userRoute.route("/userbadges").post((req, res) => {
   async function getUserBadges() {
     var user = jwt.decode(req.body.user);
-    var result = await getBadges(user.username);
-    if (result != "error") {
+    try {
+      var result = await getBadges(user.username);
       var badges = [];
       result.forEach(function (b) {
         b.badges.forEach(function (bdg) {
@@ -356,11 +349,11 @@ userRoute.route("/userbadges").post((req, res) => {
               badges.push(bdg);
             }
           })
-
+ 
         })
       })
       res.status(200).json({ badges: badges});
-    } else {
+    } catch(err) {
       res.status(500).json({
         message: "Unexpected error occured!"
       })
@@ -368,7 +361,7 @@ userRoute.route("/userbadges").post((req, res) => {
   }
   getUserBadges();
 })
-
+ 
 function deleteUsers() {
   return new Promise(function (resolve, reject) {
     User.deleteMany({}).then(() => {
@@ -379,7 +372,7 @@ function deleteUsers() {
     })
   })
 }
-
+ 
 async function deleteAll() {
   var status = await deleteUsers();
   if (status == "ok") {
@@ -391,91 +384,96 @@ async function deleteAll() {
     })
   }
 }
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
 //REGULAR USER SIGN UP
 userRoute.route("/fullsignup").post((req, res) => {
   // var result = deleteAll();
   // if (result) {
   //   console.log("SUCCESSFULLY DELETED!");
   // } 
-  getResult();
-  async function getResult() {
-    var result = await findOrg(req.body.username);
-    console.log("RESULT FROM ORG COLLECTION: " + result.data);
-    if (result.data == "not found") {
-      req.body.password = bcrypt.hashSync(req.body.password, 10);
-      const user = new User(req.body)
-      console.log(user)
-      user.save()
-        .then(() => {
-          var token = jwt.sign({
-            username: user.username,
-            type: user.type
-          }, config.secret, {
-              expiresIn: 86400
+  
+  async function signup() {
+    try {
+      var result = await findOrg(req.body.username);
+      console.log("RESULT FROM ORG COLLECTION: " + result.data);
+      if (result.data == "not found") {
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
+        const user = new User(req.body)
+        console.log(user)
+        user.save()
+          .then(() => {
+            var token = jwt.sign({
+              username: user.username,
+              type: user.type
+            }, config.secret, {
+                expiresIn: 86400
+              });
+            res.status(200).send({
+              auth: true,
+              token: token
             });
-          res.status(200).send({
-            auth: true,
-            token: token
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).send(err);
-        })
-    } else if (result.data == "error") {
-      res.status(500).json({ message: "Unexpected error occured!" })
-    } else {
-      console.log("RESPOND 400 ALREADY TAKEN")
-      res.status(400).json({ message: "Username is already taken!" })
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(400).send(err);
+          })
+      } else {
+        console.log("RESPOND 400 ALREADY TAKEN")
+        res.status(400).json({ message: "Username is already taken!" })
+      }
+    } catch(err) {
+      res.status(500).json({ message: "Unexpected error occured!" });
     }
   }
+  signup();
   tempdata = {};
 })
-
-
+ 
+ 
 //ORGANIZATION SIGN UP
 userRoute.route("/orgsignup").post((req, res) => {
   getResult();
   async function getResult() {
-    var result = await findOrg(req.body.username);
-    console.log("RESULT FROM ORG COLLECTION: " + result.data)
-    if (result.data == "not found") {
-      req.body.password = bcrypt.hashSync(req.body.password, 10);
-      const user = new Organization(req.body)
-      console.log(user.badges);
-      user.save()
-        .then(() => {
-          console.log("org account successfully created");
-          var token = jwt.sign({
-            username: user.username,
-            type: user.type
-          }, config.secret, {
-              expiresIn: 86400
+    try {
+      var result = await findOrg(req.body.username);
+      console.log("RESULT FROM ORG COLLECTION: " + result.data)
+      if (result.data == "not found") {
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
+        const user = new Organization(req.body)
+        console.log(user.badges);
+        user.save()
+          .then(() => {
+            console.log("org account successfully created");
+            var token = jwt.sign({
+              username: user.username,
+              type: user.type
+            }, config.secret, {
+                expiresIn: 86400
+              });
+            res.status(200).send({
+              auth: true,
+              token: token
             });
-          res.status(200).send({
-            auth: true,
-            token: token
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).send(err);
-        })
-    } else if (result.data == "error") {
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(400).send(err);
+          })
+      } else {
+        console.log("RESPOND 400 ALREADY TAKEN")
+        res.status(400).json({ message: "Username is already taken!" })
+      }
+    }catch(err) {
       res.status(500).json({ message: "Unexpected error occured!" })
-    } else {
-      console.log("RESPOND 400 ALREADY TAKEN")
-      res.status(400).json({ message: "Username is already taken!" })
     }
   }
   tempdata = {};
 })
-
+ 
 //************************************************************************************************************** */
 function orgInfo(username) {
   return new Promise(function (resolve, reject) {
@@ -486,42 +484,45 @@ function orgInfo(username) {
         resolve({ data: doc });
       }
     }).catch(err => {
-      resolve({ data: "error" })
+      reject(err)
       console.log(err);
     })
   })
 }
-
-
-
+ 
+ 
+ 
 userRoute.route("/offerbadge").post((req, res) => {
   async function offer() {
     var org = jwt.decode(req.body.user);
-
-    var orginf = await orgInfo(org.username);
-    req.body.badge.organization = orginf.data.orgName;
-    Organization.updateOne({ username: org.username }, { $push: { badges: req.body.badge } })
-      .then(() => {
-        console.log("UPDATE SUCCESSFUL");
-        res.status(200).json({ message: "successfull added" });
-      }).catch(err => {
-        res.status(500).json({ message: "un error occured!" });
-        console.log(err);
-      })
+    try {
+      var orginf = await orgInfo(org.username);
+      req.body.badge.organization = orginf.data.orgName;
+      Organization.updateOne({ username: org.username }, { $push: { badges: req.body.badge } })
+        .then(() => {
+          console.log("UPDATE SUCCESSFUL");
+          res.status(200).json({ message: "successfull added" });
+        }).catch(err => {
+          res.status(500).json({ message: "un error occured!" });
+          console.log(err);
+        })
+    } catch(err) {
+      res.status(500).json({message: "Unexpected error occured!"});
+    } 
   }
   offer();
 })
-
-
+ 
+ 
 userRoute.route("/badges-org").post((req, res) => {
   async function getOrgBadges() {
     var user = jwt.decode(req.body.data);
-    var org = await orgInfo(user.username);
-    if (org.data != "error") {
+    try {
+      var org = await orgInfo(user.username);
       res.status(200).json({
         badges: org.data.badges
       })
-    } else {
+    } catch(err) {
       res.status(500).json({
         message: "an error has occured!"
       })
@@ -529,14 +530,14 @@ userRoute.route("/badges-org").post((req, res) => {
   }
   getOrgBadges();
 })
-
-
-
+ 
+ 
+ 
 userRoute.route("/pendingbadges").post((req, res) => {
   async function getPendingBadges() {
     var user = jwt.decode(req.body.data);
     var org = await orgInfo(user.username);
-    if (org.data != "error") {
+    try {
       var badges = org.data.badges;
       var pendingbadges = [];
       badges.forEach(function (badge) {
@@ -555,7 +556,7 @@ userRoute.route("/pendingbadges").post((req, res) => {
       res.status(200).json({
         badges: pendingbadges
       })
-    } else {
+    } catch(err) {
       res.status(500).json({
         message: "unexpected error occured!"
       })
@@ -563,10 +564,10 @@ userRoute.route("/pendingbadges").post((req, res) => {
   }
   getPendingBadges();
 })
-
-
+ 
+ 
 function findSameCode(bcode) {
-  return new Promise(resolve => {
+  return new Promise(function(resolve, reject) {
     console.log("finding in record in org with the code======> " + bcode);
     Organization.findOne({
       badges: { $elemMatch: { code: bcode, granted: false} },
@@ -579,13 +580,14 @@ function findSameCode(bcode) {
         resolve("notTaken");
       }
     }).catch((err) => {
+      reject(err);
       console.log(err);
     })
   })
 }
-
+ 
 userRoute.route("/validatecode").post((req, res) => {
-
+ 
   async function checkCode() {
     var status = await findSameCode(req.body.code);
     console.log("RESULT FROM ORG COLLECTIN: " + status);
@@ -603,22 +605,28 @@ userRoute.route("/validatecode").post((req, res) => {
   }
   checkCode();
 })
-
-
+ 
+ 
 //========================================================================================================
-
+ 
 userRoute.route("/userInfo").post((req, res) => {
   var user = jwt.decode(req.body.data);
   getResult();
   async function getResult() {
-    var result = await findOrg(user.username);
-    if (result.data != "not found" && result.data != "error") {
-      res.status(200).json({ data: result.data });
-    } else if (result.data == "error") {
+    try {
+      var result = await findOrg(user.username);
+      if (result.data != "not found") {
+        res.status(200).json({ data: result.data });
+      } else {
+        res.status(400).json({message: "User not found!"});
+      }
+    } catch(err) {
       res.status(500).json({ message: "Unexpected error occured!" });
     }
   }
 })
-
-
+ 
+ 
 module.exports = userRoute;
+ 
+
