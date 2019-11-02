@@ -10,9 +10,12 @@ import userpage from "@/views/Userpage.vue";
 import orgpage from "@/views/Organizationpage.vue";
 
 
-import UserUpdate from "./modules/user/Updateform.vue"
-import UserNewsfeed from "./modules/user/Newsfeed.vue"
-import UserBadgelist from "./modules/user/Mybadge.vue"
+// import UserUpdate from "./modules/user/Updateform.vue";
+// import UserNewsfeed from "./modules/user/Newsfeed.vue";
+import UserBadgelist from "./modules/user/Mybadge.vue";
+
+import badges from "./modules/organization/Badges.vue";
+import certify from "./modules/organization/Certify.vue";
 
 Vue.use(Router);
 // eslint-disable-next-line
@@ -82,6 +85,16 @@ let router = new Router({
           next("/login");
         }
       },
+      children: [
+        {
+          path: "",
+          component: UserBadgelist,
+        },
+        {
+          path: "updateprofile",
+          component: FullSignUp,
+        }
+      ]
     },
     {
       path: "/organization",
@@ -102,71 +115,85 @@ let router = new Router({
         } else {
           next("/login");
         }
-      }
-    },
-    {
-      path: "/user/update",
-      component: UserUpdate,
-      props: (route) => ({
-        name: route.query.name
-      }),
-      beforeEnter(to, from, next) {
-        if (store.getters.isLoggedIn) {
-          store.dispatch("identifyUser").then((data) => {
-            console.log(data)
-            if (data) {
-              next();
-            } else {
-              next("/login");
-            }
-          })
-        } else {
-          next("/login");
-        }
       },
-    },
-    {
-      path: "/user/mybadge",
-      component: UserBadgelist,
-      props: (route) => ({
-        name: route.query.name
-      }),
-      beforeEnter(to, from, next) {
-        if (store.getters.isLoggedIn) {
-          store.dispatch("identifyUser").then((data) => {
-            console.log(data)
-            if (data) {
-              next();
-            } else {
-              next("/login");
-            }
-          })
-        } else {
-          next("/login");
+      children: [
+        {
+          path: "",
+          component: badges,
+        },
+        {
+          path: "certify",
+          component: certify
+        },
+        {
+          path: "updateprofile",
+          component: OrgSignUp,
         }
-      },
+      ]
     },
-    {
-      path: "/user/newsfeed",
-      component: UserNewsfeed,
-      props: (route) => ({
-        name: route.query.name
-      }),
-      beforeEnter(to, from, next) {
-        if (store.getters.isLoggedIn) {
-          store.dispatch("identifyUser").then((data) => {
-            console.log(data)
-            if (data) {
-              next();
-            } else {
-              next("/login");
-            }
-          })
-        } else {
-          next("/login");
-        }
-      },
-    },
+    // {
+    //   path: "/user/update",
+    //   component: UserUpdate,
+    //   props: (route) => ({
+    //     name: route.query.name
+    //   }),
+    //   beforeEnter(to, from, next) {
+    //     if (store.getters.isLoggedIn) {
+    //       store.dispatch("identifyUser").then((data) => {
+    //         console.log(data)
+    //         if (data) {
+    //           next();
+    //         } else {
+    //           next("/login");
+    //         }
+    //       })
+    //     } else {
+    //       next("/login");
+    //     }
+    //   },
+    // },
+    // {
+    //   path: "/user/mybadge",
+    //   component: UserBadgelist,
+    //   props: (route) => ({
+    //     name: route.query.name
+    //   }),
+    //   beforeEnter(to, from, next) {
+    //     if (store.getters.isLoggedIn) {
+    //       store.dispatch("identifyUser").then((data) => {
+    //         console.log(data)
+    //         if (data) {
+    //           next();
+    //         } else {
+    //           next("/login");
+    //         }
+    //       })
+    //     } else {
+    //       next("/login");
+    //     }
+    //   },
+    // },
+    // {
+    //   path: "/user/newsfeed",
+    //   component: UserNewsfeed,
+    //   props: (route) => ({
+    //     name: route.query.name
+    //   }),
+    //   beforeEnter(to, from, next) {
+    //     if (store.getters.isLoggedIn) {
+    //       store.dispatch("identifyUser").then((data) => {
+    //         console.log(data)
+    //         if (data) {
+    //           next();
+    //         } else {
+    //           next("/login");
+    //         }
+    //       })
+    //     } else {
+    //       next("/login");
+    //     }
+    //   },
+    // },
   ]
 })
 

@@ -6,13 +6,8 @@
       <img :src="image" class="border rounded-circle border-dark" id="profile">
       <div class="card-header">
         <h3>{{ userinfo.firstname }} {{userinfo.lastname}}</h3>
-        
-            <button
-              v-on:click="redirect('/user/mybadge')"
-              class="btn btn-primary btn-block"
-            >Badge List</button>
           <button
-            v-on:click="redirect('/user/update')"
+            v-on:click="updateInfo"
             class="btn btn-primary btn-block"
           >Update Profile</button>
       </div>
@@ -88,11 +83,8 @@ export default {
   },
 
   methods: {
-    InsideMethod() {
-      this.$emit("InsideMethod");
-    },
-    redirect(path) {
-      this.$router.push({ path: path });
+    updateInfo() {
+      this.$emit("updateInfo");
     }
   }
 };

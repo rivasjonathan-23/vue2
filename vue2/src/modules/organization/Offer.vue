@@ -93,7 +93,10 @@
         </div>
       </label>
       <button id="postB" v-if="!sending" class="btn btn-primary btn-block btn-lg">Submit</button>
-      <button id="postB" v-else class="btn btn-primary btn-block btn-lg">Creating&nbsp;<b-spinner class="align-middle"></b-spinner></button>
+      <button id="postB" v-else class="btn btn-primary btn-block btn-lg">
+        Creating&nbsp;
+        <b-spinner class="align-middle"></b-spinner>
+      </button>
       <!-- <span v-else  class="sending"><b-spinner class="align-middle"></b-spinner>&nbsp;Creating badge...</span> -->
     </form>
   </b-card>
@@ -128,7 +131,7 @@ export default {
           bcode += char.charAt(index);
         }
         axios
-          .post("http://localhost:8081/user/validatecode", { code: bcode})
+          .post("http://localhost:8081/user/validatecode", { code: bcode })
           .then(res => {
             resolve(bcode);
           })
@@ -145,10 +148,10 @@ export default {
       var badgecode = await this.validCode();
       while (true) {
         if (badgecode == "CODE_ALREADY_TAKEN") {
-          console.log("regenerating.....")
+          console.log("regenerating.....");
           badgecode = await this.validCode();
         } else {
-          console.log("sending code")
+          console.log("sending code");
           return new Promise(function(resolve, reject) {
             resolve(badgecode);
           });
@@ -157,7 +160,7 @@ export default {
     },
     async createBadge() {
       var bdgcode = await this.offerBadge();
-      console.log("final result: "+bdgcode)
+      console.log("final result: " + bdgcode);
       let badge = {
         granted: false,
         code: bdgcode,
@@ -194,6 +197,9 @@ export default {
           console.log(err);
         });
     }
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
   },
 
   mounted() {

@@ -1,84 +1,108 @@
  <template>
   <div id="certify">
-    <b-button
-      id="createC"
-      variant="primary"
-      class="btn btn-block"
-      v-b-modal.offer
-    >Create new certificate</b-button>
+    <div class="createNnum">
+      <b-button id="createC" variant="primary" class="btn" v-b-modal.offer>Create new</b-button>
+      <span class="pbadges">{{badges.length}} pending badges</span>
+    </div>
     <b-modal
       size="lg"
       id="offer"
       title="Create new badge"
       centered
-       no-close-on-esc
+      no-close-on-esc
       no-close-on-backdrop
       hide-footer
     >
       <Offer v-on:submit="closeCreate"></Offer>
     </b-modal>
-    <hr>
     <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
-    <div v-for="(badge, index) in badges" v-if="!badge.granted" v-bind:key="index">
-      <b-card class="contain">
-        <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
-        <b-row class="row">
-          <b-col>
-            <br>
-            <b-card class="bg-light text-center">
+    <div v-for="(badge, index) in badges" v-bind:key="index">
+      <div v-if="!badge.granted" class="contain">
+        <center>
+          <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+          <b-row class="row">
+            <!-- <b-col> -->
+            <div id="badgeicon" class="text-center">
               <img src="@/assets/image.png" class>
               <h5 class="binfo">{{ badge.badgename }}</h5>
               <p class="binfo">{{ badge.venue }}</p>
               <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
               <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
-            </b-card>
-          </b-col>
-          <b-col cols="8" class="cerMenu">
-            <hr>
-            <div id="bmenu" class="text-center">
-              <h2>Recipients</h2>
-              <br>
-              <b-row>
-                <b-col>
-                  <b-button
-                    id="cer"
-                    variant="primary"
-                    class="btn btn-block"
-                    v-b-modal.certify-modal
-                    v-on:click="getBadgeDetail(badge.code, badge.date)"
-                  >Certify Recipients</b-button>
-                </b-col>
-                <b-col>
-                  <b-button
-                    id="cer"
-                    variant="primary"
-                    class="btn btn-block"
-                    v-b-modal.addRecipient-modal
-                    v-on:click="getBadgeDetail(badge.code, badge.date)"
-                  >Add Recipient</b-button>
-                </b-col>
-              </b-row>
-              <br>
             </div>
-            <b-card class="recipient" >
-               <table class="recip" v-if="badge.recipient.length > 0">
-                   <tr class="thead">
-                     <td class="imp"><p class="TH">Username</p></td>
-                     <td class="imp1"><p class="TH">Real name</p>
-                     <td class="nimp"></td>
-                   </tr>
-                   <tr  v-for="(recipient, index) in badge.recipient" :key="index"  @mouseover="mouseOver(recipient._id)" @mouseleave="mouseLeave">
-                     <td class="imp"><p>{{recipient.username}}</p></td>
-                     <td class="imp1"><p>{{recipient.fullname}}</p></td>
-                     <td class="nimp"><span v-show="hover == recipient._id">Delete</span></td>
-                   </tr>
-               </table>
-              <!-- <b-table striped hover :items="badge.recipient"></b-table> -->
-              <p class="noRec" v-else >No recipient had availed yet</p>
-            </b-card>
-          </b-col>
-        </b-row>
-      </b-card>
+            <!-- </b-col> -->
+            <!-- <b-col class="cerMenu"> -->
+            <div class="recContainer">
+              <div id="bmenu1" class="text-left">
+                <span class="tiRec">Recipients</span>
+                <span class="cuRec">
+                  {{badge.recipient.length}} current
+                  <span
+                    v-if="badge.recipient.length > 1"
+                  >recipients</span>
+                  <span v-else>recipient</span>
+                </span>
+                <span class="cuRec">
+                  code: 
+                  {{badge.code}}
+                </span>
+              </div>
+              <div class="recipient">
+                <table class="recip" v-if="badge.recipient.length > 0">
+                  <tr class="thead">
+                    <td class="imp">
+                      <p class="TH">Username</p>
+                    </td>
+                    <td class="imp1">
+                      <p class="TH">Real name</p>
+                    </td>
+                    <td class="nimp"></td>
+                  </tr>
+                  <tr
+                    v-for="(recipient, index) in badge.recipient"
+                    :key="index"
+                    @mouseover="mouseOver(recipient._id)"
+                    @mouseleave="mouseLeave"
+                  >
+                    <td class="imp">
+                      <p>{{recipient.username}}</p>
+                    </td>
+                    <td class="imp1">
+                      <p>{{recipient.fullname}}</p>
+                    </td>
+                    <td class="nimp">
+                      <span v-show="hover == recipient._id">Delete</span>
+                    </td>
+                  </tr>
+                </table>
+                <p class="noRec" v-else>No recipient had availed yet</p>
+              </div>
+              <div id="bmenu" class="text-left">
+                <!-- <b-row class="brow">
+                  <b-col class="btncont"> -->
+                    <b-button
+                      variant="primary"
+                      class="btn2"
+                      v-b-modal.certify-modal
+                      v-on:click="getBadgeDetail(badge.code, badge.date)"
+                    >Certify Recipients</b-button>
+                  <!-- </b-col>
+                  <b-col class="btncont"> -->
+                    <b-button
+                     
+
+                      variant="info"
+                      class="btn2"
+                      v-b-modal.addRecipient-modal
+                      v-on:click="getBadgeDetail(badge.code, badge.date)"
+                    >Add Recipient</b-button>
+                  <!-- </b-col>
+                </b-row> -->
+              </div>
+            </div>
+            <!-- </b-col> -->
+          </b-row>
+        </center>
+      </div>
     </div>
     <b-modal
       class="modl"
@@ -87,7 +111,6 @@
       centered
       no-close-on-esc
       no-close-on-backdrop
-      hide-header-close
       hide-footer
     >
       <form class="addR" @submit.prevent="addRecipient()">
@@ -97,24 +120,37 @@
         <br>
         <b-row>
           <b-col>
-            <b-button v-on:click="handleCancel" v-if="!adding" variant="danger" class="btn btn-block">Cancel</b-button>
+            <b-button
+              v-on:click="handleCancel"
+              v-if="!adding"
+              variant="danger"
+              class="btn btn-block"
+            >Cancel</b-button>
           </b-col>
           <b-col cols="8">
-            <b-button type="submit" v-if="!adding" variant="primary" autocomplete="" class="btn btn-block">Add Recipient</b-button>
-            <span v-else class="add"><b-spinner class="align-middle"></b-spinner>&nbsp;<strong>Adding new recipient...</strong></span>
+            <b-button
+              type="submit"
+              v-if="!adding"
+              variant="primary"
+              autocomplete
+              class="btn btn-block"
+            >Add Recipient</b-button>
+            <span v-else class="add">
+              <b-spinner class="align-middle"></b-spinner>&nbsp;
+              <strong>Adding new recipient...</strong>
+            </span>
           </b-col>
         </b-row>
       </form>
     </b-modal>
     <b-modal
       class="modl"
-      size="dm"
+      size="lg"
       id="certify-modal"
       title="Certify The Recipients"
       centered
       no-close-on-esc
       no-close-on-backdrop
-      hide-header-close
       hide-footer
     >
       <div class="text-center ifont">
@@ -123,31 +159,38 @@
           <br>
           <input
             class="inputline"
-            size="15"
-            placeholder="Certificate Category"
+            placeholder="Certificate Name"
             v-model="certificateName"
             required
           >
           <br>
           <br>
+          <br>
           <span>is awarded to</span>
           <br>
           <p>
-            (participant/s' name)
+            (
+            <i>participant/s' name</i>)
+            <br>
+            <br>
             <br>
           </p>
           <textarea
             name="description"
             id="description"
-            cols="30"
-            rows="3"
-            placeholder="Description of the event"
+            rows="4"
+            placeholder="Certificate body..."
+            class="text-center ifont"
             v-model="descriptions"
             required
           ></textarea>
           <br>
+          <br>
+          <br>
           <p>Given this {{ date }}</p>
           <hr>
+          <br>
+          <br>
           <b-row>
             <b-col>
               <b-button
@@ -158,11 +201,20 @@
               >Cancel</b-button>
             </b-col>
             <b-col cols="8">
-              <b-button variant="primary"  v-if="!certifying & !errorCertifying" class="btn btn-block" type="sumbit">Certify Now</b-button>  
-               <span class="errorC" v-if="errorCertifying & !certifying"><strong>No recipient to certify!</strong></span>
-              <span v-if="certifying" class="add"><b-spinner class="align-middle"></b-spinner>&nbsp;<strong>Certifying recipient...</strong></span>
+              <b-button
+                variant="primary"
+                v-if="!certifying & !errorCertifying"
+                class="btn btn-block"
+                type="sumbit"
+              >Certify Now</b-button>
+              <span class="errorC" v-if="errorCertifying & !certifying">
+                <strong>No recipient to certify!</strong>
+              </span>
+              <span v-if="certifying" class="add">
+                <b-spinner class="align-middle"></b-spinner>&nbsp;
+                <strong>Certifying recipient...</strong>
+              </span>
             </b-col>
-            
           </b-row>
         </form>
       </div>
@@ -196,15 +248,19 @@ export default {
       descriptions: "",
       userExit: false,
       error: false,
-      adding: false, 
-      certifying: false, 
+      adding: false,
+      certifying: false,
       errorCertifying: false,
       hover: "",
-      tindex: 0
+      tindex: 0,
+      size: 0
     };
   },
 
   created() {
+    window.addEventListener("resize", this.handleResize);
+    this.size = window.innerWidth;
+    this.handleResize();
     axios
       .post("http://localhost:8081/user/pendingbadges", {
         data: this.$store.getters.token
@@ -218,6 +274,17 @@ export default {
   },
 
   methods: {
+    handleResize() {
+      if (window.innerWidth >= this.size) {
+        $(".text-center").css({ width: "40%" });
+        $(".recContainer").css({ width: "59%" });
+      } else if (window.innerWidth < this.size) {
+        if (window.innerWidth <= 950) {
+          $(".text-center").css({ width: "100%" });
+          $(".recContainer").css({ width: "100%" });
+        }
+      }
+    },
     mouseOver(index) {
       this.hover = index;
     },
@@ -226,7 +293,7 @@ export default {
     },
     getBadgeDetail(bcode, date) {
       this.code = bcode;
-      this.date = date.month+" "+date.day+", "+date.year;
+      this.date = date.month + " " + date.day + ", " + date.year;
     },
     resetModal() {
       this.s_username = "";
@@ -253,13 +320,13 @@ export default {
           .then(res => {
             this.badges = res.data.badges;
             this.resetModal();
-             $("#usernamei").css({"border-color":"lightgrey"});
+            $("#usernamei").css({ "border-color": "lightgrey" });
             this.$bvModal.hide("addRecipient-modal");
             this.error = false;
             resolve(true);
           })
           .catch(err => {
-            $("#usernamei").css({"border-color":"red"});
+            $("#usernamei").css({ "border-color": "red" });
             this.adding = false;
             this.error = true;
           });
@@ -269,7 +336,7 @@ export default {
     handleCancel() {
       this.resetModal();
       this.$bvModal.hide("addRecipient-modal");
-       $("#usernamei").css({"border-color":"lightgrey"});
+      $("#usernamei").css({ "border-color": "lightgrey" });
       this.error = false;
     },
     handleCertificationSubmit() {
@@ -319,55 +386,213 @@ export default {
         });
     }
   },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
+  },
   mounted() {
     if (this.$store.getters.isSubmitted) {
       alert("to close the modal");
     }
 
-    $("tr").on("mouseenter",function() {
-      alert($(this).find(".delete").text())
-      $(this).find(".delete").show();
-    })
+    $("tr").on("mouseenter", function() {
+      alert(
+        $(this)
+          .find(".delete")
+          .text()
+      );
+      $(this)
+        .find(".delete")
+        .show();
+    });
   }
 };
 </script>
 
 <style scoped>
+.createNnum {
+  margin-top: 20px;
+  margin-left: 0;
+  margin-right: 0;
+  /* background-image: linear-gradient(to right, #87cefa , white); */
+  height: 40px;
+  position: relative;
+}
+.cerMenu {
+  width: 300px;
+}
+
+#createC {
+  font-size: 18px;
+  overflow: hidden;
+  /* float: left; */
+  position: absolute;
+}
+
+.btncont {
+  width: 100%;
+  padding: 0;
+}
+
+.brow {
+  /* background:red; */
+  margin-right: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.btn2 {
+  float:left;
+  margin-top:5px;
+  margin-left: 5px;
+}
+
+#certifyrec {
+  margin-right: 0;
+  width: 100%;
+  border: none;
+}
+
+#addrecip {
+  margin-left: 0;
+  border: none;
+  background: #43aefa;
+  width: 100%;
+}
+.pbadges {
+  left: 130px;
+  font-size: 20px;
+  margin-right: 5%;
+  color: #02416e;
+  padding: 5px;
+  position: absolute;
+}
+textarea:focus,
+input:focus {
+  outline: none;
+}
+.tiRec {
+  font-size: 25px;
+  margin-right: 6%;
+}
+.cuRec {
+  font-size: 17px;
+  font-weight: normal;
+  margin-right: 5%;
+}
+
+#description {
+  border: none;
+  width: 60%;
+  font-size: 16px;
+  font-style: italic;
+  color: #3b3d3d;
+  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
+}
+
+#badgeicon {
+  -webkit-filter: opacity(80%);
+  filter: opacity(80%);
+  height: 400px;
+  color: white;
+  width: 40%;
+  overflow: auto;
+  margin-bottom: 0;
+  background-image: url("~@/assets/background2.jpg");
+  background-size: cover;
+  margin-top: 0;
+  /* background: white; */
+  /* border: 1px solid lightgrey; */
+  float: left;
+  border-right: 1px solid white;
+  /* margin-left: 30px; */
+ 
+}
+
+.recContainer {
+  width: 59%;
+  float: left;
+  border-right: 1px solid white;
+  /* margin-left: 1%; */
+}
+
+.recipient {
+  text-align: center;
+  background: white;
+  margin-bottom: 0;
+  border-bottom: 3px solid #dce2e6;
+  /* border: 1px solid lightgrey; */
+  padding: 0;
+  margin-top: 0;
+  height: 317px;
+  width: 100%;
+  overflow: auto;
+}
 .thead {
-  background:lightgrey;
-  color: #68707d;
+  background: #e6e8ed;
+  color: #5d6161;
+}
+#bmenu {
+  width: 100%;
+  height: 45px;
+  background:#dce2e6;
+  padding-bottom: 0;
+  /* padding-left:15px; */
+  padding-right: 0;
+  text-align: right;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+#bmenu1 {
+  border-top-left-radius: 1px;
+  border-top-right-radius: 1px;
+  padding-bottom: 0;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 0;
+  padding-left: 9px;
+  padding-right: 9px;
+  color: #02416e;
+  background: #72c4f7;
 }
 .imp {
   width: 40%;
 }
 
 .nimp {
-  width: 10%;
+  width: 12%;
 }
 
 .imp1 {
-  width: 50%;
+  width: 48%;
 }
 
 p {
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
 }
 
-.TH  {
+.TH {
   font-size: 16px;
 }
 
+.btn {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
 .recip {
-  
   width: 100%;
-  text-align: center;
-  margin:0;
+  text-align: left;
+  margin: 0;
 }
 
 .recip td {
+  padding: 5px;
+  padding-left:10px;
   font-size: 15px;
-  border-bottom: 1px solid lightgrey;
+  /* border-bottom: 1px solid lightgrey; */
 }
 
 .delete {
@@ -379,20 +604,18 @@ tr:hover {
 }
 
 .recip th {
-  width:100%;
+  width: 100%;
 }
 .errorC {
-  color:red;
+  color: red;
   font-size: 20px;
 }
-.recipient {
-  padding: 0;
-  height: 240px;
-  overflow: auto;
-}
+
 .noRec {
-  margin-top: 100px;
-  margin-left: 190px;
+  margin-top: 140px;
+  font-size: 20px;
+
+  /* margin-left: 190px; */
 }
 .size50 {
   height: 50px;
@@ -422,16 +645,14 @@ b-modal {
   color: #0071ff;
 }
 
-#createC {
-  margin-top: 30px;
-  margin-bottom: 20px;
-  width: 250px;
-}
-
 .inputline {
+  font-style: italic;
+  font-size: 20px;
+  width: 30%;
+  color: #3b3d3d;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid grey;
   text-align: center;
 }
 .ifont {
@@ -456,6 +677,8 @@ b-modal {
 
 #certify {
   text-align: left;
+  /* padding-left:30px;
+  padding-right:30px; */
 }
 
 .temp {
@@ -464,12 +687,28 @@ b-modal {
 }
 
 .modl {
-  position: relative;
-  margin-top: 10% !important;
+  background: red;
+}
+hr {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-/* .contain {
-  margin-top: 100px;
-} */
+.contain {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  border-radius: 0;
+  
+  /* border-bottom:2px solid #dce2e6; */
+  background: #f0f7fc;
+  border-radius: 1px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  padding-left: 35px;
+  padding-right: 25px;
+  -webkit-box-shadow: 0px 5px 20px darkgrey;
+  box-shadow: 0px 5px 20px darkgrey;
+}
 </style>
 

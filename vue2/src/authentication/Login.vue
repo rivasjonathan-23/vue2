@@ -53,7 +53,7 @@ export default {
           if (res == "Regular user") {
             console.log(res)
             this.loading = false;
-            this.$router.push("/user/mybadge");
+            this.$router.push("/user");
           } else {
             this.$router.push("/organization");
           }
@@ -106,8 +106,7 @@ export default {
   position: relative;
   justify-content: center;
   margin: 0;
-  /* background-image: url("~@/assets/background2.jpg");
-  background-size: cover; */
+
   padding-top: 150px;
   padding-bottom: 100px;
   width: 100%;

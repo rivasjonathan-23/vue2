@@ -25,36 +25,6 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <!-- <b-navbar class="navbar" toggleable="lg" type="dark">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <router-link to="/">
-            <h3 class="web-name" href="#">BadgeBook*</h3>
-          </router-link>
-        </div>
-
-        <b-navbar-nav class="ml-auto">
-          <ul id="nav" class="nav navbar-nav navbar-right">
-            <li>
-              <div v-if="!this.$store.getters.isLoggedIn">
-                <div class="searchUser">Search</div>
-                <router-link class="btn btn-default" to="/signUpAs">
-                  <p class="auth">Sign up</p>
-                </router-link>
-
-                <router-link id="su" class="btn btn-default" to="/login">
-                  <p class="auth">Sign in</p>
-                </router-link>
-              </div>
-              <button v-else id="su" class="btn btn-default" @click="signout">
-                <p class="singout">Sign out</p>
-              </button>
-            </li>
-          </ul>
-        </b-navbar-nav>
-        <span class="fa fa-bars">=</span>
-      </div>
-    </b-navbar>-->
     <b-modal
       id="searchUser"
       title="Search other user | organization"
@@ -72,7 +42,7 @@
     
     
     
-    <div v-if="notlogin">
+    <!-- <div v-if="notlogin">
       <center>
         <router-view class="content"/>
       </center>
@@ -88,13 +58,13 @@
             <OrgProfile/>
           </div>
         </b-col>
-        <b-col cols="9">
+        <b-col cols="9"> -->
           <center>
             <router-view :userInfo="info" class="content"/>
           </center>
-        </b-col>
+        <!-- </b-col>
       </b-row>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -292,7 +262,7 @@ p:hover {
 }
 
 .navbar {
-  z-index: 9999;
+  z-index: 99999;
   position: fixed;
   width: 100%;
   margin-top: 0px;

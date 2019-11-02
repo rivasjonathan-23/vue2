@@ -1,33 +1,20 @@
 <template>
   <div id="orgpage" class="pd-side">
     <b-row>
-      <b-col>
+      <b-col cols="12">
         <div>
-          <Orgprofile v-on:InsideMethod="gotoUpdate"></Orgprofile>
+          <Orgprofile v-on:InsideMethod="redirect('/organization/updateprofile')"></Orgprofile>
         </div>
       </b-col>
-      <b-col cols="9">
+    </b-row>
+    <b-row>
+      <b-col cols="12" class="views">
+        <div class="Nav">
+          <span v-on:click="redirect('/organization')">Badges</span>
+          <span v-on:click="redirect('/organization/certify')">Certify</span>
+        </div>
         <div>
-          <h4>
-            <b-tabs>
-              <b-tab v-on:click="togoBadges" title="Badges offered" active align="left"></b-tab>
-              <b-tab v-on:click="gotoCertify" title="Certify" align="right"></b-tab>
-               <b-tab v-on:click="gotoPostEvent" title="My newsfeed" align="right"></b-tab>
-            </b-tabs>
-          </h4>
-        </div>
-        <div v-if="isBadges">
-          <Badges></Badges>
-        </div>
-        <div v-if="isToCerfify">
-          <Certify></Certify>
-        </div>
-        <div v-if="postEvent">
-        <br>
-          <h1>comming soon</h1><h5>we're woking on it</h5>
-        </div>
-        <div v-if="isUpdate">
-          <UpdateOrg></UpdateOrg>
+          <router-view></router-view>
         </div>
       </b-col>
     </b-row>
@@ -35,55 +22,51 @@
 </template>
 <script>
 /*eslint linebreak-style: ["error", "windows"]*/
-import Badges from "@/modules/organization/Badges.vue";
-import Certify from "@/modules/organization/Certify.vue";
 import Orgprofile from "@/modules/organization/orgprofile.vue";
-import Offer from "@/modules/organization/Offer.vue";
 import UpdateOrg from "@/modules/organization/Update.vue";
+import $ from "jquery";
 
 export default {
   name: "orgpage",
   components: {
-    Badges,
-    Certify,
-    Orgprofile,
-    Offer,
-    UpdateOrg
+    Orgprofile
   },
   data() {
     return {
       isBadges: true,
       isToCerfify: false,
       postEvent: false,
-      isUpdate: false
+      isUpdate: false,
+      size: 0,
+      zoomin: false
     };
   },
-  methods: {
-    togoBadges() {
-      this.isBadges = true;
-      this.isToCerfify = false;
-      this.postEvent = false;
-      this.isUpdate = false;
-    },
-    gotoCertify() {
-      this.isToCerfify = true;
-      this.isBadges = false;
-      this.postEvent = false;
-      this.isUpdate = false;
-    },
-    gotoPostEvent() {
-      this.postEvent = true;
-      this.isToCerfify = false;
-      this.isBadges = false;
-      this.isUpdate = false;
-    },
-    gotoUpdate() {
-      (this.isUpdate = true), (this.isOffer = false);
-      this.isToCerfify = false;
-      this.isBadges = false;
-    },
+  created() {
+    $("#orgpage").css({ width: "900px" });
+    this.zoomin = false;
+    window.addEventListener("resize", this.handleResize);
+    this.size = window.innerWidth;
+    this.handleResize();
   },
-
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  methods: {
+    redirect(path) {
+      this.$router.push(path);
+    },
+    handleResize() {
+      if (window.innerWidth >= this.size) {
+        this.zoomin = false;
+        $("#orgpage").css({ width: "1200px" });
+        $(".views").css({ width: "1200px" });
+      } else if (window.innerWidth < this.size) {
+        this.zoomin = true;
+        $("#orgpage").css({ width: "100%" });
+        $(".views").css({ width: "100%" });
+      }
+    }
+  }
 };
 </script>
 
@@ -92,8 +75,19 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
 }
+.Nav {
+
+  height: 50px;
+  font-size: 30px;
+  background: lightblue;
+}
+
+span {
+  margin: 20px;
+}
 
 #orgpage {
-  padding-top:90px;
+  width: 1200px;
+  padding-top: 50px;
 }
 </style>

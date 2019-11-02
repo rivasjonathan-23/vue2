@@ -69,10 +69,9 @@
           required
         />
 
-        <b-row  v-if="!availing">
+        <b-row v-if="!availing">
           <b-col>
             <b-button
-             
               @click="$bvModal.hide('availBadge-modal')"
               variant="danger"
               class="btn btn-block"
@@ -83,8 +82,11 @@
             <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
           </b-col>
         </b-row>
-        <b-row  class="add" v-else>
-           <span ><b-spinner class="align-middle"></b-spinner>&nbsp;<strong>Adding new recipient...</strong></span>
+        <b-row v-else class="add">
+          <span>
+            <b-spinner class="align-middle"></b-spinner>&nbsp;
+            <strong>Searching badge...</strong>
+          </span>
         </b-row>
       </form>
     </b-modal>
@@ -108,7 +110,7 @@ export default {
       hasData: false,
       error: false,
       fullname: "",
-      availing: false,
+      availing: false
     };
   },
   methods: {
@@ -120,7 +122,7 @@ export default {
           credentials: this.$store.getters.token
         })
         .then(resp => {
-          this. availing = false;
+          this.availing = false;
           this.reset();
           this.$bvModal.hide("availBadge-modal");
           axios
@@ -128,7 +130,7 @@ export default {
               user: this.$store.getters.token
             })
             .then(res => {
-              alert("got updated data")
+              alert("got updated data");
               console.log("badgess" + res.data.badges);
               this.badgelist = res.data.badges.reverse();
               // this.fullname = userInfo.firstname+" "+userInfo.lastname;
@@ -168,6 +170,7 @@ export default {
 };
 </script>
 <style scoped>
+
 div {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
@@ -203,13 +206,11 @@ label {
   font-size: 13px;
 }
 
-
 .add {
   color: #0071ff;
   text-align: center;
-  margin-left:16px;
+  margin-left: 27px;
 }
-
 
 .binput {
   margin-bottom: 15px;
