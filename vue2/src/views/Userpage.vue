@@ -1,41 +1,21 @@
 <template>
   <div id="userpage">
-    <div class="bv-example-row pd-side">
       <b-row>
-        <b-col class="border-right">
-          <Profile v-on:updateInfo="redirect('/user/updateprofile')" :username="this.username"></Profile>
+        <b-col cols="12">
+          <Profile></Profile>
         </b-col>
-        <b-col cols="9">
-          <!-- <div class="bg-light text-center">
-            <div class="nav">
-              <h4>
-                <b-tabs>
-                  <b-tab v-on:click="gotoBadgeList" title="Badge List" align="right"></b-tab>
-                </b-tabs>
-              </h4>
-            </div>
-          </div> -->
-          <!-- <div v-if="isBadgeList"> -->
-            <!-- <div id="divBabge">
-              <Mybadge></Mybadge>
-            </div> -->
-          <!-- </div> -->
-          <!-- <div v-if="isUpdateProfile">
-            <Updateform></Updateform>
-          </div>
-          <div v-if="isNewsfeed">
-            <Newsfeed></Newsfeed>
-          </div> -->
+      </b-row>
+      <b-row>
+        <b-col class="views" cols="12">
           <router-view></router-view>
         </b-col>
       </b-row>
-    </div>
   </div>
 </template>
 
 <script>
 /*eslint linebreak-style: ["error", "windows"]*/
-import axios from 'axios';
+import axios from "axios";
 import Profile from "@/modules/user/Profile.vue";
 import $ from "jquery";
 
@@ -46,8 +26,8 @@ export default {
   },
   data() {
     return {
-      badgeCode: "",
-    }
+      badgeCode: ""
+    };
   },
   components: {
     Profile
@@ -59,28 +39,31 @@ export default {
       isUpdateProfile: false
     };
   },
-
+  created() {
+    $("#orgpage").css({ width: "900px" });
+    window.addEventListener("resize", this.handleResize);
+    this.size = window.innerWidth;
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
+  },
   methods: {
     redirect(path) {
       this.$router.push(path);
+    },
+    handleResize() {
+      if (window.innerWidth >= this.size) {
+        $("#userpage").css({ width: "1200px" });
+      } else if (window.innerWidth < this.size) {
+        $("#userpage").css({ width: "100%" });
+      }
+    },
+     redirect(path) {
+      this.$router.push(path);
     }
-    // gotoNewsfeed() {
-    //   this.isNewsfeed = true;
-    //   this.isBadgeList = false;
-    //   this.isUpdateProfile = false;
-    // },
-    // gotoBadgeList() {
-    //   this.isBadgeList = true;
-    //   this.isNewsfeed = false;
-    //   this.isUpdateProfile = false;
-    // },
-    // gotoUpdateProfile() {
-    //   // $(".nav").hide();
-    //   this.isUpdateProfile = true;
-    //   this.isBadgeList = false;
-    //   this.isNewsfeed = false;
-    // },
   }
+
 };
 </script>
 
@@ -89,13 +72,19 @@ export default {
   height: 200px;
 }
 
+.views {
+  padding-top:0;
+  margin-top:0;
+}
+
 .pd-side {
   padding-left: 20px;
   padding-right: 20px;
 }
 
 #userpage {
-  padding-top: 90px;
+  padding-top: 51px;
+  width: 1200px;
 }
 
 #availbadge {

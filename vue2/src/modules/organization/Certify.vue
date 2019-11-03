@@ -15,93 +15,91 @@
     >
       <Offer v-on:submit="closeCreate"></Offer>
     </b-modal>
-    <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+    <div class="text-center">
+      <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+    </div>
     <div v-for="(badge, index) in badges" v-bind:key="index">
       <div v-if="!badge.granted" class="contain">
-        <center>
-          <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
-          <b-row class="row">
-            <!-- <b-col> -->
-            <div id="badgeicon" class="text-center">
-              <img src="@/assets/image.png" class>
-              <h5 class="binfo">{{ badge.badgename }}</h5>
-              <p class="binfo">{{ badge.venue }}</p>
-              <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
-              <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
+        <div class="nooffered">
+          <h3 class="temp">You haven't offered badges yet</h3>
+        </div>
+        <b-row class="row">
+          <div id="badgeicon" class="text-center">
+            <img src="@/assets/image.png" class>
+            <h5 class="binfo">{{ badge.badgename }}</h5>
+            <p class="binfo">{{ badge.venue }}</p>
+            <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+            <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
+          </div>
+          <div class="recContainer">
+            <div id="bmenu1" class="text-left">
+              <span class="tiRec">Recipients</span>
+              <span class="cuRec">
+                {{badge.recipient.length}} current
+                <span v-if="badge.recipient.length > 1">recipients</span>
+                <span v-else>recipient</span>
+              </span>
+              <span class="cuRec">
+                code:
+                {{badge.code}}
+              </span>
             </div>
-            <!-- </b-col> -->
-            <!-- <b-col class="cerMenu"> -->
-            <div class="recContainer">
-              <div id="bmenu1" class="text-left">
-                <span class="tiRec">Recipients</span>
-                <span class="cuRec">
-                  {{badge.recipient.length}} current
-                  <span
-                    v-if="badge.recipient.length > 1"
-                  >recipients</span>
-                  <span v-else>recipient</span>
-                </span>
-                <span class="cuRec">
-                  code: 
-                  {{badge.code}}
-                </span>
-              </div>
-              <div class="recipient">
-                <table class="recip" v-if="badge.recipient.length > 0">
-                  <tr class="thead">
-                    <td class="imp">
-                      <p class="TH">Username</p>
-                    </td>
-                    <td class="imp1">
-                      <p class="TH">Real name</p>
-                    </td>
-                    <td class="nimp"></td>
-                  </tr>
-                  <tr
-                    v-for="(recipient, index) in badge.recipient"
-                    :key="index"
-                    @mouseover="mouseOver(recipient._id)"
-                    @mouseleave="mouseLeave"
-                  >
-                    <td class="imp">
-                      <p>{{recipient.username}}</p>
-                    </td>
-                    <td class="imp1">
-                      <p>{{recipient.fullname}}</p>
-                    </td>
-                    <td class="nimp">
+            <div class="recipient">
+              <table class="recip" v-if="badge.recipient.length > 0">
+                <tr class="thead">
+                  <td class="imp">
+                    <p class="TH">Username</p>
+                  </td>
+                  <td class="imp1">
+                    <p class="TH">Real name</p>
+                  </td>
+                  <td class="nimp"></td>
+                </tr>
+                <tr
+                  v-for="(recipient, index) in badge.recipient"
+                  :key="index"
+                  @mouseover="mouseOver(recipient._id)"
+                  @mouseleave="mouseLeave"
+                >
+                  <td class="imp">
+                    <p>{{recipient.username}}</p>
+                  </td>
+                  <td class="imp1">
+                    <p>{{recipient.fullname}}</p>
+                  </td>
+                  <td class="nimp">
+                    <transition name="slide-fade">
                       <span v-show="hover == recipient._id">Delete</span>
-                    </td>
-                  </tr>
-                </table>
-                <p class="noRec" v-else>No recipient had availed yet</p>
-              </div>
-              <div id="bmenu" class="text-left">
-                <!-- <b-row class="brow">
-                  <b-col class="btncont"> -->
-                    <b-button
-                      variant="primary"
-                      class="btn2"
-                      v-b-modal.certify-modal
-                      v-on:click="getBadgeDetail(badge.code, badge.date)"
-                    >Certify Recipients</b-button>
-                  <!-- </b-col>
-                  <b-col class="btncont"> -->
-                    <b-button
-                     
-
-                      variant="info"
-                      class="btn2"
-                      v-b-modal.addRecipient-modal
-                      v-on:click="getBadgeDetail(badge.code, badge.date)"
-                    >Add Recipient</b-button>
-                  <!-- </b-col>
-                </b-row> -->
-              </div>
+                    </transition>
+                  </td>
+                </tr>
+              </table>
+              <p class="noRec" v-else>No recipient had availed yet</p>
             </div>
-            <!-- </b-col> -->
-          </b-row>
-        </center>
+            <div id="bmenu" class="text-left">
+              <b-button
+                variant="primary"
+                id="cert"
+                class="btn2"
+                v-b-modal.certify-modal
+                v-on:click="getBadgeDetail(badge.code, badge.date)"
+              >Certify Recipients</b-button>
+
+              <b-button
+                variant="info"
+                class="btn2"
+                v-b-modal.addRecipient-modal
+                v-on:click="getBadgeDetail(badge.code, badge.date)"
+              >Add Recipient</b-button>
+              <b-button
+                variant="danger"
+                class="btn2"
+                v-b-modal.addRecipient-modal
+                v-on:click="getBadgeDetail(badge.code, badge.date)"
+              >Delete badge</b-button>
+            </div>
+          </div>
+        </b-row>
       </div>
     </div>
     <b-modal
@@ -279,7 +277,7 @@ export default {
         $(".text-center").css({ width: "40%" });
         $(".recContainer").css({ width: "59%" });
       } else if (window.innerWidth < this.size) {
-        if (window.innerWidth <= 950) {
+        if (window.innerWidth <= 1000) {
           $(".text-center").css({ width: "100%" });
           $(".recContainer").css({ width: "100%" });
         }
@@ -409,8 +407,19 @@ export default {
 </script>
 
 <style scoped>
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
 .createNnum {
-  margin-top: 20px;
+  margin-top: 0;
   margin-left: 0;
   margin-right: 0;
   /* background-image: linear-gradient(to right, #87cefa , white); */
@@ -441,10 +450,15 @@ export default {
   margin: 0;
 }
 
+#cert {
+  margin-right: 5px;
+}
+
 .btn2 {
-  float:left;
-  margin-top:5px;
+  float: right;
+  margin-top: 5px;
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 #certifyrec {
@@ -463,13 +477,17 @@ export default {
   left: 130px;
   font-size: 20px;
   margin-right: 5%;
-  color: #02416e;
+  color: #2a5c82;
   padding: 5px;
   position: absolute;
 }
 textarea:focus,
 input:focus {
   outline: none;
+}
+
+.nooffered {
+  text-align: center;
 }
 .tiRec {
   font-size: 25px;
@@ -507,7 +525,6 @@ input:focus {
   float: left;
   border-right: 1px solid white;
   /* margin-left: 30px; */
- 
 }
 
 .recContainer {
@@ -521,11 +538,11 @@ input:focus {
   text-align: center;
   background: white;
   margin-bottom: 0;
-  border-bottom: 3px solid #dce2e6;
+  /* border-bottom: 3px solid #dce2e6; */
   /* border: 1px solid lightgrey; */
   padding: 0;
   margin-top: 0;
-  height: 317px;
+  height: 318px;
   width: 100%;
   overflow: auto;
 }
@@ -536,7 +553,7 @@ input:focus {
 #bmenu {
   width: 100%;
   height: 45px;
-  background:#dce2e6;
+  background: white;
   padding-bottom: 0;
   /* padding-left:15px; */
   padding-right: 0;
@@ -590,7 +607,7 @@ p {
 
 .recip td {
   padding: 5px;
-  padding-left:10px;
+  padding-left: 10px;
   font-size: 15px;
   /* border-bottom: 1px solid lightgrey; */
 }
@@ -598,7 +615,9 @@ p {
 .delete {
   display: none;
 }
-
+tr {
+  transition: ease 0.4s;
+}
 tr:hover {
   background-color: #e6e8ed;
 }
@@ -614,7 +633,7 @@ tr:hover {
 .noRec {
   margin-top: 140px;
   font-size: 20px;
-
+  color: #2a5c82;
   /* margin-left: 190px; */
 }
 .size50 {
@@ -656,14 +675,14 @@ b-modal {
   text-align: center;
 }
 .ifont {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: verdana;
 }
 
 .temp {
-  margin-top: 250px;
-  margin-left: 250px;
-  margin-bottom: 250px;
+  margin-top: 50px;
+  display: none;
+  margin-bottom: 50px;
+  color: #2a5c82;
 }
 
 .binfo {
@@ -677,13 +696,12 @@ b-modal {
 
 #certify {
   text-align: left;
+  background: #f2f7fa;
+  margin-top: 0;
+  padding: 30px;
+  font-family: verdana;
   /* padding-left:30px;
   padding-right:30px; */
-}
-
-.temp {
-  margin-top: 250px;
-  margin-bottom: 250px;
 }
 
 .modl {
@@ -698,7 +716,6 @@ hr {
   margin-top: 25px;
   margin-bottom: 10px;
   border-radius: 0;
-  
   /* border-bottom:2px solid #dce2e6; */
   background: #f0f7fc;
   border-radius: 1px;

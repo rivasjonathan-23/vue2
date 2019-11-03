@@ -1,21 +1,22 @@
 <template>
   <div id="badges">
-    <b-card class="b">
+    <div class="text-left">
+      <span class="pbadges">
+        {{by3Data.length}}
+        offered
+        <span v-if="by3Data.length>0">badges</span>
+        <span v-else>badge</span>
+      </span>
+    </div>
+    <div class="text-center">
       <h3 class="temp" v-show="noData">You haven't offered badges yet</h3>
-      <div class="loading" v-show="isLoading">
-        <div class="text-center text-danger my-2">
+    </div>
+    <div class="loading" v-show="isLoading">
+      <div class="text-center text-danger my-2">
         <b-spinner class="align-middle"></b-spinner>
-        <!-- <strong>Loading...</strong> -->
-        </div>
       </div>
-      <!-- <div v-for="(datapass, index) in by3Data" :key="index"> -->
-      <Bythree :data="by3Data"></Bythree>
-      <br>
-      <!-- </div> -->
-      <b-row>
-        <Bythree :data="excessData"></Bythree>
-      </b-row>
-    </b-card>
+    </div>
+    <Bythree :data="by3Data"></Bythree>
   </div>
 </template>
 <script>
@@ -35,8 +36,7 @@ export default {
       by3Data: [],
       isLoading: true,
       noData: false,
-      temp: [],
-      excessData: []
+      temp: []
     };
   },
 
@@ -52,24 +52,6 @@ export default {
           this.noData = true;
         }
         this.isLoading = false;
-
-        // console.log(allData)
-        // var hasContent = false;
-        // for (let i = 0; i < allData.length; ++i) {
-        //   hasContent = true;
-        //   if ((i + 1) % 3 == 0) {
-        //     this.temp.push(allData[i]);
-        //     this.by3Data.push(this.temp);
-        //     this.temp = [];
-        //   } else {
-        //     this.temp.push(allData[i]);
-        //   }
-        //   if (i - 1 == allData.length - (allData.length % 3)) {
-        //     this.excessData.push(allData[i]);
-        //   } else if (i == allData.length - (allData.length % 3)) {
-        //     this.excessData.push(allData[i]);
-        //   }
-        // }
       });
   }
 };
@@ -82,27 +64,37 @@ export default {
   border-bottom: 1px solid #000000;
   text-align: center;
 }
-.ifont {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+
+.pbadges {
+  font-size: 17px;
+  color: #02416e;
+  padding-left: 20px;
+
 }
-.b {
+
+#badges {
+  width: 100%;
+  margin: 0;
+  text-align: left;
   border: none;
+  padding: 2px;
+  font-family: verdana;
 }
 
 .temp {
-  margin-top: 250px;
-  margin-bottom: 250px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  color: #2a5c82;
 }
 
 .align-middle {
-  color:rgb(3, 78, 133);
+  color: rgb(3, 78, 133);
   height: 75px;
   width: 75px;
 }
 
 .loading {
-  margin-top: 250px;
+  margin-top: 50px;
   margin-bottom: 250px;
 }
 </style>

@@ -1,16 +1,52 @@
 <template>
   <div>
     <div id="mybadge">
-      <b-button
-        id="createC"
-        variant="primary"
-        class="btn btn-block shadow rounded"
-        v-b-modal.availBadge-modal
-      >Avail new certificate</b-button>
-      <hr>
+      <div class="sheader">
+        <span class="tbadge">
+          {{badgelist.length}}
+          <span v-if="badgelist.length > 0">badges</span>
+          <span v-else>badge</span>
+        </span>
+        <span class="tbadge">
+          {{badgelist.length}}
+          <span v-if="badgelist.length > 0">pending badges</span>
+           <span v-else >pending badge</span>
+        </span>
+        <b-button
+          id="createC"
+          variant="primary"
+          class="btn"
+          v-b-modal.availBadge-modal
+        >Avail new certificate</b-button>
+      </div>
+      <hr id="line">
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in badgelist" :key="index">
-        <div v-if="badge.granted">
+        <b-row v-if="badge.granted" class="row">
+          <div id="badgeicon" class="badgeicon">
+            <img src="@/assets/image.png" class>
+            <h5 class="binfo">{{ badge.badgename }}</h5>
+            <p class="binfo">{{ badge.venue }}</p>
+            <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+            <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
+          </div>
+          <div class="cerBody">
+            <p class="name">
+              This certificate of
+              <br>
+              {{badge.certificateName}}
+            </p>
+            <span>is awarded to</span>
+            <h5>{{fullname}}</h5><br>
+            <p class="description">{{badge.descriptions}}</p>
+            <br>
+            <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
+            <div class="text-center byorg">
+              <h5>Certified by {{badge.organization}}</h5>
+            </div>
+          </div>
+        </b-row>
+        <!-- <div v-if="badge.granted">
           <b-card class="bdgs">
             <b-row class="justify-content-md-center">
               <b-col class="text-center">
@@ -37,15 +73,15 @@
               </b-col>
             </b-row>
           </b-card>
-        </div>
-        <div v-else>
+        </div>-->
+        <!-- <div v-else>
           <b-card class="bdgs">
             <p class="pending">PENDING</p>
             <h3 class="pending">{{badge.badgename}}</h3>
             <hr>
             <h5 class="pending">Waiting for ceritification from {{badge.organization}}</h5>
           </b-card>
-        </div>
+        </div>-->
       </div>
     </div>
     <b-modal
@@ -109,8 +145,9 @@ export default {
       badgeCode: "",
       hasData: false,
       error: false,
-      fullname: "",
-      availing: false
+      fullname: "Jonathan Rivas",
+      availing: false,
+      size: 0,
     };
   },
   methods: {
@@ -150,9 +187,26 @@ export default {
       this.error = false;
       this.badgeCode = "";
       $(".binput").css({ "border-color": "gray" });
-    }
+    },
+    handleResize() {
+      if (window.innerWidth >= this.size) {
+        $(".badgeicon").css({ width: "40%" });
+        $(".cerBody").css({ width: "59%" });
+      } else if (window.innerWidth < this.size) {
+        if (window.innerWidth <= 1000) {
+          $(".badgeicon").css({ width: "100%" });
+          $(".cerBody").css({ width: "100%" });
+        }
+      }
+    },
+  },
+   destroyed() {
+    window.removeEventListener("resize", this.handleResize);
   },
   created() {
+    window.addEventListener("resize", this.handleResize);
+    this.size = window.innerWidth;
+    this.handleResize();
     axios
       .post("http://localhost:8081/user/userbadges", {
         user: this.$store.getters.token
@@ -160,7 +214,6 @@ export default {
       .then(res => {
         console.log("badgess" + res.data.badges);
         this.badgelist = res.data.badges.reverse();
-        // this.fullname = userInfo.firstname+" "+userInfo.lastname;
         console.log({ badges: this.badgelist });
         if (this.badgelist.length == 0) {
           this.hasData = true;
@@ -170,36 +223,106 @@ export default {
 };
 </script>
 <style scoped>
+.cerBody {
+  width: 59%;
+  padding-left:20px;
+  padding-right:20px;
+  padding-top:30px;
+  padding-bottom:20px;
+  color:#3d4c54;
+  background: #e6f2f7;
+  text-align: center;
+  font-family: Verdana;
+  font-size: 16px;
+  height: 420px;
+  overflow:auto;
+}
 
-div {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+.btn:focus {
+  outline: none;
+}
+
+.name {
+  font-size: 18px;
+}
+
+.row {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+#badgeicon {
+  -webkit-filter: opacity(80%);
+  filter: opacity(80%);
+  height: 420px;
+  color: white;
+  width: 40%;
+  overflow: auto;
+  margin-bottom: 0;
+  background-image: url("~@/assets/background2.jpg");
+  background-size: cover;
+  margin-top: 0;
+}
+
+.badgeicon {
+  text-align: center;
+}
+
+.description {
+  font-size: 17px;
 }
 .byorg {
   position: relative;
   width: 70%;
   left: 15%;
 }
+
+.sheader {
+  /* background: rgb(138, 196, 219, 0.9); */
+  text-align: right;
+  font-family: verdana;
+}
 #createC {
-  margin-top: 30px;
-  margin-bottom: 20px;
-  width: 250px;
+  border: none;
+  border-radius: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: 15px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+#line {
+  color: lightblue;
+  margin-top: 8px;
+  height: 5px;
+  background: lightblue;
+}
+.tbadge {
+  font-size: 19px;
+  margin-left: 2%;
+  margin-right: 2%;
+  color: #1f4369;
 }
 label {
   margin-top: 5px;
 }
 
 .bdgs {
+  border-radius: 0;
   margin-bottom: 10px;
   background: #f2f5f5;
 }
 .temp {
-  margin-top: 250px;
-  margin-bottom: 250px;
+  margin-top: 50px;
+  margin-bottom: 100px;
+  color: #2a5c82;
 }
 
 #mybadge {
   text-align: center;
+  margin-top: 0px;
+  padding-top: 0;
+  font-family: verdana;
+  overflow: hidden;
 }
 .error {
   color: red;

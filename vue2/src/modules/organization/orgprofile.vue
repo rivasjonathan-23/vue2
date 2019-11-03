@@ -1,32 +1,32 @@
 <template>
   <div id="Profile">
-    <div>
       <div class="prfl">
         <div class="logo">
           <img :src="image" alt id="profile">
         </div>
-        <h4>{{ orgName }}</h4>
+        <h4 class="orgn">{{ orgName }}</h4>
       </div>
       <div class="info">
         <!-- <p>Organization name: {{orgName}}</p> -->
-        <p>{{description}}</p>
-        <p>
-          <strong>Admin email address:</strong>
-          {{email}}
+        <p class="des">{{description}}</p>
+        <p class="address">{{address}}</p>
+        <p class="email">
+          Email at
+          <span class="emailadd">{{email}}</span>
         </p>
-        <p>
-          <strong>Address:</strong>
-          {{address}}
-        </p>
-        <button v-on:click="InsideMethod" class="btn btn-primary">Update Profile</button>
+
+        <b-button
+          v-on:click="redirect('/signUpAs')"
+          squared
+          variant="outline-primary"
+        >Update Profile</b-button>
       </div>
-    </div>
   </div>
 </template>
 
 <script>
 /*eslint linebreak-style: ["error", "windows"]*/
-import $ from 'jquery';
+import $ from "jquery";
 
 export default {
   name: "Profile",
@@ -39,7 +39,7 @@ export default {
       address: "",
       email: "",
       description: "",
-      image: require("@/assets/background.jpg"),
+      image: require("@/assets/logo.jpg"),
       size: 0
     };
   },
@@ -65,13 +65,23 @@ export default {
     },
     handleResize() {
       if (window.innerWidth >= this.size) {
-        $(".info").css({ "width": "74%", "margin-top":"155px","text-align":"left" });
-        $(".prfl").css({ "width": "300px" });
+        $(".info").css({
+          width: "74%",
+          "margin-top": "155px",
+          "text-align": "left"
+        });
+        $(".prfl").css({ width: "300px", "margin-bottom": "25px" });
+        $(".logo").css({ width: "250px", height: "250px" });
+        $("#profile").css({ width: "auto", height: "250px" });
       } else if (window.innerWidth < this.size) {
-        // if (window.innerWidth <= 600) {
-          $(".info").css({ "width": "100%", "margin-top":"10px","text-align":"center" });
-          $(".prfl").css({ "width": "100%"});
-        // }
+          $(".info").css({
+            width: "100%",
+            "margin-top": "4px",
+            "text-align": "center"
+          });
+          $(".prfl").css({ width: "100%", "margin-bottom": "0px" });
+          $(".logo").css({ width: "180px", height: "180px" });
+          $("#profile").css({ width: "180px", height: "180px" });
       }
     },
     InsideMethod() {
@@ -82,12 +92,36 @@ export default {
 </script>
 <style scoped>
 div {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: verdana;
 }
 
+.orgn {
+   color:#364452;
+}
+
+.address {
+  font-size: 15px;
+  color: #3b4d70;
+
+  font-weight: bold;
+}
+
+.des {
+  color: #1e4773;
+}
+.email {
+  color: #486399;
+  font-size: 15px;
+}
+.emailadd {
+  text-decoration: underline;
+}
 .prof {
   float: left;
+}
+p {
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 #profile {
@@ -105,10 +139,11 @@ div {
   height: 150px;
   background-image: url("~@/assets/orgbackground.jpg");
   background-size: cover;
+  font-family: verdana;
 }
 .info {
   float: left;
-  font-size: 18px;
+  font-size: 14px;
   width: 74%;
   text-align: left;
   margin-top: 155px;
@@ -117,21 +152,18 @@ div {
 
 .logo {
   overflow: hidden;
-  margin-top: 50px;
+  margin-top: 30px;
   width: 250px;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 0px 3px 5px #545f6b;
+  box-shadow: 0px 3px 5px #545f6b;
   height: 250px;
-  border: 2px solid lightblue;
+  background: white;
 }
 .prfl {
   float: left;
   width: 300px;
-  margin-bottom: 20px;
-  /* background-image: linear-gradient(
-    transparent,
-    transparent,
-    transparent,
-    #d8e3eb
-  ); */
+  margin-bottom: 25px;
   /* background:grey; */
 }
 </style>

@@ -2,17 +2,15 @@
   <div id="orgpage" class="pd-side">
     <b-row>
       <b-col cols="12">
-        <div>
-          <Orgprofile v-on:InsideMethod="redirect('/organization/updateprofile')"></Orgprofile>
-        </div>
+          <Orgprofile class="pro"></Orgprofile>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="12" class="views">
-        <div class="Nav">
-          <span v-on:click="redirect('/organization')">Badges</span>
-          <span v-on:click="redirect('/organization/certify')">Certify</span>
-        </div>
+        <b-navbar sticky class="Nav">
+          <span id="badges" class="bdg" v-on:click="redirect('/organization')">Badge List</span>
+          <span id="certify" v-on:click="redirect('/organization/certify')">Create badge</span>
+        </b-navbar>
         <div>
           <router-view></router-view>
         </div>
@@ -37,13 +35,11 @@ export default {
       isToCerfify: false,
       postEvent: false,
       isUpdate: false,
-      size: 0,
-      zoomin: false
+      size: 0
     };
   },
   created() {
     $("#orgpage").css({ width: "900px" });
-    this.zoomin = false;
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
@@ -57,15 +53,23 @@ export default {
     },
     handleResize() {
       if (window.innerWidth >= this.size) {
-        this.zoomin = false;
         $("#orgpage").css({ width: "1200px" });
-        $(".views").css({ width: "1200px" });
       } else if (window.innerWidth < this.size) {
-        this.zoomin = true;
         $("#orgpage").css({ width: "100%" });
-        $(".views").css({ width: "100%" });
       }
     }
+  },
+  mounted() {
+    $("#certify").click(function() {
+      $(this).css({ color: "#006aff" });
+      $("#badges").css({ color: "#2a5c82" });
+      $(".pro").slideUp();
+    });
+    $("#badges").click(function() {
+      $(this).css({ color: "#006aff" });
+      $("#certify").css({ color: "#2a5c82" });
+      $(".pro").slideDown();
+    });
   }
 };
 </script>
@@ -76,14 +80,37 @@ export default {
   padding-right: 20px;
 }
 .Nav {
-
-  height: 50px;
-  font-size: 30px;
-  background: lightblue;
+  height: 45px;
+  font-size: 20px;
+  background: rgb(217, 241, 250,0.9);
+  border-bottom: 4px solid lightblue;
+  /* -webkit-box-shadow: 0px 3px 7px darkgrey;
+  box-shadow: 0px 3px 7px darkgrey; */
+  /* background-image: linear-gradient(to right, #a5d7fa, #d4f2fa); */
+  top: 50px;
+  text-align: center;
+  padding:0;
+  overflow:auto;
 }
 
 span {
-  margin: 20px;
+  color: #2a5c82;
+  margin: 0px;
+  transition: ease 0.4s;
+  /* letter-spacing: 1px; */
+  padding-bottom:5px;
+  padding-right:20px;
+  padding-left:20px;
+  padding-top: 6px;
+}
+
+.bdg {
+  color: #006aff;
+}
+
+span:hover {
+  color: #006aff;
+  background:#c5eafc;
 }
 
 #orgpage {
