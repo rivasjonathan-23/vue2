@@ -20,6 +20,11 @@
         >Avail new certificate</b-button>
       </div>
       <div id="line"></div>
+      <div class="loading" v-show="isLoading">
+      <div class="text-center text-danger my-2">
+        <b-spinner class="align-middle"></b-spinner>
+      </div>
+    </div>
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in badgelist" :key="index">
         <b-row v-if="badge.granted" class="row">
@@ -113,7 +118,8 @@ export default {
       fullname: "",
       availing: false,
       size: 0,
-      resized: false
+      resized: false,
+      isLoading: true
     };
   },
   methods: {
@@ -174,6 +180,7 @@ export default {
         user: this.$store.getters.token
       })
       .then(res => {
+        this.loading = false;
         console.log("badgess" + res.data.badges);
         this.badgelist = res.data.badges.reverse();
         console.log({ badges: this.badgelist });
@@ -242,7 +249,18 @@ export default {
   width: 70%;
   left: 15%;
 }
+.loading {
+  margin-top:30px;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  background: #f2f8fa;
+}
 
+.align-middle {
+  color: rgb(3, 78, 133);
+  height: 75px;
+  width: 75px;
+}
 .sheader {
   /* background: rgb(138, 196, 219, 0.9); */
   text-align: right;
@@ -252,7 +270,7 @@ export default {
 }
 #createC {
   border: none;
-  border-radius: 0;
+  border-radius: 2px;
   padding-left: 12px;
   padding-right: 12px;
   font-size: 15px;

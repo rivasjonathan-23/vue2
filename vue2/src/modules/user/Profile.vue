@@ -17,9 +17,9 @@
         <span class="emailadd">{{userinf.email}}</span>
       </p>
 
-      <b-button
+      <b-button 
+        class="update"
         v-on:click="Alert(userInfo.username)"
-        squared
         variant="outline-primary"
       >Update Profile</b-button>
     </div>
@@ -34,12 +34,22 @@ export default {
   name: "Profile",
   data() {
     return {
-      userinf: {},
+      userinf: {
+        username: "jrivas2398",
+        firstname: "Jonathan",
+        lastname: "Rivas",
+        occupation: "POORgrammer",
+        years: "2",
+        address: "Nasipit, Talamban, Cebu, Philippines",
+        email: "jrivas@gmail.com",
+        birthdate: { month: "September", day: 23, year: 1998},
+        age: 21
+      },
       image: require("@/assets/profile.png"),
       size: 0,
       yrlabel: "",
       company: "Aksintyur",
-      birthdate: "",
+      birthdate: "September 23, 1998",
       resized: false
     };
   },
@@ -101,13 +111,17 @@ p {
   margin-top: 5px;
 }
 
+.update {
+  border-radius: 2px;
+}
+
 .profile {
   width: auto;
   height: 250px;
 }
 
 .btn {
-  border-radius: 0;
+  border-radius: 2px;
 }
 
 #Profile {
@@ -131,8 +145,8 @@ p {
   margin-top: 30px;
   width: 250px;
   margin-bottom: 10px;
-  -webkit-box-shadow: 0px 3px 5px #545f6b;
-  box-shadow: 0px 3px 5px #545f6b;
+  -webkit-box-shadow: 0px 1px 5px #545f6b;
+  box-shadow: 0px 1px 5px #545f6b;
   height: 250px;
   background: white;
 }

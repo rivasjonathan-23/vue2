@@ -18,7 +18,7 @@
 
         <b-button
           v-on:click="redirect('/signUpAs')"
-          squared
+          class="update"
           variant="outline-primary"
         >Update Profile</b-button>
       </div>
@@ -36,10 +36,10 @@ export default {
   },
   data() {
     return {
-      orgName: "",
-      address: "",
-      email: "",
-      description: "",
+      orgName: "Passerelles Numeriques",
+      address: "Nasipit, Talamban, Cebu, Philippines",
+      email: "passerellesnumeriques@gmail.com",
+      description: "Our mission is to provide education, technical and professional training in the digital sector to young underprivileged people by leveraging their potential and willpower. We endeavour to truly develop their employability which will allow them and their families to escape poverty in a sustainable way, and contribute to the social and economic development of their countries.",
       image: require("@/assets/logo.jpg"),
       size: 0,
       resized: false,
@@ -156,8 +156,8 @@ p {
   margin-top: 30px;
   width: 250px;
   margin-bottom: 10px;
-  -webkit-box-shadow: 0px 3px 5px #545f6b;
-  box-shadow: 0px 3px 5px #545f6b;
+  -webkit-box-shadow: 0px 1px 5px #545f6b;
+  box-shadow: 0px 1px 5px #545f6b;
   height: 250px;
   background: white;
 }
@@ -181,7 +181,9 @@ p {
   margin-top: 4px;
   text-align: center;
 }
-
+.update {
+  border-radius:2px;
+}
 .smallLogo {
   width: 180px;
   height: 180px;

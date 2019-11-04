@@ -1,11 +1,12 @@
 <template>
-  <b-card>
-    <div class="badgePic">
-      <img src="@/assets/image.png" class>
+  <b-row>
+    <b-col class="badgePic">
+      <img src="@/assets/image.png">
       <h5 class="b">{{ badgename }}</h5>
       <p class="b">{{ venue }}</p>
       <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>
-    </div>
+    </b-col>
+    <b-col>
     <form class="signupform" @submit.prevent="createBadge">
       <center>
         <h1 class="sign">Offer A Badge</h1>
@@ -92,14 +93,15 @@
           <div class="line"></div>
         </div>
       </label>
-      <button id="postB" v-if="!sending" class="btn btn-primary btn-block btn-lg">Submit</button>
-      <button id="postB" v-else class="btn btn-primary btn-block btn-lg">
-        Creating&nbsp;
-        <b-spinner class="align-middle"></b-spinner>
+      <button id="postB" class="btn btn-primary btn-lg">
+        <span v-if="sending">Creating&nbsp;
+          <b-spinner class="align-middle"></b-spinner>
+        </span>
+        <span v-else>Submit</span>
       </button>
-      <!-- <span v-else  class="sending"><b-spinner class="align-middle"></b-spinner>&nbsp;Creating badge...</span> -->
     </form>
-  </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

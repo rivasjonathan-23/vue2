@@ -18,14 +18,15 @@
   }
   
   .signupform {
+    font-family: verdana;
     height: auto;
     margin-top: 0px;
     margin-bottom: 10px;
     background: white;
     text-align: center;
     margin-right: 10px;
-    padding-left: 20px;
-    border-left: 1px solid lightgray;
+    padding-left:5px;
+   /* border-left: 1px solid lightgray;*/
     float: left;
     width:450px;
     /* -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
@@ -43,8 +44,10 @@
     padding-top:60px;
     width: 240px;
     text-align: center;
-    margin:2px;
+    margin-left:15px;
+    margin-right:15px;
     float:left;
+    background:#f2f8fa;
   }
 
   .b {
@@ -53,11 +56,13 @@
   }
 
   #postB {
-    width: 140px;
+    width: 150px;
     margin-top: 55px;
     margin-left: 30px;
+    border-radius: 5px;
     margin-bottom: 0;
     padding: 10px;
+    border-radius: 2px;
     float:right;
   }
   

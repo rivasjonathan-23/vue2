@@ -106,7 +106,7 @@ span {
   margin: 0px;
   transition: ease 0.4s;
   /* letter-spacing: 1px; */
-  padding-bottom: 7px;
+  padding-bottom: 8px;
   padding-right: 20px;
   padding-left: 20px;
   padding-top: 6px;

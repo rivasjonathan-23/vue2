@@ -2,7 +2,7 @@
   <div id="certify">
     <div class="createNnum">
       <b-button id="createC" variant="primary" class="btn" v-b-modal.offer>Create new</b-button>
-      <span class="pbadges">{{badges.length}} pending badges</span>
+      <div class="pbadges">Pending badges <span class="nb">{{badges.length}}</span></div>
     </div>
     <b-modal
       size="lg"
@@ -17,6 +17,11 @@
     </b-modal>
     <div class="text-center">
       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
+    </div>
+     <div class="loading" v-show="isLoading">
+      <div class="text-center text-danger my-2">
+        <b-spinner class="align-middle"></b-spinner>
+      </div>
     </div>
     <div v-for="(badge, index) in badges" v-bind:key="index">
       <div v-if="!badge.granted" class="contain">
@@ -55,7 +60,7 @@
                   </td>
                   <td class="nimp"></td>
                 </tr>
-                <tr
+                <tr class="reclist"
                   v-for="(recipient, index) in badge.recipient"
                   :key="index"
                   @mouseover="mouseOver(recipient._id)"
@@ -236,7 +241,9 @@ export default {
   data() {
     return {
       noBadges: false,
-      badges: [],
+      badges: [{badgename: "First placer", code: "s8fs6df", venue: "Passerelles Numeriques coding contest", date: {month: "Septembner", day: 23, year: 2019},
+      recipient: [{username: "jrivas23", fullname: "Jonathan Rivas", _id: "asdfasfdgdfiau23"},{username: "jrivas23", fullname: "Jonathan Rivas", _id: "asdfasdfiau23"},{username: "jrivas23", fullname: "Jonathan Rivas", _id: "asdfasdhgadsdfiau23"},{username: "jrivas23", fullname: "Jonathan Rivas", _id: "asdfasdsdfiau23"}] }, {badgename: "First placer", code: "s8fs6df", venue: "Passerelles Numeriques coding contest", date: {month: "Septembner", day: 23, year: 2019},
+      recipient: [{username: "jrivas23", fullname: "Jonathan Rivas", _id: "asdfasdfgsdfiau23"}] }],
       s_username: "",
       s_src: "",
       warning: "",
@@ -252,7 +259,8 @@ export default {
       hover: "",
       tindex: 0,
       size: 0,
-      resized: false
+      resized: false,
+      isLoading: false,
     };
   },
 
@@ -265,6 +273,7 @@ export default {
         data: this.$store.getters.token
       })
       .then(resp => {
+        this.loading = false,
         this.badges = resp.data.badges.reverse();
         if (this.badges.length == 0) {
           $(".temp").show();
@@ -390,11 +399,6 @@ export default {
     }
 
     $("tr").on("mouseenter", function() {
-      alert(
-        $(this)
-          .find(".delete")
-          .text()
-      );
       $(this)
         .find(".delete")
         .show();
@@ -404,6 +408,23 @@ export default {
 </script>
 
 <style scoped>
+.loading {
+  margin-top:15px;
+  padding-top: 200px;
+  padding-bottom: 200px;
+  background: #f2f8fa;
+}
+
+.align-middle {
+  color: rgb(3, 78, 133);
+  height: 75px;
+  width: 75px;
+}
+
+.reclist {
+  color: #476069;
+}
+
 .slide-fade-enter-active {
   transition: all 0.3s ease;
 }
@@ -431,7 +452,14 @@ export default {
   font-size: 18px;
   overflow: hidden;
   /* float: left; */
+  border-radius: 2px;
   position: absolute;
+}
+
+.nb {
+  padding: 5px;
+  background: #d1e2e6;
+  border-radius: 25px;
 }
 
 .btncont {
@@ -448,7 +476,7 @@ export default {
 }
 
 #cert {
-  margin-right: 5px;
+  margin-right: 8px;
 }
 
 .btn2 {
@@ -456,6 +484,7 @@ export default {
   margin-top: 5px;
   margin-left: 0px;
   margin-right: 5px;
+  border-radius:2px;
 }
 
 #certifyrec {
@@ -473,9 +502,9 @@ export default {
 .pbadges {
   left: 130px;
   font-size: 20px;
-  margin-right: 5%;
   color: #2a5c82;
-  padding: 5px;
+  padding-top:5px;
+  padding-left: 20px;
   position: absolute;
 }
 textarea:focus,
@@ -592,7 +621,6 @@ p {
 
 .btn {
   margin-bottom: 0;
-  border-radius: 0;
 }
 
 .recip {
@@ -710,6 +738,7 @@ hr {
   margin-top: 25px;
   margin-bottom: 10px;
   border-radius: 0;
+  overflow:hidden;
   /* border-bottom:2px solid #dce2e6; */
   background: #f0f7fc;
   border-radius: 1px;

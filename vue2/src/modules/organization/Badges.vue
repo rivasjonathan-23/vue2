@@ -1,12 +1,10 @@
 <template>
   <div id="badges">
     <div id="nholder" class="text-center">
-      <span class="pbadges">
-        {{by3Data.length}}
-        offered
-        <span v-if="by3Data.length>0">badges</span>
-        <span v-else>badge</span>
-      </span>
+      <div class="pbadges">
+        <span>Offered badges </span>
+        <span class="nb">{{by3Data.length}}</span>
+      </div>
     </div>
     <div class="text-center">
       <h3 class="temp" v-show="noData">You haven't offered badges yet</h3>
@@ -66,11 +64,16 @@ export default {
 }
 
 .pbadges {
-  font-size: 18px;
+  text-align: left;
+  font-size: 19px;
   color: #02416e;
-  margin-top: 100px;
-  padding-left: 20px;
-
+  padding-left: 10px;
+  margin-bottom:10px;
+}
+.nb {
+  padding: 5px;
+  background: #d1e2e6;
+  border-radius: 25px;
 }
 
 #badges {
@@ -97,7 +100,8 @@ export default {
 }
 
 .loading {
-  margin-top: 50px;
-  margin-bottom: 250px;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  background: #f2f8fa;
 }
 </style>
