@@ -1,13 +1,13 @@
 <template>
   <div id="Profile">
-      <div class="prfl">
-        <div class="logo">
-          <img :src="image" alt id="profile">
+      <div class="prfl" v-bind:class="{small: resized}">
+        <div class="logo"  v-bind:class="{smallLogo: resized}">
+          <img :src="image" alt class="profile"  v-bind:class="{smallpro: resized}">
         </div>
         <h4 class="orgn">{{ orgName }}</h4>
          <p class="username">Since 1999</p>
       </div>
-      <div class="info">
+      <div class="info"  v-bind:class="{smallinfo: resized}">
         <!-- <p>Organization name: {{orgName}}</p> -->
         <p class="des">{{description}}</p>
         <p class="address">{{address}}</p>
@@ -41,7 +41,8 @@ export default {
       email: "",
       description: "",
       image: require("@/assets/logo.jpg"),
-      size: 0
+      size: 0,
+      resized: false,
     };
   },
   created() {
@@ -65,25 +66,17 @@ export default {
       this.$router.push(path);
     },
     handleResize() {
-      if (window.innerWidth >= this.size) {
-        $(".info").css({
-          width: "74%",
-          "margin-top": "155px",
-          "text-align": "left"
-        });
-        $(".prfl").css({ width: "250px", "margin-right": "25px",  "margin-left": "25px" });
-        $(".logo").css({ width: "250px", height: "250px" });
-        $("#profile").css({ width: "auto", height: "250px" });
-      } else if (window.innerWidth < this.size) {
-          $(".info").css({
-            width: "100%",
-            "margin-top": "4px",
-            "text-align": "center"
-          });
-          $(".prfl").css({ width: "100%", "margin": "0px" });
-          $(".logo").css({ width: "180px", height: "180px" });
-          $("#profile").css({ width: "180px", height: "180px" });
-      }
+      // if (window.innerWidth >= this.size) {
+        if (window.innerWidth < 1200) {
+
+            this.resized = true;
+          
+        } else {
+          this.resized = false;
+        }
+      // } else if (window.innerWidth < this.size) {
+      //   this.resized = true;
+      // }
     },
     InsideMethod() {
       this.$emit("InsideMethod");
@@ -132,7 +125,7 @@ p {
   margin-top: 5px;
 }
 
-#profile {
+.profile {
   /* height: 200px; */
 
   width: auto;
@@ -174,7 +167,28 @@ p {
   margin-left:25px;
   margin-right: 25px;
   margin-bottom: 0px;
-  border-bottom: 2px solid #d0e5f5;
+  border-bottom: 2px solid #d5e7f5;
   /* background:grey; */
+}
+
+.small {
+  width: 100%;
+  margin: 0;
+}
+
+.smallinfo {
+  width: 100%;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.smallLogo {
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+}
+.smallpro {
+  width: auto;
+  height: 180px;
 }
 </style>

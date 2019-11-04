@@ -1,5 +1,5 @@
 <template>
-  <div id="orgpage" class="pd-side">
+  <div class="orgpage" v-bind:class="{small: resized}">
     <b-row>
       <b-col cols="12">
         <Orgprofile class="pro"></Orgprofile>
@@ -8,10 +8,10 @@
     <b-row>
       <b-col cols="12" class="views">
         <b-navbar sticky class="Nav">
-            <b-navbar-nav class="ml-auto">
+            <div class="option">
             <span id="badges" class="bdg" v-on:click="redirect('/organization')">Badge List</span>
             <span id="certify" v-on:click="redirect('/organization/certify')">Create badge</span>
-          </b-navbar-nav>
+          </div>
         </b-navbar>
         <div>
           <router-view></router-view>
@@ -37,7 +37,8 @@ export default {
       isToCerfify: false,
       postEvent: false,
       isUpdate: false,
-      size: 0
+      size: 0,
+      resized: false,
     };
   },
   created() {
@@ -54,11 +55,11 @@ export default {
       this.$router.push(path);
     },
     handleResize() {
-      if (window.innerWidth >= this.size) {
-        $("#orgpage").css({ width: "1200px" });
-      } else if (window.innerWidth < this.size) {
-        $("#orgpage").css({ width: "100%" });
-      }
+       if (window.innerWidth < 1200) {
+            this.resized = true;
+        } else {
+          this.resized = false;
+        }
     }
   },
   mounted() {
@@ -81,16 +82,23 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
 }
+
+.option {
+  width: 100%;
+  text-align: right;
+  margin:0;
+  padding:0;
+}
 .Nav {
   height: 45px;
   font-size: 20px;
   background: white;
   /* background: rgb(217, 241, 250,0.9); */
   border-bottom: 4px solid lightblue;
-
+  width: 100%;
   top: 50px;
   padding: 0;
-  overflow: auto;
+  overflow: visible;
 }
 
 span {
@@ -98,7 +106,7 @@ span {
   margin: 0px;
   transition: ease 0.4s;
   /* letter-spacing: 1px; */
-  padding-bottom: 5px;
+  padding-bottom: 7px;
   padding-right: 20px;
   padding-left: 20px;
   padding-top: 6px;
@@ -113,8 +121,14 @@ span:hover {
   background: #c5eafc;
 }
 
-#orgpage {
+.orgpage {
   width: 1200px;
+  padding-left: 0;
+  padding-right: 0;
   padding-top: 50px;
+}
+
+.small {
+  width: 100%;
 }
 </style>

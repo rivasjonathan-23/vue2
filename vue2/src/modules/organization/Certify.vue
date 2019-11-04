@@ -24,14 +24,14 @@
           <h3 class="temp">You haven't offered badges yet</h3>
         </div>
         <b-row class="row">
-          <div id="badgeicon" class="text-center">
+          <div class="badgeicon" v-bind:class="{small: resized}">
             <img src="@/assets/image.png" class>
             <h5 class="binfo">{{ badge.badgename }}</h5>
             <p class="binfo">{{ badge.venue }}</p>
             <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
             <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
           </div>
-          <div class="recContainer">
+          <div class="recContainer" v-bind:class="{small: resized}">
             <div id="bmenu1" class="text-left">
               <span class="tiRec">Recipients</span>
               <span class="cuRec">
@@ -251,7 +251,8 @@ export default {
       errorCertifying: false,
       hover: "",
       tindex: 0,
-      size: 0
+      size: 0,
+      resized: false
     };
   },
 
@@ -273,14 +274,10 @@ export default {
 
   methods: {
     handleResize() {
-      if (window.innerWidth >= this.size) {
-        $(".text-center").css({ width: "40%" });
-        $(".recContainer").css({ width: "59%" });
-      } else if (window.innerWidth < this.size) {
-        if (window.innerWidth <= 1000) {
-          $(".text-center").css({ width: "100%" });
-          $(".recContainer").css({ width: "100%" });
-        }
+      if (window.innerWidth < 1200) {
+        this.resized = true;
+      } else {
+        this.resized = false;
       }
     },
     mouseOver(index) {
@@ -457,7 +454,7 @@ export default {
 .btn2 {
   float: right;
   margin-top: 5px;
-  margin-left: 5px;
+  margin-left: 0px;
   margin-right: 5px;
 }
 
@@ -509,7 +506,7 @@ input:focus {
   border-top: 1px solid grey;
 }
 
-#badgeicon {
+.badgeicon {
   -webkit-filter: opacity(80%);
   filter: opacity(80%);
   height: 400px;
@@ -523,17 +520,16 @@ input:focus {
   /* background: white; */
   /* border: 1px solid lightgrey; */
   float: left;
-  border-right: 1px solid white;
-  /* margin-left: 30px; */
+ /* margin-left: 30px; */
 }
 
 .recContainer {
   width: 59%;
   float: left;
-  border-right: 1px solid white;
-  /* margin-left: 1%; */
 }
-
+.small {
+  width: 100%;
+}
 .recipient {
   text-align: center;
   background: white;
@@ -553,7 +549,7 @@ input:focus {
 #bmenu {
   width: 100%;
   height: 45px;
-  background: white;
+  background: #def3fc;
   padding-bottom: 0;
   /* padding-left:15px; */
   padding-right: 0;
@@ -717,11 +713,11 @@ hr {
   /* border-bottom:2px solid #dce2e6; */
   background: #f0f7fc;
   border-radius: 1px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  /* padding-top: 15px;
+  padding-bottom: 15px; */
   text-align: center;
-  padding-left: 35px;
-  padding-right: 25px;
+  /* padding-left: 35px;
+  padding-right: 25px; */
   -webkit-box-shadow: 0px 5px 20px darkgrey;
   box-shadow: 0px 5px 20px darkgrey;
 }

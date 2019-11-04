@@ -1,15 +1,15 @@
 <template>
-  <div id="userpage">
-      <b-row>
-        <b-col cols="12">
-          <Profile></Profile>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col class="views" cols="12">
-          <router-view></router-view>
-        </b-col>
-      </b-row>
+  <div class="page" v-bind:class="{small: resized}">
+    <b-row>
+      <b-col cols="12">
+        <Profile></Profile>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col class="views" cols="12">
+        <router-view></router-view>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -26,21 +26,15 @@ export default {
   },
   data() {
     return {
-      badgeCode: ""
+      badgeCode: "",
+      resized: false,
+      size: 0
     };
   },
   components: {
     Profile
   },
-  data() {
-    return {
-      isBadgeList: true,
-      isNewsfeed: false,
-      isUpdateProfile: false
-    };
-  },
   created() {
-    $("#orgpage").css({ width: "900px" });
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
@@ -53,17 +47,16 @@ export default {
       this.$router.push(path);
     },
     handleResize() {
-      if (window.innerWidth >= this.size) {
-        $("#userpage").css({ width: "1200px" });
-      } else if (window.innerWidth < this.size) {
-        $("#userpage").css({ width: "100%" });
+      if (window.innerWidth < 1200) {
+        this.resized = true;
+      } else {
+        this.resized = false;
       }
     },
-     redirect(path) {
+    redirect(path) {
       this.$router.push(path);
     }
   }
-
 };
 </script>
 
@@ -73,8 +66,8 @@ export default {
 }
 
 .views {
-  padding-top:0;
-  margin-top:0;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .pd-side {
@@ -82,9 +75,13 @@ export default {
   padding-right: 20px;
 }
 
-#userpage {
+.page {
   padding-top: 51px;
   width: 1200px;
+}
+
+.small {
+  width: 100%;
 }
 
 #availbadge {

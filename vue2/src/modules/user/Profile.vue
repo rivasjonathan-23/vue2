@@ -1,15 +1,13 @@
 <template>
   <div id="Profile">
-    <div class="prfl">
-      <div class="logo">
-        <img :src="image" alt id="profile">
+    <div v-bind:class="{small: resized}" class="prfl">
+      <div class="logo" v-bind:class="{smallLogo: resized}">
+        <img :src="image" alt v-bind:class="{smallpro: resized}" class="profile">
       </div>
       <h4 class="fullname">{{ userinf.firstname+" "+userinf.lastname }}</h4>
       <p class="username">{{userinf.username}}</p>
     </div>
-    <div class="info">
-      <!-- <p>Organization name: {{orgName}}</p> -->
-
+    <div v-bind:class="{smallinfo: resized}" class="info">
       <p class="occupation">{{userinf.occupation+" for "+userinf.years+yrlabel}} at {{company}}</p>
       <p class="bday">Born on {{birthdate}}</p>
       <p class="age">{{userinf.age}} years old</p>
@@ -41,7 +39,8 @@ export default {
       size: 0,
       yrlabel: "",
       company: "Aksintyur",
-      birthdate: ""
+      birthdate: "",
+      resized: false
     };
   },
   created() {
@@ -77,24 +76,10 @@ export default {
       this.$router.push(path);
     },
     handleResize() {
-      if (window.innerWidth >= this.size) {
-        $(".info").css({
-          width: "74%",
-          "margin-top": "155px",
-          "text-align": "left"
-        });
-        $(".prfl").css({ width: "250px","margin-left":"25px","margin-right":"25px"});
-        $(".logo").css({ width: "250px", height: "250px" });
-        $("#profile").css({ width: "auto", height: "250px" });
-      } else if (window.innerWidth < this.size) {
-        $(".info").css({
-          width: "100%",
-          "margin-top": "4px",
-          "text-align": "center"
-        });
-        $(".prfl").css({ width: "100%","margin":"0"});
-        $(".logo").css({ width: "180px", height: "180px" });
-        $("#profile").css({ width: "180px", height: "180px" });
+      if (window.innerWidth < 1200) {
+        this.resized = true;
+      } else {
+        this.resized = false;
       }
     },
     InsideMethod() {
@@ -104,6 +89,86 @@ export default {
 };
 </script>
 <style scoped>
+.emailadd {
+  text-decoration: underline;
+  width: 100%;
+}
+.prof {
+  float: left;
+}
+p {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.profile {
+  width: auto;
+  height: 250px;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+#Profile {
+  height: 150px;
+  background-image: url("~@/assets/orgbackground.jpg");
+  background-size: cover;
+  font-family: verdana;
+}
+.info {
+  float: left;
+  font-size: 14px;
+  width: 74%;
+  text-align: left;
+  margin-bottom: 0;
+  margin-top: 155px;
+  padding: 10px;
+}
+
+.logo {
+  overflow: hidden;
+  margin-top: 30px;
+  width: 250px;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 0px 3px 5px #545f6b;
+  box-shadow: 0px 3px 5px #545f6b;
+  height: 250px;
+  background: white;
+}
+
+.prfl {
+  float: left;
+  width: 250px;
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 0;
+  margin-bottom: 0px;
+  border-bottom: 2px solid #d5e7f5;
+  /* background:grey; */
+}
+
+.small {
+  width: 100%;
+  margin: 0;
+}
+
+.smallinfo {
+  width: 100%;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.smallLogo {
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+}
+.smallpro {
+  width: auto;
+  height: 180px;
+}
+
 div {
   font-family: verdana;
 }
@@ -154,64 +219,5 @@ hr {
   color: #486399;
   font-size: 15px;
   width: 100%;
-}
-.emailadd {
-  text-decoration: underline;
-  width: 100%;
-}
-.prof {
-  float: left;
-}
-p {
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-
-#profile {
-  /* height: 200px; */
-
-  width: auto;
-  height: 250px;
-}
-
-.btn {
-  border-radius: 0;
-}
-
-#Profile {
-  height: 150px;
-  background-image: url("~@/assets/orgbackground.jpg");
-  background-size: cover;
-  font-family: verdana;
-}
-.info {
-  float: left;
-  font-size: 14px;
-  width: 74%;
-  text-align: left;
-  margin-bottom: 0;
-  margin-top: 155px;
-  padding: 10px;
-}
-
-.logo {
-  overflow: hidden;
-  margin-top: 30px;
-  width: 250px;
-  margin-bottom: 10px;
-  -webkit-box-shadow: 0px 3px 5px #545f6b;
-  box-shadow: 0px 3px 5px #545f6b;
-  height: 250px;
-  background: white;
-}
-.prfl {
-  float: left;
-  width: 250px;
-  margin-left:25px;
-  margin-right: 25px;
-  margin-top: 0;
-  margin-bottom: 0px;
-  border-bottom: 2px solid #d0e5f5;
-  /* background:grey; */
 }
 </style>

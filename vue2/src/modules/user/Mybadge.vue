@@ -10,7 +10,7 @@
         <span class="tbadge">
           {{badgelist.length}}
           <span v-if="badgelist.length > 0">pending badges</span>
-           <span v-else >pending badge</span>
+          <span v-else>pending badge</span>
         </span>
         <b-button
           id="createC"
@@ -23,21 +23,22 @@
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in badgelist" :key="index">
         <b-row v-if="badge.granted" class="row">
-          <div id="badgeicon" class="badgeicon">
+          <div class="badgeicon" v-bind:class="{zoomin: resized}">
             <img src="@/assets/image.png" class>
             <h5 class="binfo">{{ badge.badgename }}</h5>
             <p class="binfo">{{ badge.venue }}</p>
             <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
             <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
           </div>
-          <div class="cerBody">
+          <div class="cerBody" v-bind:class="{zoomin: resized}">
             <p class="name">
               This certificate of
               <br>
               {{badge.certificateName}}
             </p>
             <span>is awarded to</span>
-            <h5>{{fullname}}</h5><br>
+            <h5>{{fullname}}</h5>
+            <br>
             <p class="description">{{badge.descriptions}}</p>
             <br>
             <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
@@ -46,42 +47,6 @@
             </div>
           </div>
         </b-row>
-        <!-- <div v-if="badge.granted">
-          <b-card class="bdgs">
-            <b-row class="justify-content-md-center">
-              <b-col class="text-center">
-                <img src="@/assets/image.png" class>
-                <h5>{{badge.badgename}}</h5>
-              </b-col>
-              <b-col cols="8" class="border-left">
-                <div class="text-center ifont">
-                  <h4>
-                    This certificate of
-                    <br>
-                    {{badge.certificateName}}
-                  </h4>
-                  <span>is awarded to</span>
-                  <h3>{{fullname}}</h3>
-                  <p>for</p>
-                  <h5>{{badge.descriptions}}</h5>
-                  <br>
-                  <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
-                  <div class="text-center byorg">
-                    <p class="border-bottom">Certified by {{badge.organization}}</p>
-                  </div>
-                </div>
-              </b-col>
-            </b-row>
-          </b-card>
-        </div>-->
-        <!-- <div v-else>
-          <b-card class="bdgs">
-            <p class="pending">PENDING</p>
-            <h3 class="pending">{{badge.badgename}}</h3>
-            <hr>
-            <h5 class="pending">Waiting for ceritification from {{badge.organization}}</h5>
-          </b-card>
-        </div>-->
       </div>
     </div>
     <b-modal
@@ -145,9 +110,10 @@ export default {
       badgeCode: "",
       hasData: false,
       error: false,
-      fullname: "Jonathan Rivas",
+      fullname: "",
       availing: false,
       size: 0,
+      resized: false
     };
   },
   methods: {
@@ -170,7 +136,7 @@ export default {
               alert("got updated data");
               console.log("badgess" + res.data.badges);
               this.badgelist = res.data.badges.reverse();
-              // this.fullname = userInfo.firstname+" "+userInfo.lastname;
+              this.fullname = userInfo.firstname + " " + userInfo.lastname;
               console.log({ badges: this.badgelist });
               if (this.badgelist.length == 0) {
                 this.hasData = true;
@@ -189,18 +155,14 @@ export default {
       $(".binput").css({ "border-color": "gray" });
     },
     handleResize() {
-      if (window.innerWidth >= this.size) {
-        $(".badgeicon").css({ width: "40%" });
-        $(".cerBody").css({ width: "59%" });
-      } else if (window.innerWidth < this.size) {
-        if (window.innerWidth <= 1000) {
-          $(".badgeicon").css({ width: "100%" });
-          $(".cerBody").css({ width: "100%" });
-        }
+      if (window.innerWidth < 1200) {
+        this.resized = true;
+      } else {
+        this.resized = false;
       }
-    },
+    }
   },
-   destroyed() {
+  destroyed() {
     window.removeEventListener("resize", this.handleResize);
   },
   created() {
@@ -225,17 +187,16 @@ export default {
 <style scoped>
 .cerBody {
   width: 59%;
-  padding-left:20px;
-  padding-right:20px;
-  padding-top:30px;
-  padding-bottom:20px;
-  color:#3d4c54;
-  background: #e6f2f7;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  color: #3d4c54;
+  background: #f2f8fa;
   text-align: center;
   font-family: Verdana;
   font-size: 16px;
   height: 420px;
-  overflow:auto;
 }
 
 .btn:focus {
@@ -247,24 +208,30 @@ export default {
 }
 
 .row {
+  margin-right: 10px;
+  margin-left: 10px;
   margin-top: 25px;
+  padding: 0;
   margin-bottom: 25px;
+  background: #f2f8fa;
+  -webkit-box-shadow: 0px 2px 6px darkgrey;
+  box-shadow: 0px 2px 6px darkgrey;
 }
-#badgeicon {
+.badgeicon {
   -webkit-filter: opacity(80%);
   filter: opacity(80%);
   height: 420px;
   color: white;
   width: 40%;
-  overflow: auto;
   margin-bottom: 0;
+  text-align: center;
   background-image: url("~@/assets/background2.jpg");
   background-size: cover;
   margin-top: 0;
 }
 
-.badgeicon {
-  text-align: center;
+.zoomin {
+  width: 100%;
 }
 
 .description {
@@ -280,7 +247,7 @@ export default {
   /* background: rgb(138, 196, 219, 0.9); */
   text-align: right;
   font-family: verdana;
-  overflow:visible;
+  overflow: visible;
   padding-bottom: 0;
 }
 #createC {
@@ -291,12 +258,12 @@ export default {
   font-size: 15px;
   padding-top: 7px;
   padding-bottom: 7px;
-  margin:4px;
+  margin: 4px;
 }
 #line {
   color: lightblue;
   margin-top: 5px;
-  height:4px;
+  height: 4px;
   background: lightblue;
 }
 .tbadge {
