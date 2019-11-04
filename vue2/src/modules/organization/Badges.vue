@@ -1,6 +1,6 @@
 <template>
   <div id="badges">
-    <div class="text-left">
+    <div id="nholder" class="text-center">
       <span class="pbadges">
         {{by3Data.length}}
         offered
@@ -66,8 +66,9 @@ export default {
 }
 
 .pbadges {
-  font-size: 17px;
+  font-size: 18px;
   color: #02416e;
+  margin-top: 100px;
   padding-left: 20px;
 
 }
@@ -75,7 +76,7 @@ export default {
 #badges {
   width: 100%;
   margin: 0;
-  text-align: left;
+  text-align: center;
   border: none;
   padding: 2px;
   font-family: verdana;
@@ -86,7 +87,9 @@ export default {
   margin-bottom: 50px;
   color: #2a5c82;
 }
-
+#nholder {
+  padding-top:10px;
+}
 .align-middle {
   color: rgb(3, 78, 133);
   height: 75px;

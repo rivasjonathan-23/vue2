@@ -696,12 +696,10 @@ b-modal {
 
 #certify {
   text-align: left;
-  background: #f2f7fa;
+  /* background: #f2f7fa; */
   margin-top: 0;
   padding: 30px;
   font-family: verdana;
-  /* padding-left:30px;
-  padding-right:30px; */
 }
 
 .modl {

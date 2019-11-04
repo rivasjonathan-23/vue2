@@ -2,14 +2,16 @@
   <div id="orgpage" class="pd-side">
     <b-row>
       <b-col cols="12">
-          <Orgprofile class="pro"></Orgprofile>
+        <Orgprofile class="pro"></Orgprofile>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols="12" class="views">
         <b-navbar sticky class="Nav">
-          <span id="badges" class="bdg" v-on:click="redirect('/organization')">Badge List</span>
-          <span id="certify" v-on:click="redirect('/organization/certify')">Create badge</span>
+            <b-navbar-nav class="ml-auto">
+            <span id="badges" class="bdg" v-on:click="redirect('/organization')">Badge List</span>
+            <span id="certify" v-on:click="redirect('/organization/certify')">Create badge</span>
+          </b-navbar-nav>
         </b-navbar>
         <div>
           <router-view></router-view>
@@ -82,15 +84,13 @@ export default {
 .Nav {
   height: 45px;
   font-size: 20px;
-  background: rgb(217, 241, 250,0.9);
+  background: white;
+  /* background: rgb(217, 241, 250,0.9); */
   border-bottom: 4px solid lightblue;
-  /* -webkit-box-shadow: 0px 3px 7px darkgrey;
-  box-shadow: 0px 3px 7px darkgrey; */
-  /* background-image: linear-gradient(to right, #a5d7fa, #d4f2fa); */
+
   top: 50px;
-  text-align: center;
-  padding:0;
-  overflow:auto;
+  padding: 0;
+  overflow: auto;
 }
 
 span {
@@ -98,9 +98,9 @@ span {
   margin: 0px;
   transition: ease 0.4s;
   /* letter-spacing: 1px; */
-  padding-bottom:5px;
-  padding-right:20px;
-  padding-left:20px;
+  padding-bottom: 5px;
+  padding-right: 20px;
+  padding-left: 20px;
   padding-top: 6px;
 }
 
@@ -110,7 +110,7 @@ span {
 
 span:hover {
   color: #006aff;
-  background:#c5eafc;
+  background: #c5eafc;
 }
 
 #orgpage {

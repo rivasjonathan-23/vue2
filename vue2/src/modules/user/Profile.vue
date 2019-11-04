@@ -83,7 +83,7 @@ export default {
           "margin-top": "155px",
           "text-align": "left"
         });
-        $(".prfl").css({ width: "300px", "margin-bottom": "25px" });
+        $(".prfl").css({ width: "250px","margin-left":"25px","margin-right":"25px"});
         $(".logo").css({ width: "250px", height: "250px" });
         $("#profile").css({ width: "auto", height: "250px" });
       } else if (window.innerWidth < this.size) {
@@ -92,7 +92,7 @@ export default {
           "margin-top": "4px",
           "text-align": "center"
         });
-        $(".prfl").css({ width: "100%", "margin-bottom": "0px" });
+        $(".prfl").css({ width: "100%","margin":"0"});
         $(".logo").css({ width: "180px", height: "180px" });
         $("#profile").css({ width: "180px", height: "180px" });
       }
@@ -206,8 +206,12 @@ p {
 }
 .prfl {
   float: left;
-  width: 300px;
-  margin-bottom: 25px;
+  width: 250px;
+  margin-left:25px;
+  margin-right: 25px;
+  margin-top: 0;
+  margin-bottom: 0px;
+  border-bottom: 2px solid #d0e5f5;
   /* background:grey; */
 }
 </style>

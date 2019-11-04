@@ -5,6 +5,7 @@
           <img :src="image" alt id="profile">
         </div>
         <h4 class="orgn">{{ orgName }}</h4>
+         <p class="username">Since 1999</p>
       </div>
       <div class="info">
         <!-- <p>Organization name: {{orgName}}</p> -->
@@ -70,7 +71,7 @@ export default {
           "margin-top": "155px",
           "text-align": "left"
         });
-        $(".prfl").css({ width: "300px", "margin-bottom": "25px" });
+        $(".prfl").css({ width: "250px", "margin-right": "25px",  "margin-left": "25px" });
         $(".logo").css({ width: "250px", height: "250px" });
         $("#profile").css({ width: "auto", height: "250px" });
       } else if (window.innerWidth < this.size) {
@@ -79,7 +80,7 @@ export default {
             "margin-top": "4px",
             "text-align": "center"
           });
-          $(".prfl").css({ width: "100%", "margin-bottom": "0px" });
+          $(".prfl").css({ width: "100%", "margin": "0px" });
           $(".logo").css({ width: "180px", height: "180px" });
           $("#profile").css({ width: "180px", height: "180px" });
       }
@@ -91,12 +92,19 @@ export default {
 };
 </script>
 <style scoped>
+.username {
+  font-size: 17px;
+  margin-top: 0px;
+  color: #315273;
+  width: 100%;
+}
 div {
   font-family: verdana;
 }
 
 .orgn {
    color:#364452;
+   margin-bottom: 0;
 }
 
 .address {
@@ -162,8 +170,11 @@ p {
 }
 .prfl {
   float: left;
-  width: 300px;
-  margin-bottom: 25px;
+  width: 250px;
+  margin-left:25px;
+  margin-right: 25px;
+  margin-bottom: 0px;
+  border-bottom: 2px solid #d0e5f5;
   /* background:grey; */
 }
 </style>

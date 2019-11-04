@@ -19,7 +19,7 @@
           v-b-modal.availBadge-modal
         >Avail new certificate</b-button>
       </div>
-      <hr id="line">
+      <div id="line"></div>
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in badgelist" :key="index">
         <b-row v-if="badge.granted" class="row">
@@ -42,7 +42,7 @@
             <br>
             <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
             <div class="text-center byorg">
-              <h5>Certified by {{badge.organization}}</h5>
+              <h5>Given by {{badge.organization}}</h5>
             </div>
           </div>
         </b-row>
@@ -280,6 +280,8 @@ export default {
   /* background: rgb(138, 196, 219, 0.9); */
   text-align: right;
   font-family: verdana;
+  overflow:visible;
+  padding-bottom: 0;
 }
 #createC {
   border: none;
@@ -289,18 +291,23 @@ export default {
   font-size: 15px;
   padding-top: 7px;
   padding-bottom: 7px;
+  margin:4px;
 }
 #line {
   color: lightblue;
-  margin-top: 8px;
-  height: 5px;
+  margin-top: 5px;
+  height:4px;
   background: lightblue;
 }
 .tbadge {
-  font-size: 19px;
+  font-size: 18px;
   margin-left: 2%;
+  margin-bottom: 0;
+  padding-bottom: 0;
   margin-right: 2%;
-  color: #1f4369;
+  color: #225880;
+  padding-top: 10px;
+  margin-top: 20px;
 }
 label {
   margin-top: 5px;
