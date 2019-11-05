@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      by3Data: [],
+      by3Data: [{badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}, {badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}, {badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}},{badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}, {badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}],
       isLoading: true,
       noData: false,
       temp: []

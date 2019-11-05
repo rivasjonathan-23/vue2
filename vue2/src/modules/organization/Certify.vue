@@ -260,7 +260,7 @@ export default {
       tindex: 0,
       size: 0,
       resized: false,
-      isLoading: false,
+      isLoading: true,
     };
   },
 
@@ -273,7 +273,7 @@ export default {
         data: this.$store.getters.token
       })
       .then(resp => {
-        this.loading = false,
+        this.isLoading = false,
         this.badges = resp.data.badges.reverse();
         if (this.badges.length == 0) {
           $(".temp").show();

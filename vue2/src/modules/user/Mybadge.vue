@@ -33,7 +33,6 @@
             <h5 class="binfo">{{ badge.badgename }}</h5>
             <p class="binfo">{{ badge.venue }}</p>
             <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
-            <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
           </div>
           <div class="cerBody" v-bind:class="{zoomin: resized}">
             <p class="name">
@@ -111,11 +110,11 @@ export default {
   },
   data() {
     return {
-      badgelist: [],
+      badgelist: [{granted: true, badgename: "First Place", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}, descriptions: "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019", organization: "Passerelless numeriques"},{granted: true, badgename: "First Place", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}, descriptions: "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019", organization: "Passerelless numeriques"}],
       badgeCode: "",
       hasData: false,
       error: false,
-      fullname: "",
+      fullname: "Jonathan Rivas",
       availing: false,
       size: 0,
       resized: false,
@@ -180,13 +179,13 @@ export default {
         user: this.$store.getters.token
       })
       .then(res => {
-        this.loading = false;
-        console.log("badgess" + res.data.badges);
-        this.badgelist = res.data.badges.reverse();
-        console.log({ badges: this.badgelist });
-        if (this.badgelist.length == 0) {
-          this.hasData = true;
-        }
+        this.isLoading = false;
+        // console.log("badgess" + res.data.badges);
+        // this.badgelist = res.data.badges.reverse();
+        // console.log({ badges: this.badgelist });
+        // if (this.badgelist.length == 0) {
+        //   this.hasData = true;
+        // }
       });
   }
 };
