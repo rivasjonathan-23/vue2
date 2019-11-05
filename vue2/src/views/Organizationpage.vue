@@ -2,7 +2,7 @@
   <div class="orgpage" v-bind:class="{small: resized}">
     <b-row>
       <b-col cols="12">
-        <Orgprofile class="pro"></Orgprofile>
+        <Orgprofile class="pro" v-show="nothidden"></Orgprofile>
       </b-col>
     </b-row>
     <b-row>
@@ -39,10 +39,13 @@ export default {
       isUpdate: false,
       size: 0,
       resized: false,
+      nothidden: true,
     };
   },
   created() {
-    $("#orgpage").css({ width: "900px" });
+    if (this.$router.currentRoute.path == "/organization/certify") {
+      this.nothidden = false;
+    }
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
@@ -53,6 +56,11 @@ export default {
   methods: {
     redirect(path) {
       this.$router.push(path);
+      if (path == "/organization/certify") {
+        this.nothidden = false;
+      } else {
+        this.nothidden = true;
+      }
     },
     handleResize() {
        if (window.innerWidth < 1200) {
@@ -66,12 +74,10 @@ export default {
     $("#certify").click(function() {
       $(this).css({ color: "#006aff" });
       $("#badges").css({ color: "#2a5c82" });
-      $(".pro").slideUp();
     });
     $("#badges").click(function() {
       $(this).css({ color: "#006aff" });
       $("#certify").css({ color: "#2a5c82" });
-      $(".pro").slideDown();
     });
   }
 };
@@ -82,6 +88,7 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
 }
+
 
 .option {
   width: 100%;
@@ -109,7 +116,7 @@ span {
   padding-bottom: 8px;
   padding-right: 20px;
   padding-left: 20px;
-  padding-top: 6px;
+  padding-top: 8px;
 }
 
 .bdg {

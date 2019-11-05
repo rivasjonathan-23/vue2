@@ -3,14 +3,12 @@
     <div id="mybadge">
       <div class="sheader">
         <span class="tbadge">
-          {{badgelist.length}}
-          <span v-if="badgelist.length > 0">badges</span>
-          <span v-else>badge</span>
+          <span>Badges&nbsp;</span>
+          <span class="nb">{{badgelist.length}}</span>
         </span>
         <span class="tbadge">
-          {{badgelist.length}}
-          <span v-if="badgelist.length > 0">pending badges</span>
-          <span v-else>pending badge</span>
+          <span>Pending badges&nbsp;</span>
+          <span class="nb">{{badgelist.length}}</span>
         </span>
         <b-button
           id="createC"
@@ -21,15 +19,15 @@
       </div>
       <div id="line"></div>
       <div class="loading" v-show="isLoading">
-      <div class="text-center text-danger my-2">
-        <b-spinner class="align-middle"></b-spinner>
+        <div class="text-center text-danger my-2">
+          <b-spinner class="align-middle"></b-spinner>
+        </div>
       </div>
-    </div>
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in badgelist" :key="index">
         <b-row v-if="badge.granted" class="row">
           <div class="badgeicon" v-bind:class="{zoomin: resized}">
-            <img src="@/assets/image.png" class>
+            <img src="@/assets/image2.png" class="blogo" />
             <h5 class="binfo">{{ badge.badgename }}</h5>
             <p class="binfo">{{ badge.venue }}</p>
             <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
@@ -37,14 +35,14 @@
           <div class="cerBody" v-bind:class="{zoomin: resized}">
             <p class="name">
               This certificate of
-              <br>
+              <br />
               {{badge.certificateName}}
             </p>
             <span>is awarded to</span>
             <h5>{{fullname}}</h5>
-            <br>
+            <br />
             <p class="description">{{badge.descriptions}}</p>
-            <br>
+            <br />
             <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
             <div class="text-center byorg">
               <h5>Given by {{badge.organization}}</h5>
@@ -74,19 +72,15 @@
           required
         />
 
-        <b-row v-if="!availing">
-          <b-col>
-            <b-button
-              @click="$bvModal.hide('availBadge-modal')"
-              variant="danger"
-              class="btn btn-block"
-              v-on:click="reset"
-            >Cancel</b-button>
-          </b-col>
-          <b-col cols="6">
-            <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
-          </b-col>
-        </b-row>
+        <div class="btnrow" v-if="!availing">
+          <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
+          <b-button
+            @click="$bvModal.hide('availBadge-modal')"
+            variant="danger"
+            class="btn btn-block"
+            v-on:click="reset"
+          >Cancel</b-button>
+        </div>
         <b-row v-else class="add">
           <span>
             <b-spinner class="align-middle"></b-spinner>&nbsp;
@@ -110,7 +104,26 @@ export default {
   },
   data() {
     return {
-      badgelist: [{granted: true, badgename: "First Place", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}, descriptions: "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019", organization: "Passerelless numeriques"},{granted: true, badgename: "First Place", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}, descriptions: "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019", organization: "Passerelless numeriques"}],
+      badgelist: [
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        }
+      ],
       badgeCode: "",
       hasData: false,
       error: false,
@@ -118,7 +131,7 @@ export default {
       availing: false,
       size: 0,
       resized: false,
-      isLoading: true
+      isLoading: false
     };
   },
   methods: {
@@ -191,6 +204,16 @@ export default {
 };
 </script>
 <style scoped>
+.nb {
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top:3px;
+  padding-bottom:3px;
+  background: #d1e2e6;
+  border-radius: 25px;
+  font-size: 20px;
+}
+
 .cerBody {
   width: 59%;
   padding-left: 20px;
@@ -203,6 +226,17 @@ export default {
   font-family: Verdana;
   font-size: 16px;
   height: 420px;
+}
+.btnrow {
+  background: white;
+  padding: 0;
+  box-shadow: none;
+  -webkit-box-shadow: 0px 2px 6px white;
+  box-shadow: 0px 2px 6px white;
+}
+.blogo {
+  margin-top: 30px;
+  width: 200px;
 }
 
 .btn:focus {
@@ -224,8 +258,8 @@ export default {
   box-shadow: 0px 2px 6px darkgrey;
 }
 .badgeicon {
-  -webkit-filter: opacity(80%);
-  filter: opacity(80%);
+  /* -webkit-filter: opacity(80%);
+  filter: opacity(80%); */
   height: 420px;
   color: white;
   width: 40%;
@@ -240,6 +274,10 @@ export default {
   width: 100%;
 }
 
+.btn2 {
+  width: 100%;
+}
+
 .description {
   font-size: 17px;
 }
@@ -249,7 +287,7 @@ export default {
   left: 15%;
 }
 .loading {
-  margin-top:30px;
+  margin-top: 30px;
   padding-top: 100px;
   padding-bottom: 100px;
   background: #f2f8fa;
@@ -257,8 +295,8 @@ export default {
 
 .align-middle {
   color: rgb(3, 78, 133);
-  height: 75px;
-  width: 75px;
+  height: 30px;
+  width: 30px;
 }
 .sheader {
   /* background: rgb(138, 196, 219, 0.9); */

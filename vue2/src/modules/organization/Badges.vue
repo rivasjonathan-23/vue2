@@ -2,7 +2,7 @@
   <div id="badges">
     <div id="nholder" class="text-center">
       <div class="pbadges">
-        <span>Offered badges </span>
+        <span>Offered badges</span>
         <span class="nb">{{by3Data.length}}</span>
       </div>
     </div>
@@ -31,8 +31,34 @@ export default {
   },
   data() {
     return {
-      by3Data: [{badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}, {badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}, {badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}},{badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}, {badegname: "First Placer", venue: "Passerelles Numeriques coding contest", date: {month: "June", day: 23, year: 2019}}],
-      isLoading: true,
+      by3Data: [
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        }
+      ],
+      isLoading: false,
       noData: false,
       temp: []
     };
@@ -67,13 +93,18 @@ export default {
   text-align: left;
   font-size: 19px;
   color: #02416e;
-  padding-left: 10px;
-  margin-bottom:10px;
+  padding-left: 25px;
+  margin-bottom: 10px;
 }
 .nb {
-  padding: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top:3px;
+  padding-bottom:3px;
   background: #d1e2e6;
   border-radius: 25px;
+  font-size: 20px;
+  margin-left:8px;
 }
 
 #badges {
@@ -91,7 +122,7 @@ export default {
   color: #2a5c82;
 }
 #nholder {
-  padding-top:10px;
+  padding-top: 10px;
 }
 .align-middle {
   color: rgb(3, 78, 133);

@@ -1,12 +1,16 @@
 <template>
   <div id="bythree">
     <b-col class="holder" v-for="(badge, index) in this.data" :key="index">
-      <b-card class="box" v-bind:class="{small: resized}">
-        <img src="@/assets/image.png" class>
-        <h5 class="binfo">{{badge.badgename}}</h5>
-        <p class="binfo">{{badge.venue}}</p>
-        <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
-      </b-card>
+      <div class="box" v-bind:class="{small: resized}">
+        <div class="imgholder">
+          <img src="@/assets/image2.png" class="blogo" />
+        </div>
+        <div class="tholder">
+          <h5 class="binfo">{{badge.badgename}}</h5>
+          <p class="binfo">{{badge.venue}}</p>
+          <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+        </div>
+      </div>
     </b-col>
   </div>
 </template>
@@ -45,6 +49,23 @@ export default {
 </script>
 
 <style scoped>
+.imgholder {
+  background-image: url("~@/assets/badgebackground.jpg");
+  background-size: cover;
+  margin: 0;
+  height: 250px;
+  text-align: left;
+  
+}
+.blogo {
+  margin-top:20px;
+  width:100px;
+ 
+}
+
+.tholder {
+  padding:5px;
+}
 .box {
   width: 268px;
   overflow: hidden;
@@ -54,6 +75,7 @@ export default {
   float: left;
   border-radius: 0;
   margin: 10px;
+  padding: 0;
   color: #3b4d70;
   border: lightgrey;
   -webkit-box-shadow: 0px 2px 5px darkgrey;

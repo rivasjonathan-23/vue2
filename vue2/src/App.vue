@@ -228,6 +228,7 @@ export default {
 
 #app, body, html {
   height: 100vh;
+  font-family: verdana;
 }
 
 #srch {
