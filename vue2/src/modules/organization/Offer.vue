@@ -221,7 +221,7 @@ export default {
       }
     });
 
-    $("#mnth").click(function() {
+    $("#mnth").focus(function() {
       if ($(".month").is(":hidden")) {
         $("#mnth").val("");
         $(".month").slideDown();

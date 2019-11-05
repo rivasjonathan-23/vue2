@@ -9,8 +9,8 @@
       <b-col cols="12" class="views">
         <b-navbar sticky class="Nav">
             <div class="option">
-            <span id="badges" class="bdg" v-on:click="redirect('/organization')">Badge List</span>
-            <span id="certify" v-on:click="redirect('/organization/certify')">Create badge</span>
+            <span id="badges" class="bdg" v-bind:class="{pressed: blpressed}" v-on:click="redirect('/organization')">Badge List</span>
+            <span class="certify" v-bind:class="{pressed: !blpressed}" v-on:click="redirect('/organization/certify')">Create badge</span>
           </div>
         </b-navbar>
         <div>
@@ -24,7 +24,6 @@
 /*eslint linebreak-style: ["error", "windows"]*/
 import Orgprofile from "@/modules/organization/orgprofile.vue";
 import UpdateOrg from "@/modules/organization/Update.vue";
-import $ from "jquery";
 
 export default {
   name: "orgpage",
@@ -40,11 +39,13 @@ export default {
       size: 0,
       resized: false,
       nothidden: true,
+      blpressed: true,
     };
   },
   created() {
     if (this.$router.currentRoute.path == "/organization/certify") {
       this.nothidden = false;
+      this.blpressed = false;
     }
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
@@ -58,8 +59,10 @@ export default {
       this.$router.push(path);
       if (path == "/organization/certify") {
         this.nothidden = false;
+        this.blpressed = false;
       } else {
         this.nothidden = true;
+        this.blpressed = true;
       }
     },
     handleResize() {
@@ -70,16 +73,6 @@ export default {
         }
     }
   },
-  mounted() {
-    $("#certify").click(function() {
-      $(this).css({ color: "#006aff" });
-      $("#badges").css({ color: "#2a5c82" });
-    });
-    $("#badges").click(function() {
-      $(this).css({ color: "#006aff" });
-      $("#certify").css({ color: "#2a5c82" });
-    });
-  }
 };
 </script>
 
@@ -119,12 +112,18 @@ span {
   padding-top: 8px;
 }
 
-.bdg {
-  color: #006aff;
+/* .bdg {
+  color: #047cd4;
+  background:#e6f2f7
+} */
+
+.pressed {
+  color: #047cd4;
+  background:#e6f2f7
 }
 
 span:hover {
-  color: #006aff;
+  color: #047cd4;
   background: #c5eafc;
 }
 

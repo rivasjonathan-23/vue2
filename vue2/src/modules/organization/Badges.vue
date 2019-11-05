@@ -31,34 +31,35 @@ export default {
   },
   data() {
     return {
-      by3Data: [
-        {
-          badgename: "First Placer",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 }
-        },
-        {
-          badgename: "First Placer",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 }
-        },
-        {
-          badgename: "First Placer",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 }
-        },
-        {
-          badgename: "First Placer",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 }
-        },
-        {
-          badgename: "First Placer",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 }
-        }
-      ],
-      isLoading: false,
+      // by3Data: [
+      //   {
+      //     badgename: "First Placer",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 }
+      //   },
+      //   {
+      //     badgename: "First Placer",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 }
+      //   },
+      //   {
+      //     badgename: "First Placer",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 }
+      //   },
+      //   {
+      //     badgename: "First Placer",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 }
+      //   },
+      //   {
+      //     badgename: "First Placer",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 }
+      //   }
+      // ],
+      by3Data: [],
+      isLoading: true,
       noData: false,
       temp: []
     };

@@ -20,14 +20,14 @@
       <div id="line"></div>
       <div class="loading" v-show="isLoading">
         <div class="text-center text-danger my-2">
-          <b-spinner class="align-middle"></b-spinner>
+          <b-spinner id="loading2" class="align-middle"></b-spinner>
         </div>
       </div>
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in badgelist" :key="index">
         <b-row v-if="badge.granted" class="row">
           <div class="badgeicon" v-bind:class="{zoomin: resized}">
-            <img src="@/assets/image2.png" class="blogo" />
+            <img src="@/assets/image2.png" class="blogo">
             <h5 class="binfo">{{ badge.badgename }}</h5>
             <p class="binfo">{{ badge.venue }}</p>
             <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
@@ -35,14 +35,14 @@
           <div class="cerBody" v-bind:class="{zoomin: resized}">
             <p class="name">
               This certificate of
-              <br />
+              <br>
               {{badge.certificateName}}
             </p>
             <span>is awarded to</span>
             <h5>{{fullname}}</h5>
-            <br />
+            <br>
             <p class="description">{{badge.descriptions}}</p>
-            <br />
+            <br>
             <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
             <div class="text-center byorg">
               <h5>Given by {{badge.organization}}</h5>
@@ -104,26 +104,27 @@ export default {
   },
   data() {
     return {
-      badgelist: [
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        },
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        }
-      ],
+      // badgelist: [
+      //   {
+      //     granted: true,
+      //     badgename: "First Place",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 },
+      //     descriptions:
+      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+      //     organization: "Passerelless numeriques"
+      //   },
+      //   {
+      //     granted: true,
+      //     badgename: "First Place",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 },
+      //     descriptions:
+      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+      //     organization: "Passerelless numeriques"
+      //   }
+      // ],
+      badgelist: [],
       badgeCode: "",
       hasData: false,
       error: false,
@@ -131,7 +132,7 @@ export default {
       availing: false,
       size: 0,
       resized: false,
-      isLoading: false
+      isLoading: true
     };
   },
   methods: {
@@ -193,12 +194,12 @@ export default {
       })
       .then(res => {
         this.isLoading = false;
-        // console.log("badgess" + res.data.badges);
-        // this.badgelist = res.data.badges.reverse();
-        // console.log({ badges: this.badgelist });
-        // if (this.badgelist.length == 0) {
-        //   this.hasData = true;
-        // }
+        console.log("badgess" + res.data.badges);
+        this.badgelist = res.data.badges.reverse();
+        console.log({ badges: this.badgelist });
+        if (this.badgelist.length == 0) {
+          this.hasData = true;
+        }
       });
   }
 };
@@ -207,8 +208,8 @@ export default {
 .nb {
   padding-left: 7px;
   padding-right: 7px;
-  padding-top:3px;
-  padding-bottom:3px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   background: #d1e2e6;
   border-radius: 25px;
   font-size: 20px;
@@ -288,15 +289,21 @@ export default {
 }
 .loading {
   margin-top: 30px;
-  padding-top: 100px;
-  padding-bottom: 100px;
-  background: #f2f8fa;
+  padding-top: 190px;
+  padding-bottom: 190px;
+  background: #e6f1f5;
 }
 
 .align-middle {
   color: rgb(3, 78, 133);
   height: 30px;
   width: 30px;
+}
+
+#loading2 {
+  color: rgb(3, 78, 133);
+  height: 70px;
+  width: 70px;
 }
 .sheader {
   /* background: rgb(138, 196, 219, 0.9); */
