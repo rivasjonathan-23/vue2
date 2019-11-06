@@ -22,7 +22,7 @@
       no-close-on-backdrop
       hide-footer
     >
-      <Offer v-on:submit="closeCreate"></Offer>
+      <Offer v-on:submit="closeCreate" @submit="getData"></Offer>
     </b-modal>
     <div class="text-center">
       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
@@ -38,11 +38,17 @@
           <h3 class="temp">You haven't offered badges yet</h3>
         </div>
         <div class="badgeicon" v-bind:class="{small: resized}">
-          <img src="@/assets/image2.png" class="blogo">
-          <h5 class="binfo">{{ badge.badgename }}</h5>
-          <p class="binfo">{{ badge.venue }}</p>
-          <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
-          <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
+          <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+Math.floor(Math.random() * 11)+".jpg")})`}'>
+          </div>
+          <div class="background">
+            <div class="bcontent">
+              <img src="@/assets/image2.png" class="blogo">
+              <h5 class="binfo">{{ badge.badgename }}</h5>
+              <p class="binfo">{{ badge.venue }}</p>
+              <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+              <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
+            </div>
+          </div>
         </div>
         <div class="recContainer" v-bind:class="{small: resized}">
           <div id="bmenu1">
@@ -171,7 +177,7 @@
           <span>This certificate of</span>
           <br>
           <input
-            class="inputline"
+            class="inputline cername"
             placeholder="Certificate Name"
             v-model="certificateName"
             required
@@ -251,50 +257,50 @@ export default {
   data() {
     return {
       noBadges: false,
-      // badges: [],
-      badges: [
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasfdgdfiau23"
-            },
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfiau23"
-            },
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdhgadsdfiau23"
-            },
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdsdfiau23"
-            }
-          ]
-        },
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        }
-      ],
+      badges: [],
+      // badges: [
+      //   {
+      //     badgename: "First placer",
+      //     code: "s8fs6df",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "Septembner", day: 23, year: 2019 },
+      //     recipient: [
+      //       {
+      //         username: "jrivas23",
+      //         fullname: "Jonathan Rivas",
+      //         _id: "asdfasfdgdfiau23"
+      //       },
+      //       {
+      //         username: "jrivas23",
+      //         fullname: "Jonathan Rivas",
+      //         _id: "asdfasdfiau23"
+      //       },
+      //       {
+      //         username: "jrivas23",
+      //         fullname: "Jonathan Rivas",
+      //         _id: "asdfasdhgadsdfiau23"
+      //       },
+      //       {
+      //         username: "jrivas23",
+      //         fullname: "Jonathan Rivas",
+      //         _id: "asdfasdsdfiau23"
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     badgename: "First placer",
+      //     code: "s8fs6df",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "Septembner", day: 23, year: 2019 },
+      //     recipient: [
+      //       {
+      //         username: "jrivas23",
+      //         fullname: "Jonathan Rivas",
+      //         _id: "asdfasdfgsdfiau23"
+      //       }
+      //     ]
+      //   }
+      // ],
       s_username: "",
       s_src: "",
       warning: "",
@@ -311,7 +317,7 @@ export default {
       tindex: 0,
       size: 0,
       resized: false,
-      isLoading: null,
+      isLoading: true,
       hasdata: false,
       sm: false,
     };
@@ -426,7 +432,6 @@ export default {
     },
     closeCreate() {
       this.$bvModal.hide("offer");
-      this.getData();
     },
     getData() {
       axios
@@ -622,9 +627,11 @@ input:focus {
   font-size: 16px;
   font-style: italic;
   color: #3b3d3d;
+   background: #f5fbff;
   border-bottom: 1px solid grey;
   border-top: 1px solid grey;
 }
+
 
 .badgeicon {
   /* -webkit-filter: opacity(80%);
@@ -641,7 +648,33 @@ input:focus {
   /* border: 1px solid lightgrey; */
   float: left;
   /* margin-left: 30px; */
+  position: relative;
 }
+
+.bpic {
+  height: 100%;
+  width:100%;
+  /* z-index: 3333; */
+  -webkit-filter: brightness(50%); /* Safari 6.0 - 9.0 */
+  filter: brightness(50%);
+  background-size: cover;
+  position: absolute;
+}
+
+.background {
+  position: absolute;
+  margin:0;
+  /* z-index: 5555; */
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.bcontent {
+  width:100%;
+  height: 100%;
+}
+
 .fit {
   width: 100%;
   text-align: center;
@@ -793,6 +826,7 @@ b-modal {
   color: #3b3d3d;
   background: transparent;
   border: none;
+  background: #f5fbff;
   border-bottom: 1px solid grey;
   text-align: center;
 }

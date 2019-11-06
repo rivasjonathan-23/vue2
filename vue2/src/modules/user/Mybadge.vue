@@ -26,12 +26,18 @@
       </div>
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
       <div v-for="(badge, index) in badgelist" :key="index">
-        <b-row v-if="badge.granted" class="row">
-          <div class="badgeicon" v-bind:class="{zoomin: resized}">
-            <img src="@/assets/image2.png" class="blogo">
-            <h5 class="binfo">{{ badge.badgename }}</h5>
-            <p class="binfo">{{ badge.venue }}</p>
-            <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+        <b-row v-if="badge.granted" class="row" >
+          <div class="badgeicon" v-bind:class="{zoomin: resized}" >
+            <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+Math.floor(Math.random() * 11)+".jpg")})`}'>
+            </div>
+            <div class="background">
+              <div class="bcontent">
+                <img src="@/assets/image2.png" class="blogo">
+                <h5 class="binfo">{{ badge.badgename }}</h5>
+                <p class="binfo">{{ badge.venue }}</p>
+                <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+              </div>
+            </div>
           </div>
           <div class="cerBody" v-bind:class="{zoomin: resized}">
             <p class="name">
@@ -105,27 +111,27 @@ export default {
   },
   data() {
     return {
-      badgelist: [
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        },
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        }
-      ],
-      // badgelist: [],
+      // badgelist: [
+      //   {
+      //     granted: true,
+      //     badgename: "First Place",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 },
+      //     descriptions:
+      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+      //     organization: "Passerelless numeriques"
+      //   },
+      //   {
+      //     granted: true,
+      //     badgename: "First Place",
+      //     venue: "Passerelles Numeriques coding contest",
+      //     date: { month: "June", day: 23, year: 2019 },
+      //     descriptions:
+      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+      //     organization: "Passerelless numeriques"
+      //   }
+      // ],
+      badgelist: [],
       badgeCode: "",
       hasData: false,
       error: false,
@@ -133,8 +139,8 @@ export default {
       availing: false,
       size: 0,
       resized: false,
-      isLoading: null,
-      sm: false
+      isLoading: true,
+      sm: false,
     };
   },
   methods: {
@@ -263,8 +269,8 @@ export default {
   padding: 0;
   margin-bottom: 25px;
   background: #f2f8fa;
-  -webkit-box-shadow: 0px 2px 6px darkgrey;
-  box-shadow: 0px 2px 6px darkgrey;
+  -webkit-box-shadow: 0px 1px 6px #74818f;
+  box-shadow: 0px 1px 6px #74818f;
 }
 .badgeicon {
   /* -webkit-filter: opacity(80%);
@@ -277,7 +283,39 @@ export default {
   background-image: url("~@/assets/background2.jpg");
   background-size: cover;
   margin-top: 0;
+ position: relative;
 }
+
+.binfo {
+  margin:0;
+  padding:0;
+}
+
+.background {
+  position: absolute;
+  margin:0;
+  /* z-index: 5555; */
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.bcontent {
+  width:100%;
+  height: 100%;
+}
+
+.bpic {
+  height: 100%;
+  width:100%;
+  /* z-index: 3333; */
+  -webkit-filter: brightness(50%); /* Safari 6.0 - 9.0 */
+  filter: brightness(50%);
+  background-size: cover;
+  position: absolute;
+}
+
+
 
 .zoomin {
   width: 100%;

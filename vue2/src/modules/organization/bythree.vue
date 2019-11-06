@@ -6,9 +6,11 @@
         </div>
         <img src="@/assets/image2.png" class="blogo">
         <div class="tholder">
-          <h5 class="binfo">{{badge.badgename}}</h5>
+          <h5 class="binfo bname">{{badge.badgename}}</h5>
           <p class="binfo">{{badge.venue}}</p>
-          <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+          <p class="binfo date" >{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+          <p class="binfo rec">Given to&nbsp;<span class="num">{{ badge.recipient.length }}</span>&nbsp;<span v-if="badge.recipient.length > 1">recipients</span>
+          <span v-else>recipient</span></p>
         </div>
       </div>
     </b-col>
@@ -50,8 +52,8 @@ export default {
 
 <style scoped>
 .imgholder {
-   -webkit-filter: brightness(70%); /* Safari 6.0 - 9.0 */
-  filter: brightness(70%);
+   -webkit-filter: brightness(60%); /* Safari 6.0 - 9.0 */
+  filter: brightness(60%);
   background-size: cover;
   margin: 0;
   height: 250px;
@@ -83,8 +85,8 @@ export default {
   padding: 0;
   color: #3b4d70;
   border: lightgrey;
-  -webkit-box-shadow: 0px 0px 7px darkgrey;
-  box-shadow: 0px 0px 7px darkgrey;
+  -webkit-box-shadow: 0px 1px 6px #8492a1;
+  box-shadow: 0px 1px 6px #8492a1;
   position: relative;
 }
 .small {
@@ -95,8 +97,30 @@ export default {
   background: red;
 }
 .binfo {
-  margin-bottom: 2px;
-  margin-top: 2px;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  color:#214d70;
+}
+.rec {
+  font-size: 12px;
+  color:#2e77b0;
+  padding:0px;
+  /* background:#d5e5f0; */
+  /* border-radius: 5px; */
+}
+.num  {
+  margin-top:0;
+  padding:0;
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.date {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+.bname {
+  color: #1a4f78;
 }
 
 .text-center {
