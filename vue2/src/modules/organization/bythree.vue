@@ -3,8 +3,8 @@
     <b-col class="holder" v-for="(badge, index) in this.data" :key="index">
       <div class="box" v-bind:class="{small: resized}">
         <div class="imgholder" v-bind:style="cssProps[Math.floor(Math.random() * 11)]">
-          <img src="@/assets/image2.png" class="blogo">
         </div>
+        <img src="@/assets/image2.png" class="blogo">
         <div class="tholder">
           <h5 class="binfo">{{badge.badgename}}</h5>
           <p class="binfo">{{badge.venue}}</p>
@@ -64,14 +64,22 @@ export default {
 
 <style scoped>
 .imgholder {
+   -webkit-filter: brightness(70%); /* Safari 6.0 - 9.0 */
+  filter: brightness(70%);
   background-size: cover;
   margin: 0;
   height: 250px;
   text-align: left;
+  
 }
 .blogo {
-  margin-top: 20px;
+  top:14px;
+  left:0;
   width: 100px;
+  position: absolute;
+  z-index: 9999;
+   -webkit-filter: brightness(130%); /* Safari 6.0 - 9.0 */
+  filter: brightness(130%);
 }
 
 .tholder {
@@ -89,8 +97,9 @@ export default {
   padding: 0;
   color: #3b4d70;
   border: lightgrey;
-  -webkit-box-shadow: 0px 2px 8px darkgrey;
-  box-shadow: 0px 2px 8px darkgrey;
+  -webkit-box-shadow: 0px 0px 7px darkgrey;
+  box-shadow: 0px 0px 7px darkgrey;
+  position: relative;
 }
 .small {
   width: 98%;
