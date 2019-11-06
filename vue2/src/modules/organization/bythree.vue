@@ -2,7 +2,7 @@
   <div id="bythree">
     <b-col class="holder" v-for="(badge, index) in this.data" :key="index">
       <div class="box" v-bind:class="{small: resized}">
-        <div class="imgholder" v-bind:style="cssProps[Math.floor(Math.random() * 11)]">
+        <div class="imgholder" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+Math.floor(Math.random() * 11)+".jpg")})`}'>
         </div>
         <img src="@/assets/image2.png" class="blogo">
         <div class="tholder">
@@ -23,21 +23,7 @@ export default {
     return {
       size: 0,
       resized: false,
-      cssProps: [
-        {backgroundImage: `url(${require("@/assets/bb/0.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/1.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/2.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/3.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/4.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/5.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/6.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/7.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/8.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/9.jpg")})`},
-        {backgroundImage: `url(${require("@/assets/bb/10.jpg")})`},
-        
-      ]
-    };
+    }       
   },
   props: {
     data: Array
@@ -77,7 +63,7 @@ export default {
   left:0;
   width: 100px;
   position: absolute;
-  z-index: 9999;
+  z-index: 5555;
    -webkit-filter: brightness(130%); /* Safari 6.0 - 9.0 */
   filter: brightness(130%);
 }
