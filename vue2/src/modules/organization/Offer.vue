@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-col class="badgePic">
-      <img src="@/assets/image.png">
+      <img src="@/assets/image2.png" class="blogo">
       <h5 class="b">{{ badgename }}</h5>
       <p class="b">{{ venue }}</p>
       <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>

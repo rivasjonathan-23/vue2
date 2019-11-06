@@ -2,8 +2,8 @@
   <div id="bythree">
     <b-col class="holder" v-for="(badge, index) in this.data" :key="index">
       <div class="box" v-bind:class="{small: resized}">
-        <div class="imgholder">
-          <img src="@/assets/image2.png" class="blogo" />
+        <div class="imgholder" v-bind:style="cssProps[Math.floor(Math.random() * 11)]">
+          <img src="@/assets/image2.png" class="blogo">
         </div>
         <div class="tholder">
           <h5 class="binfo">{{badge.badgename}}</h5>
@@ -22,7 +22,21 @@ export default {
   data() {
     return {
       size: 0,
-      resized: false
+      resized: false,
+      cssProps: [
+        {backgroundImage: `url(${require("@/assets/bb/0.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/1.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/2.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/3.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/4.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/5.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/6.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/7.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/8.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/9.jpg")})`},
+        {backgroundImage: `url(${require("@/assets/bb/10.jpg")})`},
+        
+      ]
     };
   },
   props: {
@@ -50,21 +64,18 @@ export default {
 
 <style scoped>
 .imgholder {
-  background-image: url("~@/assets/badgebackground.jpg");
   background-size: cover;
   margin: 0;
   height: 250px;
   text-align: left;
-  
 }
 .blogo {
-  margin-top:20px;
-  width:100px;
- 
+  margin-top: 20px;
+  width: 100px;
 }
 
 .tholder {
-  padding:5px;
+  padding: 5px;
 }
 .box {
   width: 268px;
@@ -78,8 +89,8 @@ export default {
   padding: 0;
   color: #3b4d70;
   border: lightgrey;
-  -webkit-box-shadow: 0px 2px 5px darkgrey;
-  box-shadow: 0px 2px 5px darkgrey;
+  -webkit-box-shadow: 0px 2px 8px darkgrey;
+  box-shadow: 0px 2px 8px darkgrey;
 }
 .small {
   width: 98%;

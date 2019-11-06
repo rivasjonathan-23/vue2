@@ -2,11 +2,11 @@
   <div>
     <div id="mybadge">
       <div class="sheader">
-        <span class="tbadge">
+        <span class="tbadge" v-bind:class="{fit: sm}">
           <span>Badges&nbsp;</span>
           <span class="nb">{{badgelist.length}}</span>
         </span>
-        <span class="tbadge">
+        <span class="tbadge" v-bind:class="{fit: sm}">
           <span>Pending badges&nbsp;</span>
           <span class="nb">{{badgelist.length}}</span>
         </span>
@@ -14,6 +14,7 @@
           id="createC"
           variant="primary"
           class="btn"
+         v-bind:class="{fit: sm}"
           v-b-modal.availBadge-modal
         >Avail new certificate</b-button>
       </div>
@@ -104,27 +105,27 @@ export default {
   },
   data() {
     return {
-      // badgelist: [
-      //   {
-      //     granted: true,
-      //     badgename: "First Place",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 },
-      //     descriptions:
-      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-      //     organization: "Passerelless numeriques"
-      //   },
-      //   {
-      //     granted: true,
-      //     badgename: "First Place",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 },
-      //     descriptions:
-      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-      //     organization: "Passerelless numeriques"
-      //   }
-      // ],
-      badgelist: [],
+      badgelist: [
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        }
+      ],
+      // badgelist: [],
       badgeCode: "",
       hasData: false,
       error: false,
@@ -132,7 +133,8 @@ export default {
       availing: false,
       size: 0,
       resized: false,
-      isLoading: true
+      isLoading: null,
+      sm: false
     };
   },
   methods: {
@@ -176,7 +178,13 @@ export default {
     handleResize() {
       if (window.innerWidth < 1200) {
         this.resized = true;
+        if (window.innerWidth < 600) {
+          this.sm = true;
+        } else {
+          this.sm = false;
+        }
       } else {
+        this.sm = false;
         this.resized = false;
       }
     }
@@ -211,7 +219,7 @@ export default {
   padding-top: 3px;
   padding-bottom: 3px;
   background: #d1e2e6;
-  border-radius: 25px;
+  border-radius: 5px;
   font-size: 20px;
 }
 
@@ -311,6 +319,7 @@ export default {
   font-family: verdana;
   overflow: visible;
   padding-bottom: 0;
+  padding-right: 7px;
 }
 #createC {
   border: none;
@@ -327,6 +336,15 @@ export default {
   margin-top: 5px;
   height: 4px;
   background: lightblue;
+}
+
+.btn {
+  color:white;
+}
+
+.fit {
+  width:100%;
+  text-align: center;
 }
 .tbadge {
   font-size: 18px;

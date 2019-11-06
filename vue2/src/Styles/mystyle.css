@@ -47,7 +47,11 @@
     margin-left:15px;
     margin-right:15px;
     float:left;
-    background:#f2f8fa;
+    background:#d5e8f5;
+  }
+
+  .blogo{
+    width:200px;
   }
 
   .b {

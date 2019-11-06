@@ -1,8 +1,14 @@
  <template>
   <div id="certify">
     <div class="createNnum">
-      <b-button id="createC" variant="primary" class="btn" v-b-modal.offer>Create new</b-button>
-      <div class="pbadges">
+      <b-button
+        id="createC"
+        v-bind:class="{fit: sm}"
+        variant="primary"
+        class="btn"
+        v-b-modal.offer
+      >Create new</b-button>
+      <div class="pbadges" v-bind:class="{fit: sm}">
         Pending badges
         <span class="nb">{{badges.length}}</span>
       </div>
@@ -31,81 +37,84 @@
         <div v-if="!hasdata" class="nooffered">
           <h3 class="temp">You haven't offered badges yet</h3>
         </div>
-          <div class="badgeicon" v-bind:class="{small: resized}">
-            <img src="@/assets/image2.png" class="blogo" />
-            <h5 class="binfo">{{ badge.badgename }}</h5>
-            <p class="binfo">{{ badge.venue }}</p>
-            <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
-            <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
+        <div class="badgeicon" v-bind:class="{small: resized}">
+          <img src="@/assets/image2.png" class="blogo">
+          <h5 class="binfo">{{ badge.badgename }}</h5>
+          <p class="binfo">{{ badge.venue }}</p>
+          <p class="binfo">{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
+          <p id="code" class="binfo">Code:&nbsp;{{ badge.code }}</p>
+        </div>
+        <div class="recContainer" v-bind:class="{small: resized}">
+          <div id="bmenu1">
+            <span class="tiRec" v-bind:class="{fit: sm}">Recipients</span>
+            <span class="cuRec" v-bind:class="{fit: sm}">
+              <span>Recipients&nbsp;</span>
+              <span class="nrec">{{badge.recipient.length}}</span>
+            </span>
+            <span class="cuRec" v-bind:class="{fit: sm}">
+              <span>code&nbsp;</span>
+              <span class="nrec">{{badge.code}}</span>
+            </span>
           </div>
-          <div class="recContainer" v-bind:class="{small: resized}">
-            <div id="bmenu1" class="text-left">
-              <span class="tiRec">Recipients</span>
-              <span class="cuRec">
-                <span>Recipients&nbsp;</span>
-                <span class="nrec">{{badge.recipient.length}}</span> 
-              </span>
-              <span class="cuRec">
-                <span>code:</span>
-                <span class="nrec">{{badge.code}}</span>
-              </span>
-            </div>
-            <div class="recipient">
-              <table class="recip" v-if="badge.recipient.length > 0">
-                <tr class="thead">
-                  <td class="imp">
-                    <p class="TH">Username</p>
-                  </td>
-                  <td class="imp1">
-                    <p class="TH">Real name</p>
-                  </td>
-                  <td class="nimp"></td>
-                </tr>
-                <tr
-                  class="reclist"
-                  v-for="(recipient, index) in badge.recipient"
-                  :key="index"
-                  @mouseover="mouseOver(recipient._id)"
-                  @mouseleave="mouseLeave"
-                >
-                  <td class="imp">
-                    <p>{{recipient.username}}</p>
-                  </td>
-                  <td class="imp1">
-                    <p>{{recipient.fullname}}</p>
-                  </td>
-                  <td class="nimp">
-                    <transition name="slide-fade">
-                      <span class="delete" v-show="hover != recipient._id">Delete</span>
-                    </transition>
-                  </td>
-                </tr>
-              </table>
-              <p class="noRec" v-else>No recipient had availed yet</p>
-            </div>
-            <div id="bmenu" class="text-left">
-              <b-button
-                variant="primary"
-                id="cert"
-                class="btn2"
-                v-b-modal.certify-modal
-                v-on:click="getBadgeDetail(badge.code, badge.date)"
-              >Certify Recipients</b-button>
+          <div class="recipient">
+            <table class="recip" v-if="badge.recipient.length > 0">
+              <tr class="thead">
+                <td class="imp">
+                  <p class="TH">Username</p>
+                </td>
+                <td class="imp1">
+                  <p class="TH">Real name</p>
+                </td>
+                <td class="nimp"></td>
+              </tr>
+              <tr
+                class="reclist"
+                v-for="(recipient, index) in badge.recipient"
+                :key="index"
+                @mouseover="hover = recipient._id"
+                @mouseleave="hover = ''"
+              >
+                <td class="imp">
+                  <p>{{recipient.username}}</p>
+                </td>
+                <td class="imp1">
+                  <p>{{recipient.fullname}}</p>
+                </td>
+                <td class="nimp">
+                  <transition name="slide-fade">
+                    <p class="delete" v-if="hover === recipient._id">Delete</p>
+                  </transition>
+                </td>
+              </tr>
+            </table>
+            <p class="noRec" v-else>No recipient had availed yet</p>
+          </div>
+          <div id="bmenu" class="text-left">
+            <b-button
+              variant="primary"
+              id="cert"
+              class="btn2"
+              v-b-modal.certify-modal
+              v-bind:class="{fit: sm}"
+              v-on:click="getBadgeDetail(badge.code, badge.date)"
+            >Certify Recipients</b-button>
 
-              <b-button
-                variant="info"
-                class="btn2"
-                v-b-modal.addRecipient-modal
-                v-on:click="getBadgeDetail(badge.code, badge.date)"
-              >Add Recipient</b-button>
-              <b-button
-                variant="danger"
-                class="btn2"
-                v-b-modal.addRecipient-modal
-                v-on:click="getBadgeDetail(badge.code, badge.date)"
-              >Delete badge</b-button>
-            </div>
+            <b-button
+              variant="info"
+              class="btn2"
+              v-bind:class="{fit: sm}"
+              v-b-modal.addRecipient-modal
+              v-on:click="getBadgeDetail(badge.code, badge.date)"
+            >Add Recipient</b-button>
+            <b-button
+              variant="danger"
+              class="btn2"
+              v-bind:class="{fit: sm}"
+              v-b-modal.addRecipient-modal
+              v-on:click="getBadgeDetail(badge.code, badge.date)"
+            >Delete badge</b-button>
           </div>
+        </div>
       </div>
     </div>
     <b-modal
@@ -119,9 +128,9 @@
     >
       <form class="addR" @submit.prevent="addRecipient()">
         <span class="error" v-show="error">Cannot find user or user already in the list!</span>
-        <br />
-        <b-input id="usernamei" required v-model="s_username" placeholder="Enter username" />
-        <br />
+        <br>
+        <b-input id="usernamei" required v-model="s_username" placeholder="Enter username"/>
+        <br>
         <b-row>
           <b-col>
             <b-button
@@ -160,24 +169,24 @@
       <div class="text-center ifont">
         <form @submit.stop.prevent="handleCertificationSubmit()">
           <span>This certificate of</span>
-          <br />
+          <br>
           <input
             class="inputline"
             placeholder="Certificate Name"
             v-model="certificateName"
             required
-          />
-          <br />
-          <br />
-          <br />
+          >
+          <br>
+          <br>
+          <br>
           <span>is awarded to</span>
-          <br />
+          <br>
           <p>
             (
             <i>participant/s' name</i>)
-            <br />
-            <br />
-            <br />
+            <br>
+            <br>
+            <br>
           </p>
           <textarea
             name="description"
@@ -188,13 +197,13 @@
             v-model="descriptions"
             required
           ></textarea>
-          <br />
-          <br />
-          <br />
+          <br>
+          <br>
+          <br>
           <p>Given this {{ date }}</p>
-          <hr />
-          <br />
-          <br />
+          <hr>
+          <br>
+          <br>
           <b-row>
             <b-col>
               <b-button
@@ -242,50 +251,50 @@ export default {
   data() {
     return {
       noBadges: false,
-      badges: [],
-      // badges: [
-      //   {
-      //     badgename: "First placer",
-      //     code: "s8fs6df",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "Septembner", day: 23, year: 2019 },
-      //     recipient: [
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasfdgdfiau23"
-      //       },
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdfiau23"
-      //       },
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdhgadsdfiau23"
-      //       },
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdsdfiau23"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     badgename: "First placer",
-      //     code: "s8fs6df",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "Septembner", day: 23, year: 2019 },
-      //     recipient: [
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdfgsdfiau23"
-      //       }
-      //     ]
-      //   }
-      // ],
+      // badges: [],
+      badges: [
+        {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasfdgdfiau23"
+            },
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfiau23"
+            },
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdhgadsdfiau23"
+            },
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdsdfiau23"
+            }
+          ]
+        },
+        {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        }
+      ],
       s_username: "",
       s_src: "",
       warning: "",
@@ -302,8 +311,9 @@ export default {
       tindex: 0,
       size: 0,
       resized: false,
-      isLoading: true,
+      isLoading: null,
       hasdata: false,
+      sm: false,
     };
   },
 
@@ -327,19 +337,17 @@ export default {
     handleResize() {
       if (window.innerWidth < 1200) {
         this.resized = true;
+        if (window.innerWidth < 600) {
+          this.sm = true;
+        } else {
+          this.sm = false;
+        }
       } else {
+        this.sm = false;
         this.resized = false;
       }
     },
-    mouseOver(index) {
-      console.log(this.hover)
-      this.hover = index;
-    },
-    mouseLeave(index) {
-        console.log(this.hover)
-      this.hover = null;
     
-    },
     getBadgeDetail(bcode, date) {
       this.code = bcode;
       this.date = date.month + " " + date.day + ", " + date.year;
@@ -439,8 +447,18 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   mounted() {
-    
+    $(".reclist").mouseenter(function() {
+      $(this)
+        .find(".delete")
+        .show();
+    });
+    $(".reclist").mouseleave(function() {
+      $(this)
+        .find(".delete")
+        .hide();
+    });
   }
+ 
 };
 </script>
 
@@ -476,7 +494,7 @@ export default {
 }
 .slide-fade-enter,
 .slide-fade-leave-to {
-  transform: translateX(10px);
+  transform: translateX(5px);
   opacity: 0;
 }
 .createNnum {
@@ -499,41 +517,33 @@ export default {
 #createC {
   font-size: 18px;
   overflow: hidden;
-  /* float: left; */
+  float: left;
   border-radius: 2px;
-  position: absolute;
-}
-.nrec {
-  background: #a6d7f5;
-  border-radius: 25px;
-  padding-left:8px;
-  padding-right: 8px;
-  color:#415663;
 }
 
 .nrec {
   background: #a6d7f5;
-  border-radius: 25px;
-  padding-left:8px;
+  border-radius: 5px;
+  padding-left: 8px;
   padding-right: 8px;
-  color:#415663;
+  color: #415663;
 }
 
 .nb {
   padding-left: 7px;
   padding-right: 7px;
-  padding-top:3px;
-  padding-bottom:3px;
+  padding-bottom: 3px;
+  padding-top: 3px;
   background: #d1e2e6;
-  border-radius: 25px;
+  border-radius: 5px;
   font-size: 20px;
-  margin-left:1px;
+  margin-left: 1px;
 }
 .delete {
-  transition: ease 0.4s;
+  transition: ease 0.5s;
 }
 .delete:hover {
-  color:red;
+  color: red;
 }
 .btncont {
   width: 100%;
@@ -548,15 +558,15 @@ export default {
   margin: 0;
 }
 
-#cert {
-  margin-right: 8px;
-}
+/* #cert {
+  margin-right: 2px;
+} */
 
 .btn2 {
   float: right;
   margin-top: 5px;
-  margin-left: 0px;
-  margin-right: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
   border-radius: 2px;
 }
 
@@ -578,7 +588,7 @@ export default {
   color: #2a5c82;
   padding-top: 5px;
   padding-left: 20px;
-  position: absolute;
+  float: left;
 }
 textarea:focus,
 input:focus {
@@ -589,13 +599,21 @@ input:focus {
   text-align: center;
 }
 .tiRec {
+  float: left;
   font-size: 25px;
-  margin-right: 6%;
+  margin: 0;
+  padding-left: 9px;
+  background: #72c4f7;
 }
 .cuRec {
+  float: left;
   font-size: 17px;
+  padding-top: 8px;
   font-weight: normal;
-  margin-right: 5%;
+  padding-left: 20px;
+  padding-right: 10px;
+  margin: 0;
+  background: #72c4f7;
 }
 
 #description {
@@ -624,12 +642,16 @@ input:focus {
   float: left;
   /* margin-left: 30px; */
 }
+.fit {
+  width: 100%;
+  text-align: center;
+}
 
 .recContainer {
   width: 59%;
   float: left;
   margin-right: 0;
-  margin-bottom:24px;
+  margin-bottom: 24px;
 }
 .small {
   width: 100%;
@@ -655,8 +677,8 @@ input:focus {
   height: 45px;
   background: #b8e2fc;
   padding-bottom: 0;
-  /* padding-left:15px; */
-  padding-right: 0;
+  padding-left: 5px;
+  padding-right: 2px;
   text-align: right;
   margin-top: 0;
   margin-bottom: 0;
@@ -666,10 +688,11 @@ input:focus {
   border-top-right-radius: 1px;
   padding-bottom: 0;
   text-align: left;
+  height: 37px;
   width: 100%;
   margin-bottom: 0;
-  padding-left: 9px;
-  padding-right: 9px;
+  /* padding-left: 9px;
+  padding-right: 9px; */
   color: #165780;
   background: #72c4f7;
 }
@@ -679,7 +702,6 @@ input:focus {
 
 .nimp {
   width: 12%;
-
 }
 
 .imp1 {
@@ -812,8 +834,6 @@ hr {
   margin-top: 0;
   margin-bottom: 0;
 }
-
-
 
 .contain {
   margin-top: 25px;

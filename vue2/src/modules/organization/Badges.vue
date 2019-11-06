@@ -31,35 +31,35 @@ export default {
   },
   data() {
     return {
-      // by3Data: [
-      //   {
-      //     badgename: "First Placer",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 }
-      //   },
-      //   {
-      //     badgename: "First Placer",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 }
-      //   },
-      //   {
-      //     badgename: "First Placer",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 }
-      //   },
-      //   {
-      //     badgename: "First Placer",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 }
-      //   },
-      //   {
-      //     badgename: "First Placer",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 }
-      //   }
-      // ],
-      by3Data: [],
-      isLoading: true,
+      by3Data: [
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        },
+        {
+          badgename: "First Placer",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 }
+        }
+      ],
+      // by3Data: [],
+      isLoading: null,
       noData: false,
       temp: []
     };
@@ -103,7 +103,7 @@ export default {
   padding-top:3px;
   padding-bottom:3px;
   background: #d1e2e6;
-  border-radius: 25px;
+  border-radius: 5px;
   font-size: 20px;
   margin-left:8px;
 }
