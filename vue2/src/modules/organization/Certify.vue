@@ -6,6 +6,7 @@
         v-bind:class="{fit: sm}"
         variant="primary"
         class="btn"
+        @click="covered"
         v-b-modal.offer
       >Create new</b-button>
       <div class="pbadges" v-bind:class="{fit: sm}">
@@ -108,6 +109,7 @@
             <b-button
               variant="info"
               class="btn2"
+              @click="covered"
               v-bind:class="{fit: sm}"
               v-b-modal.addRecipient-modal
               v-on:click="getBadgeDetail(badge.code, badge.date)"
@@ -116,6 +118,7 @@
               variant="danger"
               class="btn2"
               v-bind:class="{fit: sm}"
+              @click="covered"
               v-b-modal.addRecipient-modal
               v-on:click="getBadgeDetail(badge.code, badge.date)"
             >Delete badge</b-button>
@@ -155,7 +158,6 @@
               autocomplete
               class="btn btn-block"
             >Add Recipient</b-button>
-            
           </b-col>
           
         </b-row>
@@ -272,7 +274,7 @@ export default {
       tindex: 0,
       size: 0,
       resized: false,
-      isLoading: false,
+      isLoading: true,
       hasdata: false,
       sm: false,
     };
@@ -282,114 +284,114 @@ export default {
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-    this.badges =  [
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasfdgdfiau23"
-            },
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfiau23"
-            },
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdhgadsdfiau23"
-            },
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdsdfiau23"
-            }
-          ]
-        },
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        }
-      ];
-      var num = 0;
-      this.badges.forEach(badge => {
-        badge["imgnum"] = num;
-        num += 1;
-          if (num > 10) {
-          num = 0;
-        }
-      })
-    // axios
-    //   .post("http://localhost:8081/user/pendingbadges", {
-    //     data: this.$store.getters.token
-    //   })
-    //   .then(resp => {
-    //     (this.isLoading = false), (this.badges = resp.data.badges.reverse());
-    //     if (this.badges.length == 0) {
-    //       this.hasdata = false;
+    // this.badges =  [
+    //     {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasfdgdfiau23"
+    //         },
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfiau23"
+    //         },
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdhgadsdfiau23"
+    //         },
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdsdfiau23"
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
+    //     },
+    //      {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
+    //     },
+    //      {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
+    //     },
+    //      {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
     //     }
-    //     var num = 0;
-    //     this.badges.forEach(badge => {
-    //       badge["imgnum"] = num;
-    //       num += 1;
-    //         if (num > 10) {
-    //         num = 0;
-    //       }
-    //     })
-    //   });
+    //   ];
+    //   var num = 0;
+    //   this.badges.forEach(badge => {
+    //     badge["imgnum"] = num;
+    //     num += 1;
+    //       if (num > 10) {
+    //       num = 0;
+    //     }
+    //   })
+    axios
+      .post("http://localhost:8081/user/pendingbadges", {
+        data: this.$store.getters.token
+      })
+      .then(resp => {
+        (this.isLoading = false), (this.badges = resp.data.badges.reverse());
+        if (this.badges.length == 0) {
+          this.hasdata = false;
+        }
+        var num = 0;
+        this.badges.forEach(badge => {
+          badge["imgnum"] = num;
+          num += 1;
+            if (num > 10) {
+            num = 0;
+          }
+        })
+      });
   },
 
   methods: {
@@ -485,6 +487,9 @@ export default {
     },
     closeCreate() {
       this.$bvModal.hide("offer");
+    },
+    covered() {
+      this.$emit("changeZindex");
     },
     getData() {
       axios
@@ -598,7 +603,7 @@ export default {
 }
 
 .nrec {
-  background: #a6d7f5;
+  background: #98d8fa;
   border-radius: 5px;
   padding-left: 8px;
   padding-right: 8px;
@@ -679,7 +684,7 @@ input:focus {
   font-size: 25px;
   margin: 0;
   padding-left: 9px;
-  background: #72c4f7;
+  background: #7dc3e8;
 }
 .cuRec {
   float: left;
@@ -689,7 +694,7 @@ input:focus {
   padding-left: 20px;
   padding-right: 10px;
   margin: 0;
-  background: #72c4f7;
+  background: #7dc3e8;
 }
 
 #description {
@@ -779,7 +784,7 @@ input:focus {
 #bmenu {
   width: 100%;
   height: 45px;
-  background: #b8e2fc;
+  background: #b5d4e8;
   padding-bottom: 0;
   padding-left: 5px;
   padding-right: 2px;
@@ -798,7 +803,7 @@ input:focus {
   /* padding-left: 9px;
   padding-right: 9px; */
   color: #165780;
-  background: #72c4f7;
+  background: #7dc3e8;
 }
 .imp {
   width: 40%;

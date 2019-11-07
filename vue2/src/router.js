@@ -26,8 +26,10 @@ let router = new Router({
 
   routes: [{
       path: "/",
-      component: Home
+      component: Home,
+      
     },
+    
 
     {
       path: "/login",
@@ -48,21 +50,35 @@ let router = new Router({
       path: "/signup",
       component: FullSignUp,
       props: (route) => ({
-        name: route.query.name
+        name: route.query.name,
       })
     },
     {
       path: "/organizationsignup",
       component: OrgSignUp,
       props: (route) => ({
-        name: route.query.name
+        name: route.query.name,
+        beforeEnter(to, from, next) {
+        if (!store.getters.isLoggedIn) {
+          next();
+        } else {
+          next("/");
+        }
+      },
       })
     },
     {
       path: "/signUpAs",
       component: TypeOfUser,
       props: (route) => ({
-        name: route.query.name
+        name: route.query.name,
+        beforeEnter(to, from, next) {
+          if (!store.getters.isLoggedIn) {
+            next();
+          } else {
+            next("/");
+          }
+        },
       })
     },
     {
@@ -72,18 +88,18 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        // if (store.getters.isLoggedIn) {
-        //   store.dispatch("identifyUser").then((data) => {
-        //     console.log(data)
-        //     if (data) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data)
+            if (data) {
               next();
-        //     } else {
-        //       next("/login");
-        //     }
-        //   })
-        // } else {
-        //   next("/login");
-        // }
+            } else {
+              next("/login");
+            }
+          })
+        } else {
+          next("/login");
+        }
       },
       children: [
         {
@@ -103,18 +119,18 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        // if (store.getters.isLoggedIn) {
-        //   store.dispatch("identifyUser").then((data) => {
-        //     console.log(data);
-        //     if (!data) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data);
+            if (!data) {
               next();
-        //     } else {
-        //       next("/login");
-        //     }
-        //   })
-        // } else {
-        //   next("/login");
-        // }
+            } else {
+              next("/login");
+            }
+          })
+        } else {
+          next("/login");
+        }
       },
       children: [
         {
