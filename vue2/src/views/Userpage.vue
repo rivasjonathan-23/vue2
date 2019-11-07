@@ -7,7 +7,7 @@
     </b-row>
     <b-row>
       <b-col class="views" cols="12">
-        <router-view></router-view>
+        <Newsfeed></Newsfeed>
       </b-col>
     </b-row>
   </div>
@@ -17,6 +17,7 @@
 /*eslint linebreak-style: ["error", "windows"]*/
 import axios from "axios";
 import Profile from "@/modules/user/Profile.vue";
+import Newsfeed from "@/modules/user/Mybadge.vue";
 import $ from "jquery";
 
 export default {
@@ -32,7 +33,8 @@ export default {
     };
   },
   components: {
-    Profile
+    Profile,
+    Newsfeed
   },
   created() {
     window.addEventListener("resize", this.handleResize);

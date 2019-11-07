@@ -2,14 +2,14 @@
   <div id="bythree">
     <b-col class="holder" v-for="(badge, index) in this.data" :key="index">
       <div class="box" v-bind:class="{small: resized}">
-        <div class="imgholder" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+Math.floor(Math.random() * 11)+".jpg")})`}'>
+        <div class="imgholder" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+badge.imgnum+".jpg")})`}'>
         </div>
         <img src="@/assets/image2.png" class="blogo">
         <div class="tholder">
           <h5 class="binfo bname">{{badge.badgename}}</h5>
           <p class="binfo">{{badge.venue}}</p>
           <p class="binfo date" >{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
-          <p class="binfo rec">Given to&nbsp;<span class="num">{{ badge.recipient.length }}</span>&nbsp;<span v-if="badge.recipient.length > 1">recipients</span>
+          <p class="binfo rec">Given to&nbsp;<span class="num">{{ badge.recipient }}</span>&nbsp;<span v-if="badge.recipient > 1">recipients</span>
           <span v-else>recipient</span></p>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     handleResize() {
-      if (window.innerWidth < 1200) {
+      if (window.innerWidth < 700) {
         this.resized = true;
       } else {
         this.resized = false;

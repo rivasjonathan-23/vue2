@@ -22,7 +22,7 @@
       no-close-on-backdrop
       hide-footer
     >
-      <Offer v-on:submit="closeCreate" @submit="getData"></Offer>
+      <Offer v-on:submit="closeCreate" @submit="getData" @cancel="closeCreate"></Offer>
     </b-modal>
     <div class="text-center">
       <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
@@ -38,7 +38,7 @@
           <h3 class="temp">You haven't offered badges yet</h3>
         </div>
         <div class="badgeicon" v-bind:class="{small: resized}">
-          <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+Math.floor(Math.random() * 11)+".jpg")})`}'>
+          <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+badge.imgnum+".jpg")})`}'>
           </div>
           <div class="background">
             <div class="bcontent">
@@ -128,6 +128,7 @@
       id="addRecipient-modal"
       title="Recepient Information"
       centered
+      size="sm"
       no-close-on-esc
       no-close-on-backdrop
       hide-footer
@@ -137,29 +138,31 @@
         <br>
         <b-input id="usernamei" required v-model="s_username" placeholder="Enter username"/>
         <br>
-        <b-row>
-          <b-col>
+        <b-row  v-if="!adding">
+          <b-col class="bl">
             <b-button
               v-on:click="handleCancel"
-              v-if="!adding"
+             
               variant="danger"
               class="btn btn-block"
             >Cancel</b-button>
           </b-col>
-          <b-col cols="8">
+          <b-col class="br">
             <b-button
               type="submit"
-              v-if="!adding"
+              
               variant="primary"
               autocomplete
               class="btn btn-block"
             >Add Recipient</b-button>
-            <span v-else class="add">
-              <b-spinner class="align-middle"></b-spinner>&nbsp;
-              <strong>Adding new recipient...</strong>
-            </span>
+            
           </b-col>
+          
         </b-row>
+        <div v-else class="add">
+              <b-spinner class="align-middle"></b-spinner>&nbsp;
+              <strong>Adding recipient...</strong>
+        </div>
       </form>
     </b-modal>
     <b-modal
@@ -208,22 +211,18 @@
           <br>
           <p>Given this {{ date }}</p>
           <hr>
-          <br>
-          <br>
-          <b-row>
-            <b-col>
+          <div class="btnholder">
+        
               <b-button
                 v-if="!certifying | errorCertifying"
                 variant="danger"
-                class="btn btn-block"
+                class="btn cerbtn"
                 v-on:click="resetCertification"
               >Cancel</b-button>
-            </b-col>
-            <b-col cols="8">
               <b-button
                 variant="primary"
                 v-if="!certifying & !errorCertifying"
-                class="btn btn-block"
+                class="btn cerbtn"
                 type="sumbit"
               >Certify Now</b-button>
               <span class="errorC" v-if="errorCertifying & !certifying">
@@ -233,8 +232,7 @@
                 <b-spinner class="align-middle"></b-spinner>&nbsp;
                 <strong>Certifying recipient...</strong>
               </span>
-            </b-col>
-          </b-row>
+          </div>
         </form>
       </div>
     </b-modal>
@@ -258,49 +256,6 @@ export default {
     return {
       noBadges: false,
       badges: [],
-      // badges: [
-      //   {
-      //     badgename: "First placer",
-      //     code: "s8fs6df",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "Septembner", day: 23, year: 2019 },
-      //     recipient: [
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasfdgdfiau23"
-      //       },
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdfiau23"
-      //       },
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdhgadsdfiau23"
-      //       },
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdsdfiau23"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     badgename: "First placer",
-      //     code: "s8fs6df",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "Septembner", day: 23, year: 2019 },
-      //     recipient: [
-      //       {
-      //         username: "jrivas23",
-      //         fullname: "Jonathan Rivas",
-      //         _id: "asdfasdfgsdfiau23"
-      //       }
-      //     ]
-      //   }
-      // ],
       s_username: "",
       s_src: "",
       warning: "",
@@ -317,7 +272,7 @@ export default {
       tindex: 0,
       size: 0,
       resized: false,
-      isLoading: true,
+      isLoading: false,
       hasdata: false,
       sm: false,
     };
@@ -327,21 +282,119 @@ export default {
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-    axios
-      .post("http://localhost:8081/user/pendingbadges", {
-        data: this.$store.getters.token
-      })
-      .then(resp => {
-        (this.isLoading = false), (this.badges = resp.data.badges.reverse());
-        if (this.badges.length == 0) {
-          this.hasdata = false;
+    this.badges =  [
+        {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasfdgdfiau23"
+            },
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfiau23"
+            },
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdhgadsdfiau23"
+            },
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdsdfiau23"
+            }
+          ]
+        },
+        {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        },
+         {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        },
+         {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        },
+         {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
         }
-      });
+      ];
+      var num = 0;
+      this.badges.forEach(badge => {
+        badge["imgnum"] = num;
+        num += 1;
+          if (num > 10) {
+          num = 0;
+        }
+      })
+    // axios
+    //   .post("http://localhost:8081/user/pendingbadges", {
+    //     data: this.$store.getters.token
+    //   })
+    //   .then(resp => {
+    //     (this.isLoading = false), (this.badges = resp.data.badges.reverse());
+    //     if (this.badges.length == 0) {
+    //       this.hasdata = false;
+    //     }
+    //     var num = 0;
+    //     this.badges.forEach(badge => {
+    //       badge["imgnum"] = num;
+    //       num += 1;
+    //         if (num > 10) {
+    //         num = 0;
+    //       }
+    //     })
+    //   });
   },
 
   methods: {
     handleResize() {
-      if (window.innerWidth < 1200) {
+      if (window.innerWidth < 850) {
         this.resized = true;
         if (window.innerWidth < 600) {
           this.sm = true;
@@ -468,6 +521,15 @@ export default {
 </script>
 
 <style scoped>
+.bl {
+  margin-right: 0;
+  padding-right: 5px;
+}
+
+.br {
+  margin-left: 0;
+  padding-left: 5px;
+}
 .loading {
   margin-top: 15px;
   padding-top: 200px;
@@ -509,6 +571,15 @@ export default {
   /* background-image: linear-gradient(to right, #87cefa , white); */
   height: 40px;
   position: relative;
+}
+
+.cerbtn {
+  margin:5px;
+}
+
+.btnholder {
+  margin-top:10px;
+  text-align: right;
 }
 .blogo {
   /* float: left; */
@@ -782,7 +853,14 @@ tr {
 }
 .errorC {
   color: red;
-  font-size: 20px;
+  font-family: verdana;
+  font-size: 19px;
+  background: #f0bdbf;
+  padding:11px;
+  height: 30px;
+  margin-top: 8px;
+  border-radius: 5px;
+  margin-bottom: 0;
 }
 
 .noRec {
@@ -817,6 +895,10 @@ b-modal {
 
 .add {
   color: #0071ff;
+  text-align: center;
+  background:lightblue;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .inputline {

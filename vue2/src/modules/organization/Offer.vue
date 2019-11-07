@@ -1,105 +1,80 @@
 <template>
-  <b-row>
-    <b-col class="badgePic">
-      <img src="@/assets/image2.png" class="blogo">
+  <b-row class="con">
+    <b-col class="badgePic rows">
+      <img src="@/assets/image2.png" class="blogo" />
       <h5 class="b">{{ badgename }}</h5>
       <p class="b">{{ venue }}</p>
       <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>
     </b-col>
-    <b-col>
-    <form class="signupform" @submit.prevent="createBadge">
-      <center>
-        <h1 class="sign">Offer A Badge</h1>
-      </center>
-      <label>
-        <div class="fixedwidth">
-          <p class="label-txt">Certificate name</p>
-          <input
-            type="text"
-            class="input"
-            name="badgename"
-            v-model="badgename"
-            autocomplete="off"
-            required
-          >
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
+    <b-col class="rows">
+      <form class="signupform Form" @submit.prevent="createBadge">
+        <center>
+          <h2 class="sign">Offer A Badge</h2>
+        </center>
+        <div class="holder">
+        <b-input v-model="badgename" autocomplete="off" placeholder="Certificate name | award name " required />
         </div>
-      </label>
-      <label>
-        <div class="fixedwidth">
-          <p class="label-txt">Name of the event</p>
-          <input type="text" class="input" name="venue" v-model="venue" autocomplete="off" required>
-          <div class="line-box">
-            <div class="line"></div>
-          </div>
+        <div class="holder">
+        <b-input v-model="venue" autocomplete="off" placeholder="Name of event" required />
         </div>
-      </label>
-      <label class="ln">
-        <p id="gend" class="label-txt">Date</p>
-        <table class="bday">
-          <td>
-            <input
-              autocomplete="off"
-              type="text"
-              class="BD"
-              id="mnth"
-              placeholder="Month"
-              min="1"
-              max="12"
-              required
-              v-model="date.month"
-            >
-            <div class="month">
-              <h5 class="m" @click="month('January')">January</h5>
-              <h5 class="m" @click="month('February')">February</h5>
-              <h5 class="m" @click="month('March')">March</h5>
-              <h5 class="m" @click="month('April')">April</h5>
-              <h5 class="m" @click="month('May')">May</h5>
-              <h5 class="m" @click="month('June')">June</h5>
-              <h5 class="m" @click="month('July')">July</h5>
-              <h5 class="m" @click="month('August')">August</h5>
-              <h5 class="m" @click="month('September')">September</h5>
-              <h5 class="m" @click="month('October')">October</h5>
-              <h5 class="m" @click="month('November')">November</h5>
-              <h5 class="m" @click="month('December')">December</h5>
-            </div>
-          </td>
-          <td id="day">
-            <input
-              type="number"
-              class="BD"
-              placeholder="Day"
-              min="1"
-              max="32"
-              required
-              v-model="date.day"
-            >
-          </td>
-          <td>
-            <input
-              type="number"
-              class="BD"
-              placeholder="Year"
-              min="1990"
-              max="2019"
-              required
-              v-model="date.year"
-            >
-          </td>
-        </table>
-        <div class="line-box">
-          <div class="line"></div>
+        <div class="holder drow">
+          <p class="labl">Date</p>
+          <table class="bday table">
+            <td  class="inpt d">
+              <b-input
+                class="BD table"
+                id="mnth"
+                v-model="date.month"
+                autocomplete="off"
+                placeholder="Month"
+                min="1"
+                ref="month"
+                max="12"
+                @focus="focus = true"
+                required
+              />
+
+              <div class="month" v-show="focus">
+                <div v-for="(m,n) in cal" :key="n">
+                  <h5 class="m" @click="month(m)">{{m}}</h5>
+                </div>
+              </div>
+            </td>
+            <td id="day" class="inpt d">
+              <b-input
+                type="number"
+                v-model="date.day"
+                autocomplete="off"
+                placeholder="Day"
+                min="1"
+                max="32"
+                required
+              />
+            </td>
+            <td  class="inpt d">
+              <b-input
+                type="number"
+                autocomplete="off"
+                placeholder="Year"
+                min="1990"
+                max="2019"
+                required
+                v-model="date.year"
+              />
+            </td>
+          </table>
         </div>
-      </label>
-      <button id="postB" class="btn btn-primary btn-lg">
-        <span v-if="sending">Creating&nbsp;
-          <b-spinner class="align-middle"></b-spinner>
-        </span>
-        <span v-else>Submit</span>
-      </button>
-    </form>
+       <div class="bhldr">
+        <b-button @click="cancel" class="btn btn-danger btn-lg nm">Cancel</b-button>
+         <b-button class="btn btn-lg nm" type="submit" variant="primary">
+          <span v-if="sending">
+            Creating&nbsp;
+            <b-spinner class="align-middle"></b-spinner>
+          </span>
+          <span v-else>Submit</span>
+        </b-button>
+       </div>
+      </form>
     </b-col>
   </b-row>
 </template>
@@ -119,7 +94,22 @@ export default {
       venue: "",
       date: { month: "", day: "", year: "" },
       sending: false,
-      rep: 0
+      rep: 0,
+      cal: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      focus: false
     };
   },
   methods: {
@@ -142,8 +132,12 @@ export default {
           });
       });
     },
+    cancel() {
+      this.$emit("cancel");
+    },
     month(m) {
       this.date.month = m;
+      this.focus = false;
     },
     async offerBadge() {
       var ok = false;
@@ -202,33 +196,67 @@ export default {
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
-  },
-
-  mounted() {
-    $(".input").focus(function() {
-      $(this)
-        .parent()
-        .find(".label-txt")
-        .addClass("label-active");
-    });
-
-    $(".input").focusout(function() {
-      if ($(this).val() == "") {
-        $(this)
-          .parent()
-          .find(".label-txt")
-          .removeClass("label-active");
-      }
-    });
-
-    $("#mnth").focus(function() {
-      if ($(".month").is(":hidden")) {
-        $("#mnth").val("");
-        $(".month").slideDown();
-      } else if ($("#mnth").val() != "") {
-        $(".month").slideUp();
-      }
-    });
   }
 };
 </script>
+<style scoped>
+  .holder {
+    margin-bottom: 30px;
+    margin-top: 30px;
+    margin-left:0px;
+    margin-right: 0px;
+    text-align: left;
+  }
+
+  .labl {
+    margin:0;
+    padding:0;
+    color:#555f63;
+  }
+
+  .table {
+    /* border:none; */
+    margin:0;
+  }
+
+  .rows {
+    margin:0;
+    padding-left:0;
+    padding-right:0;
+
+  }
+
+  .bhldr {
+    text-align: right;
+  }
+
+  .nm {
+    margin:5px;
+  border-radius: 4px;
+  }
+
+  .inpt {
+    margin-left: 0;
+    margin-right: 0;
+    padding:0;
+  }
+
+  .drow {
+    margin-top:0px;
+  }
+  .d {
+    padding-top:5px;
+  }
+
+  .con {
+    margin: 0;
+    padding:0;
+  }
+
+  .Form {
+    width:100%;
+    padding: 10px;
+    height: 100%;
+    background: #e1f1f7;
+  }
+</style>

@@ -28,7 +28,7 @@
       <div v-for="(badge, index) in badgelist" :key="index">
         <b-row v-if="badge.granted" class="row" >
           <div class="badgeicon" v-bind:class="{zoomin: resized}" >
-            <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+Math.floor(Math.random() * 11)+".jpg")})`}'>
+            <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+badge.imgnum+".jpg")})`}'>
             </div>
             <div class="background">
               <div class="bcontent">
@@ -79,20 +79,24 @@
           required
         />
 
-        <div class="btnrow" v-if="!availing">
-          <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
-          <b-button
-            @click="$bvModal.hide('availBadge-modal')"
-            variant="danger"
-            class="btn btn-block"
-            v-on:click="reset"
-          >Cancel</b-button>
-        </div>
-        <b-row v-else class="add">
-          <span>
+        <b-row class="btnrow nosh" v-if="!availing">
+          <b-col class="bl">
+              <b-button
+              @click="$bvModal.hide('availBadge-modal')"
+              variant="danger"
+              class="btn btn-block"
+              v-on:click="reset"
+            >Cancel</b-button>
+          </b-col>
+          <b-col class="br">
+            <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
+          </b-col>
+        </b-row>
+        <b-row v-else class="add nosh">
+          <div>
             <b-spinner class="align-middle"></b-spinner>&nbsp;
             <strong>Searching badge...</strong>
-          </span>
+          </div>
         </b-row>
       </form>
     </b-modal>
@@ -111,27 +115,8 @@ export default {
   },
   data() {
     return {
-      // badgelist: [
-      //   {
-      //     granted: true,
-      //     badgename: "First Place",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 },
-      //     descriptions:
-      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-      //     organization: "Passerelless numeriques"
-      //   },
-      //   {
-      //     granted: true,
-      //     badgename: "First Place",
-      //     venue: "Passerelles Numeriques coding contest",
-      //     date: { month: "June", day: 23, year: 2019 },
-      //     descriptions:
-      //       "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-      //     organization: "Passerelless numeriques"
-      //   }
-      // ],
       badgelist: [],
+      // badgelist: [],
       badgeCode: "",
       hasData: false,
       error: false,
@@ -139,7 +124,7 @@ export default {
       availing: false,
       size: 0,
       resized: false,
-      isLoading: true,
+      isLoading: false,
       sm: false,
     };
   },
@@ -182,7 +167,7 @@ export default {
       $(".binput").css({ "border-color": "gray" });
     },
     handleResize() {
-      if (window.innerWidth < 1200) {
+      if (window.innerWidth < 900) {
         this.resized = true;
         if (window.innerWidth < 600) {
           this.sm = true;
@@ -199,26 +184,95 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   created() {
+    this.badgelist = [
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        }
+      ];
+      var num =0;
+    this.badgelist.forEach(element => {
+      element["imgnum"] = num;
+      num += 1;
+      if (num > 10) {
+        num = 0;
+      }
+    });
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-    axios
-      .post("http://localhost:8081/user/userbadges", {
-        user: this.$store.getters.token
-      })
-      .then(res => {
-        this.isLoading = false;
-        console.log("badgess" + res.data.badges);
-        this.badgelist = res.data.badges.reverse();
-        console.log({ badges: this.badgelist });
-        if (this.badgelist.length == 0) {
-          this.hasData = true;
-        }
-      });
+    // axios
+    //   .post("http://localhost:8081/user/userbadges", {
+    //     user: this.$store.getters.token
+    //   })
+    //   .then(res => {
+    //     this.isLoading = false;
+    //     console.log("badgess" + res.data.badges);
+    //     this.badgelist = res.data.badges.reverse();
+    //     console.log({ badges: this.badgelist });
+    //     if (this.badgelist.length == 0) {
+    //       this.hasData = true;
+    //     }
+    //     var num = 0;
+    //     this.badges.forEach(badge => {
+    //       badge["imgnum"] = num;
+    //       num += 1;
+    //         if (num > 10) {
+    //         num = 0;
+    //       }
+    //     })
+    //   });
   }
 };
 </script>
 <style scoped>
+.bl {
+  margin-right: 0;
+  margin-left: 0;
+ padding-right: 5px;
+  padding-left: 5px;
+
+}
+
+.br {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+
+}
 .nb {
   padding-left: 7px;
   padding-right: 7px;
@@ -245,9 +299,6 @@ export default {
 .btnrow {
   background: white;
   padding: 0;
-  box-shadow: none;
-  -webkit-box-shadow: 0px 2px 6px white;
-  box-shadow: 0px 2px 6px white;
 }
 .blogo {
   margin-top: 30px;
@@ -271,6 +322,14 @@ export default {
   background: #f2f8fa;
   -webkit-box-shadow: 0px 1px 6px #74818f;
   box-shadow: 0px 1px 6px #74818f;
+}
+
+.nosh {
+  margin:0;
+  padding:0;
+   -webkit-box-shadow: 0px 1px 6px white;
+  box-shadow: 0px 1px 6px white;
+  background: white;
 }
 .badgeicon {
   /* -webkit-filter: opacity(80%);
@@ -422,9 +481,11 @@ label {
 }
 
 .add {
-  color: #0071ff;
   text-align: center;
-  margin-left: 27px;
+  color: #0071ff;
+  padding: 10px;
+  background: lightblue;
+  border-radius: 5px;
 }
 
 .binput {
