@@ -3,7 +3,7 @@
     <center>
       <div class="holder">
         <div class="choices">
-          <span class="ch">Create an account as</span>
+          <!-- <span class="ch">Create an account as</span> -->
           <button
             id="org"
             class="btn btn-default"
@@ -86,7 +86,7 @@ export default {
 
 .holder {
   padding: 0;
-  width: 970px;
+  /* width: 970px; */
   /* margin-top: 80px; */
   text-align: right;
   margin-bottom:0; 

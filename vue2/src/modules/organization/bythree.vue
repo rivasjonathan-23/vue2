@@ -40,8 +40,10 @@ export default {
   },
   methods: {
     handleResize() {
+      console.log(window.innerWidth);
       if (window.innerWidth < 900) {
         this.resized = true;
+        
       } else {
         this.resized = false;
       }
@@ -74,7 +76,7 @@ export default {
   padding: 5px;
 }
 .box {
-  width: 268px;
+  width: 279px;
   overflow: hidden;
   height: 400px;
   text-align: center;
@@ -94,7 +96,7 @@ export default {
 }
 .holder {
   margin: 0;
-  background: red;
+  padding:0;
 }
 .binfo {
   margin-bottom: 1px;

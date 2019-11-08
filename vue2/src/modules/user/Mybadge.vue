@@ -293,8 +293,9 @@ export default {
   text-align: center;
   font-family: Verdana;
   font-size: 16px;
-  height: 420px;
-  border-right:4px solid #779cb5
+  height: 390px;
+  border-right:6px solid #779cb5;
+  border-bottom:8px solid #f2f8fa;
 }
 .btnrow {
   background: white;
@@ -378,6 +379,7 @@ export default {
 
 .zoomin {
   width: 100%;
+  border:none;
 }
 
 .btn2 {
@@ -442,6 +444,7 @@ export default {
 .fit {
   width:100%;
   text-align: center;
+  border:none;
 }
 .tbadge {
   font-size: 18px;

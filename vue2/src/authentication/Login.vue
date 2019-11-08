@@ -6,7 +6,8 @@
         <!-- <label>
         <p class="label-txt">Username</p>-->
         <div class="inputholder">
-          <b-input type="text" placeholder="username" required v-model="username" />
+          <span>Username</span>
+          <b-input type="text" required v-model="username" />
         </div>
         <!-- <div class="line-box">
             <div class="line"></div>
@@ -15,7 +16,8 @@
         <!-- <label>
         <p class="label-txt">Password</p>-->
         <div class="inputholder">
-          <b-input type="password" placeholder="Password" required v-model="password" />
+           <span>Password</span>
+          <b-input type="password" required v-model="password" />
         </div>
         <!-- <div class="line-box">
             <div class="line"></div>
@@ -26,12 +28,11 @@
           type="submit"
           class="lgnbtn"
           variant="primary"
-          v-if="!loading"
-        >Login</b-button>
-        <span v-else class="submitted">
-          <span class="ldword">Loading&nbsp;</span>
+        ><span v-if="!loading">Login</span> <span v-else>
+          <span>Loading&nbsp;</span>
           <b-spinner class="align-middle"></b-spinner>&nbsp;
-        </span>
+        </span></b-button>
+       
       </form>
     </center>
   </div>
@@ -76,7 +77,7 @@ export default {
     handleResize() {
       if (window.innerWidth < 450) {
         this.resized = true;
-        $("#lgn").css({ width: $("#lgn").innerHeight });
+       
       } else {
         this.resized = false;
       }
@@ -117,7 +118,7 @@ export default {
 
 <style scoped>
 .align-middle {
-  color: rgb(3, 78, 133);
+  color:white;
   height: 30px;
   width: 30px;
 }
@@ -138,9 +139,9 @@ export default {
 .inputholder {
   margin-top: 30px;
   margin-bottom: 30px;
+  text-align: left;
 }
 .lgnbtn {
-  background: (3, 78, 133, 0.9);
   font-family: verdana;
   font-size: 18px;
 }
@@ -169,6 +170,7 @@ export default {
   padding-top: 150px;
   padding-bottom: 100px;
   width: 100%;
+  /* background:red; */
   height: 100%;
 }
 .input {

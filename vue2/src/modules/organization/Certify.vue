@@ -1,5 +1,5 @@
  <template>
-  <div id="certify">
+  <div class="certify" v-bind:class="{nopdng: resized}">
     <div class="createNnum">
       <b-button
         id="createC"
@@ -53,9 +53,9 @@
         </div>
         <div class="recContainer" v-bind:class="{small: resized}">
           <div id="bmenu1">
-            <span class="tiRec" v-bind:class="{fit: sm}">Recipients</span>
+            <!-- <span class="tiRec" v-bind:class="{fit: sm}">Recipients</span> -->
             <span class="cuRec" v-bind:class="{fit: sm}">
-              <span>Number of recipients&nbsp;</span>
+              <span>Recipients&nbsp;</span>
               <span class="nrec">{{badge.recipient.length}}</span>
             </span>
             <span class="cuRec" v-bind:class="{fit: sm}">
@@ -792,7 +792,7 @@ input:focus {
 }
 
 .recContainer {
-  width: 59%;
+  width: 60%;
   float: left;
   margin-right: 0;
   margin-bottom: 24px;
@@ -973,15 +973,20 @@ b-modal {
   padding-top: 500px;
 }
 
-#certify {
+.certify {
   text-align: left;
   /* background: #f2f7fa; */
   margin-top: 0;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 40px;
+  padding-right: 40px;
   padding-top: 20px;
 
   font-family: verdana;
+}
+
+.nopdng {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .modl {
@@ -996,6 +1001,9 @@ hr {
   margin-top: 25px;
   margin-bottom: 10px;
   border-radius: 0;
+  padding:0;
+  margin-right: 0;
+  margin-left: 0;
   width: 100%;
   height: 400px;
   /* border-bottom:2px solid #dce2e6; */
