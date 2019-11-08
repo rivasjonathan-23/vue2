@@ -1,27 +1,37 @@
 <template>
   <div class="container">
     <center>
-      <form id="lgn" @submit.prevent="login">
+      <form class="lgn" id="lgn" v-bind:class="{small: resized}" @submit.prevent="login">
         <h1 class="sign">Sign in</h1>
-
-        
-        <label>
-          <p class="label-txt">ENTER USERNAME</p>
-          <input type="text" class="input" required v-model="username" />
-          <div class="line-box">
+        <!-- <label>
+        <p class="label-txt">Username</p>-->
+        <div class="inputholder">
+          <b-input type="text" placeholder="username" required v-model="username" />
+        </div>
+        <!-- <div class="line-box">
             <div class="line"></div>
           </div>
-        </label>
-        <label>
-          <p class="label-txt">ENTER PASSWORD</p>
-          <input type="password" class="input" required v-model="password" />
-          <div class="line-box">
+        </label>-->
+        <!-- <label>
+        <p class="label-txt">Password</p>-->
+        <div class="inputholder">
+          <b-input type="password" placeholder="Password" required v-model="password" />
+        </div>
+        <!-- <div class="line-box">
             <div class="line"></div>
           </div>
-        </label>
-
-        <button v-show="!loading" type="submit">submit</button>
-        <span v-show="loading">Loading...</span>
+        </label>-->
+        <b-button
+          v-on:click="redirect('/signUpAs')"
+          type="submit"
+          class="lgnbtn"
+          variant="primary"
+          v-if="!loading"
+        >Login</b-button>
+        <span v-else class="submitted">
+          <span class="ldword">Loading&nbsp;</span>
+          <b-spinner class="align-middle"></b-spinner>&nbsp;
+        </span>
       </form>
     </center>
   </div>
@@ -32,26 +42,26 @@
 import $ from "jquery";
 import axios from "axios";
 
-
-
 export default {
   name: "login",
   data() {
     return {
       username: "",
       password: "",
-      loading: false
+      loading: false,
+      resized: false
     };
   },
   methods: {
     login() {
       this.loading = true;
       let cred = { username: this.username, password: this.password };
-       this.$store.dispatch("login", cred)
-        .then((res) => {
-           console.log(res)
+      this.$store
+        .dispatch("login", cred)
+        .then(res => {
+          console.log(res);
           if (res == "Regular user") {
-            console.log(res)
+            console.log(res);
             this.loading = false;
             this.$router.push("/user");
           } else {
@@ -62,14 +72,31 @@ export default {
           this.loading = false;
           alert("Invalid credentials!");
         });
+    },
+    handleResize() {
+      if (window.innerWidth < 450) {
+        this.resized = true;
+        $("#lgn").css({ width: $("#lgn").innerHeight });
+      } else {
+        this.resized = false;
+      }
     }
+  },
+  created() {
+    window.addEventListener("resize", this.handleResize);
+    this.size = window.innerWidth;
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
   },
   mounted() {
     $(".input").focus(function() {
       $(this)
         .parent()
         .find(".label-txt")
-        .addClass("label-active").css({"color":"#0071ff"});
+        .addClass("label-active")
+        .css({ color: "#0071ff" });
     });
 
     $(".input").focusout(function() {
@@ -82,31 +109,63 @@ export default {
       $(this)
         .parent()
         .find(".label-txt")
-        .css({"color":"#555657"});
+        .css({ color: "#555657" });
     });
   }
 };
 </script>
 
 <style scoped>
-#lgn {
+.align-middle {
+  color: rgb(3, 78, 133);
+  height: 30px;
+  width: 30px;
+}
+
+.submitted {
+  color: rgb(3, 78, 133);
+  background: #b7d4eb;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.ldword {
+  font-weight: bold;
+  font-family: verdana;
+  color: rgb(3, 78, 133);
+}
+.inputholder {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.lgnbtn {
+  background: (3, 78, 133, 0.9);
+  font-family: verdana;
+  font-size: 18px;
+}
+.lgn {
   border: 1px solid lightgrey;
-  width: 400px;
+  width: 360px;
   /* margin-top: 150px; */
   margin-bottom: 40px;
   background: white;
-  padding: 40px;
+  padding: 30px;
   text-align: center;
+  font-family: verdana;
   -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }
 
+.small {
+  width: 100%;
+}
 .container {
+  font-family: verdana;
   position: relative;
   justify-content: center;
   margin: 0;
-
   padding-top: 150px;
   padding-bottom: 100px;
   width: 100%;
@@ -125,9 +184,9 @@ label {
   position: absolute;
   top: -1.6em;
   font-weight: normal;
+  font-family: verdana;
   padding: 10px;
-  font-family: sans-serif;
-  font-size: 1em;
+  font-size: 16px;
   letter-spacing: 1px;
   color: #555657;
   transition: ease 0.2s;
@@ -135,7 +194,7 @@ label {
 }
 
 .label-active {
-  color:#0071ff;
+  color: #0071ff;
   font-size: 0.8em;
   top: -3em;
 }
@@ -171,30 +230,16 @@ label {
   width: 100%;
 }
 
-
-
-button {
-  display: inline-block;
-  padding: 12px 24px;
-  background: rgb(220, 220, 220);
-  font-weight: bold;
-  color: rgb(120, 120, 120);
-  border: none;
-  outline: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: ease 0.3s;
-}
-
 button:hover {
   background: #0071ff;
   color: #ffffff;
 }
 
 .sign {
+  font-family: verdana;
   padding: 0px;
   margin-top: 0;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 </style>
 

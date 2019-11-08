@@ -159,6 +159,7 @@ p {
   -webkit-box-shadow: 0px 1px 5px #545f6b;
   box-shadow: 0px 1px 5px #545f6b;
   height: 250px;
+  border:1px solid white;
   background: white;
 }
 .prfl {

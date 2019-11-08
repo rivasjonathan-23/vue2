@@ -9,7 +9,7 @@
           <h5 class="binfo bname">{{badge.badgename}}</h5>
           <p class="binfo">{{badge.venue}}</p>
           <p class="binfo date" >{{ badge.date.month+" "+badge.date.day+" "+badge.date.year }}</p>
-          <p class="binfo rec">Given to&nbsp;<span class="num">{{ badge.recipient.length }}</span>&nbsp;<span v-if="badge.recipient.length > 1">recipients</span>
+          <p class="binfo rec">Given to&nbsp;<span class="num">{{ badge.recipient }}</span>&nbsp;<span v-if="badge.recipient > 1">recipients</span>
           <span v-else>recipient</span></p>
         </div>
       </div>

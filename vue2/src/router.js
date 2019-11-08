@@ -88,18 +88,18 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        if (store.getters.isLoggedIn) {
-          store.dispatch("identifyUser").then((data) => {
-            console.log(data)
-            if (data) {
+        // if (store.getters.isLoggedIn) {
+        //   store.dispatch("identifyUser").then((data) => {
+        //     console.log(data)
+        //     if (data) {
               next();
-            } else {
-              next("/login");
-            }
-          })
-        } else {
-          next("/login");
-        }
+        //     } else {
+        //       next("/login");
+        //     }
+        //   })
+        // } else {
+        //   next("/login");
+        // }
       },
       children: [
         {
@@ -119,18 +119,18 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        if (store.getters.isLoggedIn) {
-          store.dispatch("identifyUser").then((data) => {
-            console.log(data);
-            if (!data) {
+        // if (store.getters.isLoggedIn) {
+        //   store.dispatch("identifyUser").then((data) => {
+        //     console.log(data);
+        //     if (!data) {
               next();
-            } else {
-              next("/login");
-            }
-          })
-        } else {
-          next("/login");
-        }
+        //     } else {
+        //       next("/login");
+        //     }
+        //   })
+        // } else {
+        //   next("/login");
+        // }
       },
       children: [
         {
