@@ -10,6 +10,7 @@ import userpage from "@/views/Userpage.vue";
 import orgpage from "@/views/Organizationpage.vue";
 
 
+
 // import UserUpdate from "./modules/user/Updateform.vue";
 // import UserNewsfeed from "./modules/user/Newsfeed.vue";
 import UserBadgelist from "./modules/user/Mybadge.vue";
@@ -79,7 +80,17 @@ let router = new Router({
             next("/");
           }
         },
-      })
+      }),
+      children: [
+        {path: "organization",
+        component: OrgSignUp
+    
+        },
+        {
+          path: "",
+          component: FullSignUp
+        }
+      ]
     },
     {
       path: "/user",
@@ -88,18 +99,18 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        // if (store.getters.isLoggedIn) {
-        //   store.dispatch("identifyUser").then((data) => {
-        //     console.log(data)
-        //     if (data) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data)
+            if (data) {
               next();
-        //     } else {
-        //       next("/login");
-        //     }
-        //   })
-        // } else {
-        //   next("/login");
-        // }
+            } else {
+              next("/login");
+            }
+          })
+        } else {
+          next("/login");
+        }
       },
       children: [
         {
@@ -119,18 +130,18 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        // if (store.getters.isLoggedIn) {
-        //   store.dispatch("identifyUser").then((data) => {
-        //     console.log(data);
-        //     if (!data) {
+        if (store.getters.isLoggedIn) {
+          store.dispatch("identifyUser").then((data) => {
+            console.log(data);
+            if (!data) {
               next();
-        //     } else {
-        //       next("/login");
-        //     }
-        //   })
-        // } else {
-        //   next("/login");
-        // }
+            } else {
+              next("/login");
+            }
+          })
+        } else {
+          next("/login");
+        }
       },
       children: [
         {

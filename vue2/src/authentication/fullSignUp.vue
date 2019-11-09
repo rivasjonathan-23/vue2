@@ -1,184 +1,189 @@
 <template>
-  <div class="innercont">
-    <b-form @submit.prevent="register">
-      <b-row>
-        <b-col sm="4">
-          <p class="sign">Sign Up</p>
-          <div class="inputholder">
-            <span>Username</span>
-            <b-input type="text" placeholder="Username" required v-model="username"></b-input>
-            <transition name="slide-fade">
-              <span class="err" v-if="err">Username already taken!</span>
-            </transition>
-          </div>
-          <div class="inputholder">
-            <b-input type="password" placeholder="Password" required v-model="password"></b-input>
-            <transition name="slide-fade">
-              <span
-                class="err"
-                v-show=" password.length < 8 && password  != ''"
-              >must be at least 8 characters!</span>
-            </transition>
-          </div>
-          <div class="inputholder">
-            <b-input
-              type="password"
-              placeholder="Confirm passwords"
-              required
-              v-model="confirmpassword"
-            ></b-input>
-            <transition name="slide-fade">
-              <span
-                class="err"
-                v-show="confirmpassword != password && confirmpassword && password"
-              >Password doesn't match!</span>
-            </transition>
-          </div>
-        </b-col>
-        <b-col id="perinfo" sm="8">
-          <p class="sign2">Personal Information</p>
-          <b-row class="fllnameholder">
-            <b-col class="fncol">
-              <div class="inputholder2">
+  <div class="innercont" v-bind:class="{ftsize: resized}">
+    <form @submit.prevent="register">
+      <div class="accinfo">
+        <p class="sign">Sign Up</p>
+        <div class="inputholder">
+          <span>Username</span>
+          <b-input type="text" class="binput" required v-model="username"></b-input>
+          <transition name="slide-fade">
+            <span class="err" v-if="err">Username already taken!</span>
+          </transition>
+        </div>
+         <div class="inputholder">
+          <span>Email</span>
+          <b-input type="email" class="binput" required v-model="email"></b-input>
+        </div>
+        <div class="inputholder">
+          <span>Password</span>
+          <b-input type="password" class="binput" required v-model="password"></b-input>
+          <transition name="slide-fade">
+            <span
+              class="err"
+              v-show=" password.length < 8 && password  != ''"
+            >must be at least 8 characters!</span>
+          </transition>
+        </div>
+        <div class="inputholder">
+          <span>Confirm Password</span>
+          <b-input type="password" class="binput" required v-model="confirmpassword"></b-input>
+          <transition name="slide-fade">
+            <span
+              class="err"
+              v-show="confirmpassword != password && confirmpassword && password"
+            >Password doesn't match!</span>
+          </transition>
+        </div>
+      </div>
+      <div class="perinfo">
+        <p class="sign2">Personal Information</p>
+
+        <div class="inputholder">
+          <table>
+            <tr>
+              <td>
                 <span>Firstname</span>
-                <b-input type="text" placeholder="First name" required v-model="firstname"></b-input>
-              </div>
-            </b-col>
-            <b-col class="fncol">
-              <div class="inputholder2">
+                <b-input
+                  type="text"
+                  class="binput"
+                  required
+                  v-model="firstname"
+                ></b-input>
+              </td>
+              <td>
                 <span>Lastname</span>
-                <b-input type="text" placeholder="Last name" required v-model="lastname"></b-input>
+                <b-input
+                  type="text"
+                  class="binput"
+                  required
+                  v-model="lastname"
+                ></b-input>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="inputholder">
+          <span>Address</span>
+          <b-input type="text" class="binput" required v-model="address"></b-input>
+        </div>
+        <div class="inputholder bdd">
+          <span>Date of birth</span>
+          <table class="bday">
+            <td>
+              <b-input
+                class="binput"
+                autocomplete="off"
+                type="text"
+                placeholder="Month"
+                min="1"
+                id="mnth"
+                max="12"
+                required
+                v-model="birthdate.month"
+              ></b-input>
+              <div class="month">
+                <div v-for="(m,n) in cal" :key="n">
+                  <h5 class="m" @click="month(m)">{{m}}</h5>
+                </div>
               </div>
-            </b-col>
-          </b-row>
-          <div class="inputholder2">
-            <span>Address</span>
-            <b-input type="text" placeholder="Address" required v-model="address"></b-input>
-          </div>
+            </td>
+            <td>
+              <b-input
+                type="number"
+                placeholder="Day"
+                min="1"
+                max="32"
+                class="binput"
+                required
+                v-model="birthdate.day"
+              ></b-input>
+            </td>
+            <td>
+              <b-input
+                type="number"
+                placeholder="Year"
+                min="1990"
+                max="2019"
+                class="binput"
+                required
+                v-model="birthdate.year"
+              ></b-input>
+            </td>
+          </table>
+        </div>
+        <div class="inputholder">
           <table class="srow">
             <td>
-              <div class="fname">
-                <div class="inputholder2">
-                  <span>Age</span>
-                  <b-input type="number" placeholder="Age" required v-model="age" min="12"></b-input>
-                </div>
-              </div>
+              <span>Age</span>
+              <b-input
+                type="number"
+                class="binput"
+                required
+                v-model="age"
+                min="12"
+              ></b-input>
             </td>
-            <td>
-              <div class="fname">
-                <div class="inputholder2">
-                  <span>Birthdate</span>
-                  <table class="bday">
-                    <td>
-                      <b-input
-                        autocomplete="off"
-                        type="text"
-                        placeholder="Month"
-                        min="1"
-                        id="mnth"
-                        max="12"
-                        required
-                        v-model="birthdate.month"
-                      ></b-input>
-                      <div class="month">
-                        <div v-for="(m,n) in cal" :key="n">
-                          <h5 class="m" @click="month(m)">{{m}}</h5>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <b-input
-                        type="number"
-                        placeholder="Day"
-                        min="1"
-                        max="32"
-                        required
-                        v-model="birthdate.day"
-                      ></b-input>
-                    </td>
-                    <td>
-                      <b-input
-                        type="number"
-                        placeholder="Year"
-                        min="1990"
-                        max="2019"
-                        required
-                        v-model="birthdate.year"
-                      ></b-input>
-                    </td>
-                  </table>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div class="inputholder2 genders">
-                <span class="g">Gender</span>
-                <table>
-                  <tr>
-                    <td>
-                      <b-form-radio v-model="gender" class="Gender" value="A">
-                        <span class="glabel">Female</span>
-                      </b-form-radio>
-                    </td>
-                    <td>
-                      <b-form-radio v-model="gender" class="Gender" value="A">
-                        <span class="glabel">Female</span>
-                      </b-form-radio>
-                    </td>
-                  </tr>
-                </table>
-              </div>
+            <td class="genders">
+              <span class="g">Gender</span>
+              <table>
+                <tr>
+                  <td>
+                    <b-form-radio v-model="gender" class="Gender" value="Male">
+                      <span class="glabel">Male</span>
+                    </b-form-radio>
+                  </td>
+                  <td>
+                    <b-form-radio v-model="gender" class="Gender" value="Female">
+                      <span class="glabel">Female</span>
+                    </b-form-radio>
+                  </td>
+                </tr>
+              </table>
             </td>
           </table>
-          <div class="inputholder2">
-            <span>Email</span>
-            <b-input type="email" placeholder="Email" required v-model="email"></b-input>
-          </div>
-          <table class="lastrow">
-            <td>
-              <div class="inputholder2">
-                <span>Work</span>
-                <b-input
-                  type="text"
-                  placeholder="Occupation | optional"
-                  required
-                  v-model="occupation"
-                ></b-input>
-              </div>
-            </td>
-            <td>
-              <div class="inputholder2">
-                <span>Company</span>
-                <b-input
-                  type="text"
-                  placeholder="Occupation | optional"
-                  required
-                  v-model="occupation"
-                ></b-input>
-              </div>
-            </td>
-            <td id="years">
-              <div class="inputholder2">
-                <span>Years</span>
-                <b-input type="number" placeholder="Years" required v-model="years" min="1"></b-input>
-              </div>
-            </td>
-          </table>
-          <b-button
-            v-on:click="redirect('/signUpAs')"
-            type="submit"
-            class="lgnbtn"
-            variant="primary"
-          >
-            <span v-if="!loading">Login</span>
-            <span v-else>
-              <span>Loading&nbsp;</span>
-              <b-spinner class="align-middle"></b-spinner>&nbsp;
-            </span>
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-form>
+        </div>
+       
+        <span>Working already?</span>
+        <div class="inputholder">
+          <span>Work</span>
+          <b-input
+            type="text"
+            class="binput"
+            placeholder="Optional"
+            required
+            v-model="occupation"
+          ></b-input>
+        </div>
+        <div class="inputholder">
+          <span>Company</span>
+          <b-input
+            type="text"
+            class="binput"
+            placeholder="Optional"
+            required
+            v-model="company"
+          ></b-input>
+        </div>
+        <span>Or still studying?</span>
+        <div class="inputholder">
+          <span>School</span>
+          <b-input
+            type="text"
+            class="binput"
+            placeholder="Optional"
+            required
+            v-model="occupation"
+          ></b-input>
+        </div>
+        <b-button v-on:click="redirect('/signUpAs')" type="submit" class="lgnbtn" variant="primary">
+          <span v-if="!loading">Register</span>
+          <span v-else>
+            <span>Loading&nbsp;</span>
+            <b-spinner class="align-middle"></b-spinner>&nbsp;
+          </span>
+        </b-button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -194,16 +199,17 @@ export default {
       username: "",
       password: "",
       confirmpassword: "",
-      firstname: "Jonathan",
-      lastname: "Rivas",
-      email: "rivas@gmail.com",
-      age: 21,
-      address: "Sa imong heart ayeehh",
-      occupation: "POORgrammer",
-      gender: "Male",
-      birthdate: { month: "September", day: 23, year: 1998 },
+      firstname: "",
+      lastname: "",
+      email: "",
+      age: null,
+      address: "",
+      occupation: "",
+      company: "",
+      school:"",
+      gender: "",
+      birthdate: { month: "", day: null, year: null },
       isValid: true,
-      years: 10,
       err: false,
       type: "",
       loading: false,
@@ -221,7 +227,8 @@ export default {
         "November",
         "December"
       ],
-      focus: false
+      focus: false,
+      resized: false
     };
   },
 
@@ -284,32 +291,14 @@ export default {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/");
       });
-    }
-  },
-  created() {
-    if (
-      this.username != "" &&
-      this.password != "" &&
-      this.confirmpassword != ""
-    ) {
-      $(".label-txt1").addClass("label-active");
-    }
-    axios.get("http://localhost:8081/user/signedup").then(
-      response => {
-        if (response.data.username != null) {
-          this.isValid = true;
-          this.username = response.data.username;
-          this.password = response.data.password;
-          this.confirmpassword = response.data.password;
-          $(".label-txt1")
-            .addClass("label-active")
-            .css({ color: "#555657" });
-        }
-      },
-      err => {
-        console.log("error");
+    },
+    handleResize() {
+      if (window.innerWidth <= 650) {
+        this.resized = true;
+      } else {
+        this.resized = false;
       }
-    );
+    }
   },
   watch: {
     focus(val) {
@@ -323,25 +312,73 @@ export default {
     $("#mnth").focus(function() {
       $(".month").slideDown();
     });
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  created() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
   }
 };
 </script>
 
 
 <style scoped>
+.ws {
+  /* background:#fafcfc; */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+.binput {
+  background: #f5f9fa;
+}
+.perinfo {
+  /* background: white; */
+  overflow: visible;
+  padding: 0;
+  padding-top: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.accinfo {
+  width: 100%;
+  padding: 0;
+  position: relative;
+}
+.innercont {
+  padding: 0;
+  border-radius: 0;
+  width: 600px;
+  background: white;
+  text-align: center;
+  padding: 40px;
+}
+
+.ftsize {
+  width: 100%;
+  padding: 10px;
+}
+.bdd {
+  padding-top: 10px;
+}
+
 .genders {
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top:0;
+  padding-left: 40px;
+  padding-top: 0;
   padding-bottom: 0;
   position: relative;
   /* background:grey; */
   height: 10px;
-  
 }
 
 .g {
   top: 10px;
+  left: 20px;
   position: absolute;
 }
 .Gender {
@@ -351,24 +388,19 @@ export default {
 }
 .fncol {
   margin: 0;
+  width: 50%;
 }
 .month {
   padding: 0px;
   display: none;
   position: absolute;
-  border: 1px solid lightgray;
+  border: 1px solid black;
   z-index: 9999;
   background: #f7fafa;
 }
 .inputholder {
-  margin-top: 30px;
-  margin-bottom: 30px;
-  text-align: left;
-}
-
-.inputholder2 {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
   text-align: left;
 }
 
@@ -377,6 +409,7 @@ export default {
   padding: 3px;
   font-weight: normal;
   font-size: 15px;
+  background: #f5f9fa;
 }
 
 .slide-fade-enter-active {
@@ -455,34 +488,26 @@ h5:hover {
 
 .bd {
   width: 100%;
-  background: red;
 }
 .srow {
   margin-left: 0px;
-  padding:0;
-  margin-top:0;
+  padding: 0;
+  margin-top: 0;
   margin-bottom: 0;
   width: 100%;
 }
 
 .srow td {
-  padding-top:0;
-  padding-bottom:0;
-  width: 33%;
+  padding-top: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  width: 50%;
 }
 
 #years {
   width: 150px;
   padding-left: 20px;
-}
-
-#perinfo {
-  background: white;
-  overflow: visible;
-  padding: 40px;
-  margin: 0;
-  height: 100%;
-  text-align: left;
 }
 
 .gender {
@@ -495,7 +520,7 @@ h5:hover {
 .err {
   font-weight: normal;
   color: red;
-  font-size: 14px;
+  font-size: 11px;
   position: absolute;
   left: 0px;
 }
@@ -529,18 +554,15 @@ h5:hover {
   padding: 0;
   margin: 0;
   /* width: 50%; */
-  background: red;
 }
 .bday {
-  width: 250px;
-  padding: 0;
-  /* padding-top: 20px;
-  margin-top: 10px; */
+  width: 100%;
 }
 
 .bday td {
   padding: 0;
   width: 33%;
+  padding: 1px;
 }
 .ln {
   margin-top: 0;
@@ -563,105 +585,9 @@ table {
   overflow: visible;
 }
 
-.innercont {
-  padding: 0;
-  border-radius: 2px;
-  border: 1px solid #bdbebf;
-  /* overflow: hidden; */
-  /* width: 970px; */
-  /* height: 650px; */
-}
-
 .body {
   padding: 0;
   margin: 0;
-}
-
-label {
-  display: block;
-  position: relative;
-  margin: 40px 0px;
-}
-.label-txt {
-  position: absolute;
-  top: -1.6em;
-  font-weight: normal;
-  padding: 10px;
-  font-family: sans-serif;
-  font-size: 1em;
-  letter-spacing: 1px;
-  color: #555657;
-  transition: ease 0.2s;
-  margin-top: 15px;
-}
-
-.label-txt1 {
-  position: absolute;
-  top: -1.6em;
-  font-weight: normal;
-  padding: 10px;
-  font-family: sans-serif;
-  font-size: 1em;
-  letter-spacing: 1px;
-  color: #555657;
-  transition: ease 0.2s;
-  margin-top: 15px;
-}
-.label-txt2 {
-  position: absolute;
-  top: -1.6em;
-  padding: 10px;
-  font-family: sans-serif;
-  font-size: 1em;
-  font-weight: normal;
-  letter-spacing: 1px;
-  color: #555657;
-  transition: ease 0.2s;
-}
-
-.label-active {
-  color: #0071ff;
-  font-size: 0.8em;
-  top: -3em;
-}
-.input {
-  width: 100%;
-  padding: 10px;
-  /* height: 5px; */
-  background: transparent;
-  border: none;
-  outline: none;
-  text-align: left;
-}
-
-.line-box {
-  position: relative;
-  width: 100%;
-  height: 1px;
-  background: #555657;
-}
-
-.input {
-  font-weight: normal;
-}
-
-.line {
-  position: absolute;
-  width: 0%;
-  height: 2px;
-  top: 0px;
-  transform: translateX(0%);
-  background: #0071ff;
-  transition: ease 0.6s;
-}
-
-.input:focus + .line-box .line {
-  width: 100%;
-}
-
-button:hover {
-  background: #0071ff;
-  color: #ffffff;
 }
 
 .sign {
@@ -671,16 +597,17 @@ button:hover {
   font-weight: unset;
   font-family: verdana;
   font-weight: normal;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
 }
 .sign2 {
   padding: 0px;
   margin-top: 0;
   font-size: 25px;
   font-weight: unset;
+  padding-top: 0;
   font-family: verdana;
   font-weight: normal;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 </style>
 

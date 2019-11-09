@@ -75,11 +75,13 @@ export default {
 .pd-side {
   padding-left: 20px;
   padding-right: 20px;
+ 
 }
 
 .page {
   padding-top: 51px;
   width: 1200px;
+  background:white;
 }
 
 .small {

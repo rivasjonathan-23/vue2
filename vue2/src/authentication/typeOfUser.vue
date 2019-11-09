@@ -1,25 +1,17 @@
 <template>
-  <b-container class="contain">
+  <div class="contain">
+    <h2>Create account as</h2>
+      <b-button
+        class="btn org"
+        variant="primary"
+        v-bind:class="{pressed: change}"
+        v-on:click="signUpAs('/signUpAs/organization')"
+      >Organization</b-button>
+      <b-button v-bind:class="{unpressed: !change}" v-on:click="signUpAs('/signUpAs')"  variant="primary" class="btn reg">Regular user</b-button>
     <center>
-      <div class="holder">
-        <div class="choices">
-          <!-- <span class="ch">Create an account as</span> -->
-          <button
-            id="org"
-            class="btn btn-default"
-            v-on:click="signUpAs('Organization')"
-          >ORGANIZATION</button>
-          <button
-            id="reg"
-            v-on:click="signUpAs('Regular User')"
-            class="btn btn-default"
-          >REGULAR USER</button>
-        </div>
-        <FullSignUp v-show="type=='Regular User'"></FullSignUp>
-        <OrgSignUp v-show="type=='Organization'"></OrgSignUp>
-      </div>
+      <router-view></router-view>
     </center>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -31,7 +23,7 @@ export default {
   name: "TypeOfUser",
   data() {
     return {
-      type: "Regular User"
+      change: false,
     };
   },
   components: {
@@ -40,94 +32,85 @@ export default {
   },
   methods: {
     signUpAs(type) {
-      if (type == "Organization") {
-        $("#org").css({"background-color":"#034e85"})
-        $("#reg").css({"background-color":"#b8bcc2"})
-        this.type = type;
+      this.$router.push(type);
+      if (this.$router.currentRoute.path == "/signUpAs/organization") {
+       this.change = true;
       } else {
-        $("#reg").css({"background-color":"#034e85"})
-        $("#org").css({"background-color":"#b8bcc2"})
-        this.type = type;
+       this.change= false;
       }
-    },
-    
+    }
+  },
+  created() {
+     if (this.$router.currentRoute.path == "/signUpAs/organization") {
+       this.change = true;
+      } else {
+       this.change= false;
+      }
   }
 };
 </script>
 
 <style scoped>
-.contain {
-  /* background-image: url("~@/assets/background3.jpg");
-  background-size: cover; */
+.nav {
+  background: #e6eff5;
   text-align: center;
-  padding-top:65px;
-  text-align: center;
-  margin-top:0;
-  margin-left: 0;
-  margin-right:0;
-  padding-left: 0;
-  padding-right:0;
-  width: 100%;
-  font-weight: normal;
 }
 
-
+.contain {
+  /* background-image: url("~@/assets/background3.jpg");
+  background-size: cover;
+  background-attachment: fixed; */
+  padding-top: 65px;
+  text-align: center;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+  /* height: 140vh; */
+  font-weight: normal;
+}
 
 .tp {
   margin-bottom: 2px;
   padding-bottom: 0;
 }
 
-.choices {
-  border-bottom: none;
-  border-radius: 2px;
-  position: relative;
-}
 
-.holder {
-  padding: 0;
-  /* width: 970px; */
-  /* margin-top: 80px; */
-  text-align: right;
-  margin-bottom:0; 
-}
-.ch {
-  font-size: 17px;
-  font-weight: normal;
-  margin-right: 10px;
-  margin-bottom: 0;
-  padding-bottom: 0;
-  position:absolute;
-  bottom:4px;
-  right: 255px;
-  font-family: sans-serif;
-}
 
 .btn {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  background-color: #034e85;
+  margin: 5px;
   color: white;
   border: none;
   padding: 10px;
+  font-size:20px;
   padding-bottom: 8px;
   cursor: pointer;
   transition: ease 0.3s;
 }
 
-#org {
-  margin-right: 5px;
-  background-color:#b8bcc2;
+
+.org {
+  background-color: #d3e0e8;
+   color:#136ea8;
 }
 .btn:focus {
   outline: none;
 }
+.pressed {
+  background-color: #136ea8;
+  color:white;
+}
 
+.reg {
+  background-color: #d3e0e8;
+  color:#136ea8;
+}
 
-#option {
-  margin-top: 15%;
-  border-radius: 1px;
-  padding: 0;
+.unpressed {
+  background-color: #136ea8;
+  color:white;
 }
 
 .close {
@@ -136,10 +119,9 @@ export default {
   margin-right: 5px;
 }
 h2 {
-  border-bottom: 1px solid gray;
-  padding: 25px;
   margin: 0;
+  padding-top:20px;
+  font-family: verdana;
   padding-bottom: 10px;
 }
-
 </style>

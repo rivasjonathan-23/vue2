@@ -27,14 +27,6 @@ export default {
 
 <style scoped>
 
-.background {
-  /* position:absolute; */
-  width:1000em;
-  height: auto;
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-
-}
 
 
 .col-sm-3 {
@@ -65,13 +57,13 @@ body {
 
 .outercont {
   margin-top: 0;
-  width: 100vw;
+  width: 100%;
   padding-left:0;
   padding-right:0;
   margin-right:0;
   margin-left:0;
   height: 100vh;
-  background-image: url("~@/assets/background.jpg");
+  background-image: url("~@/assets/bb/10.jpg");
   background-size: cover;
   
 }

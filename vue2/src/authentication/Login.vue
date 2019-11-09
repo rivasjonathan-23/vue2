@@ -2,37 +2,28 @@
   <div class="container">
     <center>
       <form class="lgn" id="lgn" v-bind:class="{small: resized}" @submit.prevent="login">
-        <h1 class="sign">Sign in</h1>
-        <!-- <label>
-        <p class="label-txt">Username</p>-->
-        <div class="inputholder">
-          <span>Username</span>
-          <b-input type="text" required v-model="username" />
+        <div class="sign">
+          <h1 class="text">Sign in</h1>
         </div>
-        <!-- <div class="line-box">
-            <div class="line"></div>
+        <div class="loginbody">
+          <div class="inputholder">
+            <span>Username</span>
+            <b-input type="text" required v-model="username"/>
           </div>
-        </label>-->
-        <!-- <label>
-        <p class="label-txt">Password</p>-->
-        <div class="inputholder">
-           <span>Password</span>
-          <b-input type="password" required v-model="password" />
+
+          <div class="inputholder">
+            <span>Password</span>
+            <b-input type="password" required v-model="password"/>
+          </div>
+
+          <b-button type="submit" class="lgnbtn" variant="primary">
+            <span v-if="!loading">Login</span>
+            <span v-else>
+              <span>Loading&nbsp;</span>
+              <b-spinner class="align-middle"></b-spinner>&nbsp;
+            </span>
+          </b-button>
         </div>
-        <!-- <div class="line-box">
-            <div class="line"></div>
-          </div>
-        </label>-->
-        <b-button
-          v-on:click="redirect('/signUpAs')"
-          type="submit"
-          class="lgnbtn"
-          variant="primary"
-        ><span v-if="!loading">Login</span> <span v-else>
-          <span>Loading&nbsp;</span>
-          <b-spinner class="align-middle"></b-spinner>&nbsp;
-        </span></b-button>
-       
       </form>
     </center>
   </div>
@@ -77,7 +68,6 @@ export default {
     handleResize() {
       if (window.innerWidth < 450) {
         this.resized = true;
-       
       } else {
         this.resized = false;
       }
@@ -118,7 +108,7 @@ export default {
 
 <style scoped>
 .align-middle {
-  color:white;
+  color: white;
   height: 30px;
   width: 30px;
 }
@@ -149,14 +139,19 @@ export default {
   border: 1px solid lightgrey;
   width: 360px;
   /* margin-top: 150px; */
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
   background: white;
-  padding: 30px;
+  padding: 0px;
   text-align: center;
   font-family: verdana;
-  -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  margin:0;
+  border-radius: 0;
+}
+
+.loginbody {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
 }
 
 .small {
@@ -168,10 +163,9 @@ export default {
   justify-content: center;
   margin: 0;
   padding-top: 150px;
-  padding-bottom: 100px;
-  width: 100%;
-  /* background:red; */
-  height: 100%;
+  /* width: 200vw; */
+  /* background:lightblue; */
+  height: 100vh;
 }
 .input {
   font-weight: normal;
@@ -239,9 +233,14 @@ button:hover {
 
 .sign {
   font-family: verdana;
-  padding: 0px;
-  margin-top: 0;
-  margin-bottom: 30px;
+  padding: 5px;
+  margin: 0;
+  color: #445f6e;
+  background:#e3e7e8;
+}
+
+.text {
+  font-family: verdana;
 }
 </style>
 

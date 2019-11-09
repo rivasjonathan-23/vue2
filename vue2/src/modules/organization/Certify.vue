@@ -274,7 +274,7 @@ export default {
       tindex: 0,
       size: 0,
       resized: false,
-      isLoading: false,
+      isLoading: true,
       hasdata: false,
       sm: false,
     };
@@ -284,149 +284,149 @@ export default {
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-    this.badges =  [
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
+    // this.badges =  [
+    //     {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
            
-          ]
-        },
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }, {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        }
-      ];
-      var num = 0;
-      this.badges.forEach(badge => {
-        badge["imgnum"] = num;
-        num += 1;
-          if (num > 10) {
-          num = 0;
-        }
-      })
-    // axios
-    //   .post("http://localhost:8081/user/pendingbadges", {
-    //     data: this.$store.getters.token
-    //   })
-    //   .then(resp => {
-    //     (this.isLoading = false), (this.badges = resp.data.badges.reverse());
-    //     if (this.badges.length == 0) {
-    //       this.hasdata = false;
+    //       ]
+    //     },
+    //     {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }, {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         },
+    //          {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
+    //     },
+    //      {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
+    //     },
+    //      {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
+    //     },
+    //      {
+    //       badgename: "First placer",
+    //       code: "s8fs6df",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "Septembner", day: 23, year: 2019 },
+    //       recipient: [
+    //         {
+    //           username: "jrivas23",
+    //           fullname: "Jonathan Rivas",
+    //           _id: "asdfasdfgsdfiau23"
+    //         }
+    //       ]
     //     }
-    //     var num = 0;
-    //     this.badges.forEach(badge => {
-    //       badge["imgnum"] = num;
-    //       num += 1;
-    //         if (num > 10) {
-    //         num = 0;
-    //       }
-    //     })
-    //   });
+    //   ];
+    //   var num = 0;
+    //   this.badges.forEach(badge => {
+    //     badge["imgnum"] = num;
+    //     num += 1;
+    //       if (num > 10) {
+    //       num = 0;
+    //     }
+    //   })
+    axios
+      .post("http://localhost:8081/user/pendingbadges", {
+        data: this.$store.getters.token
+      })
+      .then(resp => {
+        (this.isLoading = false), (this.badges = resp.data.badges.reverse());
+        if (this.badges.length == 0) {
+          this.hasdata = false;
+        }
+        var num = 0;
+        this.badges.forEach(badge => {
+          badge["imgnum"] = num;
+          num += 1;
+            if (num > 10) {
+            num = 0;
+          }
+        })
+      });
   },
 
   methods: {

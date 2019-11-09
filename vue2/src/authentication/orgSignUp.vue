@@ -1,5 +1,71 @@
 <template>
-  <center>
+  <div class="innercont" v-bind:class="{ftsize: resized}">
+    <form @submit.prevent="register">
+      <div class="accinfo">
+        <p class="sign">Sign Up</p>
+        <div class="inputholder">
+          <span>Username</span>
+          <b-input type="text" class="binput" required v-model="username"></b-input>
+          <transition name="slide-fade">
+            <span class="err" v-if="err">Username already taken!</span>
+          </transition>
+        </div>
+        <div class="inputholder">
+          <span>Email</span>
+          <b-input type="email" class="binput" required v-model="email"></b-input>
+        </div>
+        <div class="inputholder">
+          <span>Password</span>
+          <b-input type="password" class="binput" required v-model="password"></b-input>
+          <transition name="slide-fade">
+            <span
+              class="err"
+              v-show=" password.length < 8 && password  != ''"
+            >must be at least 8 characters!</span>
+          </transition>
+        </div>
+        <div class="inputholder">
+          <span>Confirm Password</span>
+          <b-input type="password" class="binput" required v-model="confirmpassword"></b-input>
+          <transition name="slide-fade">
+            <span
+              class="err"
+              v-show="confirmpassword != password && confirmpassword && password"
+            >Password doesn't match!</span>
+          </transition>
+        </div>
+      </div>
+      <div class="perinfo">
+        <p class="sign2">About your organization</p>
+
+        <div class="inputholder">
+          <span>Name</span>
+          <b-input type="text" class="binput" required v-model="orgName"></b-input>
+        </div>
+        <div class="inputholder">
+          <span>Address</span>
+          <b-input type="text" class="binput" required v-model="address"></b-input>
+        </div>
+        <div class="inputholder">
+          <span>Year started</span>
+          <b-input type="text" class="binput" required v-model="years"></b-input>
+        </div>
+        <div class="inputholder">
+          <span>What you do | short description</span>
+          <b-input type="text" class="binput" required v-model="description"></b-input>
+        </div>
+
+        <b-button v-on:click="redirect('/signUpAs')" type="submit" class="lgnbtn" variant="primary">
+          <span v-if="!loading">Register</span>
+          <span v-else>
+            <span>Loading&nbsp;</span>
+            <b-spinner class="align-middle"></b-spinner>&nbsp;
+          </span>
+        </b-button>
+      </div>
+    </form>
+  </div>
+  <!-- <center>
     <div class="innercont">
       <b-form @submit.prevent="register">
         <b-row>
@@ -88,7 +154,7 @@
         </b-row>
       </b-form>
     </div>
-  </center>
+  </center>-->
 </template>
 
 <script>
@@ -102,10 +168,11 @@ export default {
       username: "",
       password: "",
       confirmpassword: "",
-      orgName: "Passerelles Numeriques",
-      email: "passerelles.numeriqeus.@gmail.com",
-      address: "Nasipit, Talamban, Cebu, Philippines",
-      description: "Our mission is to provide education, technical and professional training in the digital sector to young underprivileged people by leveraging their potential and willpower. We endeavour to truly develop their employability which will allow them and their families to escape poverty in a sustainable way, and contribute to the social and economic development of their countries.",
+      orgName: "",
+      email: "",
+      years: "",
+      address: "",
+      description:"",
       isValid: true,
       err: false,
       type: ""
@@ -123,7 +190,7 @@ export default {
         description: this.description,
         type: "Organization",
         badges: [],
-        posts: [],
+        posts: []
       };
       if (
         this.isValid &&
@@ -134,13 +201,12 @@ export default {
           .dispatch("orgSignUp", userInfo)
           .then(() => {
             this.err = false;
-            $("#unameErr").css({"background-color": "#555657"});
-            this.$router.push("/organization")
-            
-            })
+            $("#unameErr").css({ "background-color": "#555657" });
+            this.$router.push("/organization");
+          })
           .catch(err => {
             this.err = true;
-            $("#unameErr").css({"background-color": "red"});
+            $("#unameErr").css({ "background-color": "red" });
           });
       } else {
         alert("invalid credentials!");
@@ -218,6 +284,93 @@ export default {
 
 
 <style scoped>
+.ws {
+  /* background:#fafcfc; */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+.binput {
+  background: #f5f9fa;
+}
+.perinfo {
+  /* background: white; */
+  overflow: visible;
+  padding: 0;
+  padding-top: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.accinfo {
+  width: 100%;
+  padding: 0;
+  position: relative;
+}
+.innercont {
+  padding: 0;
+  border-radius: 0;
+  width: 600px;
+  background: white;
+  text-align: center;
+  padding: 40px;
+}
+
+.ftsize {
+  width: 100%;
+  padding: 10px;
+}
+.bdd {
+  padding-top: 10px;
+}
+
+.genders {
+  padding-left: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+  position: relative;
+  /* background:grey; */
+  height: 10px;
+}
+
+.g {
+  top: 10px;
+  left: 20px;
+  position: absolute;
+}
+.Gender {
+  margin: 0;
+  height: 10px;
+  padding: 0;
+}
+.fncol {
+  margin: 0;
+  width: 50%;
+}
+.month {
+  padding: 0px;
+  display: none;
+  position: absolute;
+  border: 1px solid black;
+  z-index: 9999;
+  background: #f7fafa;
+}
+.inputholder {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.m {
+  margin: 0;
+  padding: 3px;
+  font-weight: normal;
+  font-size: 15px;
+  background: #f5f9fa;
+}
+
 .slide-fade-enter-active {
   transition: all 0.5s ease;
 }
@@ -229,14 +382,15 @@ export default {
   transform: translateX(10px);
   opacity: 0;
 }
+
+.lgnbtn {
+  font-family: verdana;
+  font-size: 18px;
+}
+
 .lgt {
   color: red;
   text-decoration: underline;
-}
-
-.bcont {
-  margin: 0;
-  /* background:red; */
 }
 
 hr {
@@ -247,41 +401,72 @@ hr {
   margin: 1em 0;
   padding: 0;
 }
+
 .signup {
   overflow: auto;
   background: #e3e3e3;
   padding: 40px;
   text-align: center;
   border-right: none;
-  /* border: 1px solid #bdbebf; */
   height: 648px;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   border-right: 1px solid #b3b4b5;
 }
-
-#description {
-  overflow: visible;
+.uname {
+  text-decoration: underline;
+}
+h5 {
+  margin: 0;
+  padding: 3px;
+  font-weight: normal;
+  font-size: 15px;
 }
 
+h5:hover {
+  background-color: #0071ff;
+  color: white;
+}
+
+.month {
+  padding: 0px;
+  display: none;
+  position: absolute;
+  border: 1px solid lightgray;
+  z-index: 9999;
+  background: #f7fafa;
+}
+
+#mnth {
+  width: 100%;
+  margin-left: 0;
+}
+#gend {
+  font-size: 0.8em;
+}
+
+.bd {
+  width: 100%;
+}
 .srow {
   margin-left: 0px;
-  width: 400px;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.srow td {
+  padding-top: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  width: 50%;
 }
 
 #years {
   width: 150px;
   padding-left: 20px;
-}
-
-#perinfo {
-  overflow: auto;
-  padding: 40px;
-  margin: 0;
-  background:white;
-  border-radius: 5px;
-  height: 800px;
-  text-align: left;
 }
 
 .gender {
@@ -291,14 +476,10 @@ hr {
   padding: 0;
 }
 
-.rad {
-  margin: 16px;
-}
-
 .err {
   font-weight: normal;
   color: red;
-  font-size: 14px;
+  font-size: 11px;
   position: absolute;
   left: 0px;
 }
@@ -315,6 +496,33 @@ hr {
   padding-bottom: 0;
 }
 
+#day {
+  width: 10%;
+}
+
+.gg {
+  margin-bottom: 0;
+  /* height: 5px; */
+  /* padding-top: 5px; */
+  width: 100%;
+  background: green;
+}
+
+.gg td {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  /* width: 50%; */
+}
+.bday {
+  width: 100%;
+}
+
+.bday td {
+  padding: 0;
+  width: 33%;
+  padding: 1px;
+}
 .ln {
   margin-top: 0;
   margin-bottom: 0;
@@ -336,119 +544,9 @@ table {
   overflow: visible;
 }
 
-.container2 {
-  margin-left: 0;
-  margin-top: 0;
-  padding: 0;
-  padding-top: 0;
-  width: 100%;
-  font-weight: normal;
-}
-
-.innercont {
-  /* margin-top: 100px; */
-  padding: 0;
-  border-radius: 2px;
-  border: 1px solid #bdbebf;
-  overflow: hidden;
-  width: 970px;
-  height: 650px;
-}
-
 .body {
   padding: 0;
   margin: 0;
-}
-
-label {
-  display: block;
-  position: relative;
-  margin: 40px 0px;
-}
-.label-txt {
-  position: absolute;
-  top: -1.6em;
-  font-weight: normal;
-  padding: 10px;
-  font-family: sans-serif;
-  font-size: 1em;
-  letter-spacing: 1px;
-  color: #555657;
-  transition: ease 0.2s;
-  margin-top: 15px;
-}
-.label-txt1 {
-  position: absolute;
-  top: -1.6em;
-  font-weight: normal;
-  padding: 10px;
-  font-family: sans-serif;
-  font-size: 1em;
-  letter-spacing: 1px;
-  color: #555657;
-  transition: ease 0.2s;
-  margin-top: 15px;
-}
-
-.input {
-  width: 100%;
-  padding: 10px;
-  /* height: 5px; */
-  background: transparent;
-  border: none;
-  outline: none;
-  text-align: left;
-}
-
-.line-box {
-  position: relative;
-  width: 100%;
-  height: 1px;
-  background: #555657;
-}
-
-.input {
-  font-weight: normal;
-}
-
-.line {
-  position: absolute;
-  width: 0%;
-  height: 2px;
-  top: 0px;
-  transform: translateX(0%);
-  background: #0071ff;
-  transition: ease 0.6s;
-}
-
-.input:focus + .line-box .line {
-  width: 100%;
-}
-
-.label-active {
-  color: #0071ff;
-  font-size: 0.8em;
-  top: -3em;
-}
-
-button {
-  padding: 12px 24px;
-  background: rgb(220, 220, 220);
-  font-weight: bold;
-  color: rgb(120, 120, 120);
-  border: none;
-  outline: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: ease 0.3s;
-  margin-top: 50px;
-  margin-left: 250px;
-  /* float:right; */
-}
-
-button:hover {
-  background: #0071ff;
-  color: #ffffff;
 }
 
 .sign {
@@ -456,18 +554,19 @@ button:hover {
   margin-top: 0;
   font-size: 40px;
   font-weight: unset;
-  font-family: sans-serif;
+  font-family: verdana;
   font-weight: normal;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
 }
 .sign2 {
   padding: 0px;
   margin-top: 0;
   font-size: 25px;
   font-weight: unset;
-  font-family: sans-serif;
+  padding-top: 0;
+  font-family: verdana;
   font-weight: normal;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
 }
 </style>
 

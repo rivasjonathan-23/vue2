@@ -39,9 +39,7 @@
       </b-form>
       <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
     </b-modal>
-    
-    
-    
+
     <!-- <div v-if="notlogin">
       <center>
         <router-view class="content"/>
@@ -58,13 +56,17 @@
             <OrgProfile/>
           </div>
         </b-col>
-        <b-col cols="9"> -->
-          <center>
-            <router-view :userInfo="info" class="content"/>
-          </center>
-        <!-- </b-col>
+    <b-col cols="9">-->
+    <!-- <center> -->
+    <div class="content">
+      <center>
+        <router-view :userInfo="info"/>
+      </center>
+    </div>
+    <!-- </center> -->
+    <!-- </b-col>
       </b-row>
-    </div> -->
+    </div>-->
   </div>
 </template>
 
@@ -87,8 +89,8 @@ export default {
       person: "",
       notlogin: true,
       isloginConfirm: false,
-      isRuser: false,
-      isOrg: false,
+      inlogin: false,
+      path: ""
     };
   },
   components: {
@@ -101,6 +103,12 @@ export default {
     },
     redirect(path) {
       this.$router.push(path);
+      this.path = path;
+      if (this.$router.currentRoute.path == "/login") {
+        this.inlogin = true;
+      } else {
+        this.inlogin = false;
+      }
     },
     search() {
       let user = { user: this.person };
@@ -152,7 +160,19 @@ export default {
       }
     });
   },
+  watch: {
+    path() {
+      if (this.$router.currentRoute.path == "/login") {
+        this.inlogin = true;
+      } else {
+        this.inlogin = false;
+      }
+    }
+  },
   created() {
+    if (this.$router.currentRoute.path == "/login") {
+      this.inlogin = true;
+    }
     var url = window.location.href;
     if (url.includes("/user")) {
       this.notlogin = false;
@@ -222,11 +242,18 @@ export default {
 }
 
 .content {
-  padding-top: 50px;
   height: 100vh;
+  /* width: 100vw; */
+  text-align: center;
+  /* background-image: url("~@/assets/bb/3.jpg"); */
+  /* background-size: cover; */
+  /* background-attachment: fixed; */
+  /* background:lightblue; */
 }
 
-#app, body, html {
+#app,
+body,
+html {
   height: 100vh;
   font-family: verdana;
 }
@@ -271,7 +298,7 @@ p:hover {
   padding-right: 2%;
   padding-left: 2%;
   margin-bottom: 0;
-  background: rgb(3, 78, 133, 0.9);
+  background: #186fa1;
   padding-top: 0;
   padding-bottom: 0;
   overflow: hidden;

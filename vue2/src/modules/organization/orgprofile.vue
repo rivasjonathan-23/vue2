@@ -156,8 +156,8 @@ p {
   margin-top: 30px;
   width: 250px;
   margin-bottom: 10px;
-  -webkit-box-shadow: 0px 1px 5px #545f6b;
-  box-shadow: 0px 1px 5px #545f6b;
+  -webkit-box-shadow: 0px 1px 5px #0e222b;
+  box-shadow: 0px 1px 5px #0e222b;
   height: 250px;
   border:1px solid white;
   background: white;

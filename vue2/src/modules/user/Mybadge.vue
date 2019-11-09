@@ -123,7 +123,7 @@ export default {
       availing: false,
       size: 0,
       resized: false,
-      isLoading: false,
+      isLoading: true,
       sm: false,
     };
   },
@@ -183,76 +183,76 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   created() {
-    this.badgelist = [
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        },
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        },
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        },
-        {
-          granted: true,
-          badgename: "First Place",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "June", day: 23, year: 2019 },
-          descriptions:
-            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-          organization: "Passerelless numeriques"
-        }
-      ];
-      var num =0;
-    this.badgelist.forEach(element => {
-      element["imgnum"] = num;
-      num += 1;
-      if (num > 10) {
-        num = 0;
-      }
-    });
+    // this.badgelist = [
+    //     {
+    //       granted: true,
+    //       badgename: "First Place",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "June", day: 23, year: 2019 },
+    //       descriptions:
+    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+    //       organization: "Passerelless numeriques"
+    //     },
+    //     {
+    //       granted: true,
+    //       badgename: "First Place",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "June", day: 23, year: 2019 },
+    //       descriptions:
+    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+    //       organization: "Passerelless numeriques"
+    //     },
+    //     {
+    //       granted: true,
+    //       badgename: "First Place",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "June", day: 23, year: 2019 },
+    //       descriptions:
+    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+    //       organization: "Passerelless numeriques"
+    //     },
+    //     {
+    //       granted: true,
+    //       badgename: "First Place",
+    //       venue: "Passerelles Numeriques coding contest",
+    //       date: { month: "June", day: 23, year: 2019 },
+    //       descriptions:
+    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+    //       organization: "Passerelless numeriques"
+    //     }
+    //   ];
+    //   var num =0;
+    // this.badgelist.forEach(element => {
+    //   element["imgnum"] = num;
+    //   num += 1;
+    //   if (num > 10) {
+    //     num = 0;
+    //   }
+    // });
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-    // axios
-    //   .post("http://localhost:8081/user/userbadges", {
-    //     user: this.$store.getters.token
-    //   })
-    //   .then(res => {
-    //     this.isLoading = false;
-    //     console.log("badgess" + res.data.badges);
-    //     this.badgelist = res.data.badges.reverse();
-    //     console.log({ badges: this.badgelist });
-    //     if (this.badgelist.length == 0) {
-    //       this.hasData = true;
-    //     }
-    //     var num = 0;
-    //     this.badgelist.forEach(badge => {
-    //       badge["imgnum"] = num;
-    //       num += 1;
-    //         if (num > 10) {
-    //         num = 0;
-    //       }
-    //     })
-    //   });
+    axios
+      .post("http://localhost:8081/user/userbadges", {
+        user: this.$store.getters.token
+      })
+      .then(res => {
+        this.isLoading = false;
+        console.log("badgess" + res.data.badges);
+        this.badgelist = res.data.badges.reverse();
+        console.log({ badges: this.badgelist });
+        if (this.badgelist.length == 0) {
+          this.hasData = true;
+        }
+        var num = 0;
+        this.badgelist.forEach(badge => {
+          badge["imgnum"] = num;
+          num += 1;
+            if (num > 10) {
+            num = 0;
+          }
+        })
+      });
   }
 };
 </script>

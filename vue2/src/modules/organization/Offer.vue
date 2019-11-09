@@ -1,12 +1,12 @@
 <template>
   <b-row class="con">
-    <b-col class="badgePic rows">
+    <div class="badgePic rows" v-bind:class="{small: resized}">
       <img src="@/assets/image2.png" class="blogo">
       <h5 class="b">{{ badgename }}</h5>
       <p class="b">{{ venue }}</p>
       <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>
-    </b-col>
-    <b-col class="rows">
+    </div>
+    <div class="rows" v-bind:class="{small: resized}">
       <form class="signupform Form" @submit.prevent="createBadge">
         <center>
           <h2 class="sign">Offer A Badge</h2>
@@ -81,7 +81,7 @@
           </b-button>
         </div>
       </form>
-    </b-col>
+    </div>
   </b-row>
 </template>
 
@@ -115,10 +115,18 @@ export default {
         "November",
         "December"
       ],
-      focus: false
+      focus: false,
+      resized: false,
     };
   },
   methods: {
+    handleResize() {
+      if (window.innerWidth < 850) {
+        this.resized = true;
+      } else {
+        this.resized = false;
+      }
+    },
     validCode() {
       this.sending = true;
       return new Promise(function(resolve, reject) {
@@ -202,7 +210,11 @@ export default {
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
-  }
+  },
+   created() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+   },
 };
 </script>
 <style scoped>
@@ -226,11 +238,14 @@ export default {
 }
 
 .rows {
+  width: 50%;
   margin: 0;
   padding-left: 0;
   padding-right: 0;
 }
-
+.small {
+  width: 100%;
+}
 .bhldr {
   text-align: right;
 }

@@ -1,6 +1,6 @@
 <template>
-  <!-- <div id="signup"> -->
-    <form class="signupform" @submit.prevent="login">
+  <div id="signup">
+    <!-- <form class="signupform" @submit.prevent="login">
       <h1 class="sign">Sign up</h1>
       
       <label>
@@ -53,8 +53,8 @@
       </label>
 
       <button type="submit">submit</button>
-    </form>
-  <!-- </div> -->
+    </form> -->
+  </div>
 </template>
 
 <script>

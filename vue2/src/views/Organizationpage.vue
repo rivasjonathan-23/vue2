@@ -9,7 +9,7 @@
     </b-row>
     <b-row>
       <b-col cols="12" class="views">
-        <b-navbar sticky class="Nav" v-bind:class="{czindex: under}">
+        <div class="Nav" v-bind:class="{czindex: under}">
           <div class="option">
             <span
               id="badges"
@@ -23,7 +23,7 @@
               v-on:click="redirect('/organization/certify')"
             >Create badge</span>
           </div>
-        </b-navbar>
+        </div>
         <div>
           <router-view @changeZindex="under = true" ></router-view>
         </div>
@@ -58,6 +58,9 @@ export default {
     if (this.$router.currentRoute.path == "/organization/certify") {
       this.nothidden = false;
       this.blpressed = false;
+    } else {
+      this.nothidden = true;
+      this.blpressed = true;
     }
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
@@ -69,7 +72,7 @@ export default {
   methods: {
     redirect(path) {
       this.$router.push(path);
-      if (path == "/organization/certify") {
+      if (this.$router.currentRoute.path == "/organization/certify") {
         this.nothidden = false;
         this.blpressed = false;
       } else {
@@ -137,14 +140,15 @@ export default {
   padding: 0;
 }
 .Nav {
-  height: 45px;
+  height: 39px;
   font-size: 20px;
   background: white;
   /* background: rgb(217, 241, 250,0.9); */
   border-bottom: 4px solid lightblue;
   width: 100%;
   top: 50px;
-  padding: 0;
+  padding-top: 4px;
+  padding-bottom: 0px;
   overflow: visible;
   z-index: 11111;
 }
@@ -163,10 +167,10 @@ span {
   margin: 0px;
   transition: ease 0.4s;
   /* letter-spacing: 1px; */
-  padding-bottom: 8px;
+  padding-bottom: 4px;
   padding-right: 20px;
   padding-left: 20px;
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
 /* .bdg {
