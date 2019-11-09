@@ -2,7 +2,7 @@
   <div class="innercont" v-bind:class="{ftsize: resized}">
     <form @submit.prevent="register">
       <div class="accinfo">
-        <p class="sign">Sign Up</p>
+        <p class="sign">Sign Up*</p>
         <div class="inputholder">
           <span>Username</span>
           <b-input type="text" class="binput" required v-model="username"></b-input>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="perinfo">
-        <p class="sign2">Personal Information</p>
+        <p class="sign2">Personal Information*</p>
 
         <div class="inputholder">
           <table>
@@ -143,7 +143,7 @@
           </table>
         </div>
        
-        <span>Working already?</span>
+        <p class="lbl">Working already?</p>
         <div class="inputholder">
           <span>Work</span>
           <b-input
@@ -164,7 +164,7 @@
             v-model="company"
           ></b-input>
         </div>
-        <span>Or still studying?</span>
+        <p class="lbl">Or still studying?</p>
         <div class="inputholder">
           <span>School</span>
           <b-input
@@ -334,6 +334,12 @@ export default {
 }
 .binput {
   background: #f5f9fa;
+}
+.lbl {
+  font-size: 17px;
+  margin-top:35px;
+  padding-bottom: 0;
+  margin-bottom:0;
 }
 .perinfo {
   /* background: white; */

@@ -2,7 +2,7 @@
   <div class="innercont" v-bind:class="{ftsize: resized}">
     <form @submit.prevent="register">
       <div class="accinfo">
-        <p class="sign">Sign Up</p>
+        <p class="sign">Sign Up*</p>
         <div class="inputholder">
           <span>Username</span>
           <b-input type="text" class="binput" required v-model="username"></b-input>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="perinfo">
-        <p class="sign2">About your organization</p>
+        <p class="sign2">About your organization*</p>
 
         <div class="inputholder">
           <span>Name</span>
@@ -51,7 +51,7 @@
           <b-input type="text" class="binput" required v-model="years"></b-input>
         </div>
         <div class="inputholder">
-          <span>What you do | short description</span>
+          <span>What you do? | short description</span>
           <b-input type="text" class="binput" required v-model="description"></b-input>
         </div>
 
@@ -175,6 +175,7 @@ export default {
       description:"",
       isValid: true,
       err: false,
+      loading: false,
       type: ""
     };
   },
@@ -197,6 +198,7 @@ export default {
         this.password != "" &&
         this.password == this.confirmpassword
       ) {
+        this.loading = true;
         this.$store
           .dispatch("orgSignUp", userInfo)
           .then(() => {

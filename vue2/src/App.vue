@@ -8,7 +8,6 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav></b-navbar-nav>
 
-        <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
           <b-nav-item
@@ -39,34 +38,11 @@
       </b-form>
       <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
     </b-modal>
-
-    <!-- <div v-if="notlogin">
-      <center>
-        <router-view class="content"/>
-      </center>
-    </div>
-    <div v-show="isloginConfirm">
-      <br><br><br>
-      <b-row>
-        <b-col class="border-right">
-          <div v-show="isRUser">
-            <UserProfile v-on:created="getData"/>
-          </div>
-          <div v-show="isOrg">
-            <OrgProfile/>
-          </div>
-        </b-col>
-    <b-col cols="9">-->
-    <!-- <center> -->
     <div class="content">
       <center>
         <router-view :userInfo="info"/>
       </center>
     </div>
-    <!-- </center> -->
-    <!-- </b-col>
-      </b-row>
-    </div>-->
   </div>
 </template>
 
