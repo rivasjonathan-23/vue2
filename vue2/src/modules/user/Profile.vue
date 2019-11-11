@@ -17,11 +17,24 @@
         <span class="emailadd">{{userinf.email}}</span>
       </p>
 
-      <b-button 
+      <b-button
         class="update"
         v-on:click="Alert(userInfo.username)"
         variant="outline-primary"
       >Update Profile</b-button>
+    </div>
+    <div class="outercont" v-bind:class="{smlbcount: resized}">
+      <div class="bcountoutercont" v-bind:class="{sml: resized}">
+        <div class="countinnercont" v-if="!resized">
+          <h1>{{badgenum}}</h1>
+        </div>
+        <div class="bnumdesign"  v-bind:class="{smldes: resized}">
+          <div class="changedes" v-if="resized">
+            <h1>{{badgenum}}&nbsp;Badges</h1>
+          </div>
+        </div>
+        <h2 v-if="!resized" class="btext">Badges</h2>
+      </div>
     </div>
   </div>
 </template>
@@ -42,7 +55,7 @@ export default {
         years: "2",
         address: "Nasipit, Talamban, Cebu, Philippines",
         email: "jrivas@gmail.com",
-        birthdate: { month: "September", day: 23, year: 1998},
+        birthdate: { month: "September", day: 23, year: 1998 },
         age: 21
       },
       image: require("@/assets/profile.jpg"),
@@ -52,6 +65,9 @@ export default {
       birthdate: "September 23, 1998",
       resized: false
     };
+  },
+  props: {
+    badgenum: Number
   },
   created() {
     window.addEventListener("resize", this.handleResize);
@@ -86,7 +102,7 @@ export default {
       this.$router.push(path);
     },
     handleResize() {
-      if (window.innerWidth < 1200) {
+      if (window.innerWidth < 1000) {
         this.resized = true;
       } else {
         this.resized = false;
@@ -99,6 +115,103 @@ export default {
 };
 </script>
 <style scoped>
+.outercont {
+  width: 25%;
+  float: left;
+  font-family: verdana;
+  margin-top: 145px;
+}
+.smlbcount {
+  width: 100%;
+  margin: 0;
+  
+}
+
+.info {
+  float: left;
+  font-size: 14px;
+  width: 50%;
+  text-align: left;
+  margin-bottom: 0;
+  margin-top: 155px;
+  padding: 10px;
+  background: white;
+}
+.countinnercont {
+  color: white;
+  z-index: 55555;
+  background: grey;
+  border-radius: 50px;
+  padding-top: 15px;
+  margin-left: 50px;
+  padding-bottom: 15px;
+  width: 80px;
+  top: 24px;
+  overflow: visible;
+  position: absolute;
+}
+.bnumdesign {
+  width: 100%;
+  padding: 0;
+  border-right: 20px solid white;
+  border-left: 20px solid white;
+  border-bottom: 20px solid lightgrey;
+  border-top: 20px solid lightgrey;
+}
+
+.smldes {
+  border-right: 10px solid white;
+  border-left: 10px solid white;
+  border-bottom: 10px solid lightgrey;
+  border-top: 10px solid white;
+}
+
+.changedes {
+  background: transparent;
+  color: grey;
+  margin: 0;
+  position: unset;
+}
+.bcountoutercont {
+  width: 200px;
+  padding-top: 45px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+  color: grey;
+  border-bottom: 2px solid #d5e7f5;
+}
+
+.sml {
+  width: 100%;
+  padding-bottom: 10px;
+  border-bottom: none;
+}
+.btext {
+  margin-top: 20px;
+}
+.logo {
+  overflow: hidden;
+  margin-top: 30px;
+  width: 250px;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 0px 1px 5px #0e222b;
+  box-shadow: 0px 1px 5px #0e222b;
+  height: 250px;
+  border: 1px solid white;
+  background: white;
+}
+
+.prfl {
+  float: left;
+  width: 25%;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin-top: 0;
+  margin-bottom: 0px;
+  border-bottom: 2px solid #d5e7f5;
+  /* background:grey; */
+}
 .emailadd {
   text-decoration: underline;
   width: 100%;
@@ -129,38 +242,6 @@ p {
   background-image: url("~@/assets/orgbackground.jpg");
   background-size: cover;
   font-family: verdana;
-}
-.info {
-  float: left;
-  font-size: 14px;
-  width: 74%;
-  text-align: left;
-  margin-bottom: 0;
-  margin-top: 155px;
-  padding: 10px;
-}
-
-.logo {
-  overflow: hidden;
-  margin-top: 30px;
-  width: 250px;
-  margin-bottom: 10px;
-  -webkit-box-shadow: 0px 1px 5px #0e222b;
-  box-shadow: 0px 1px 5px #0e222b;
-  height: 250px;  
-  border:1px solid white;
-  background: white;
-}
-
-.prfl {
-  float: left;
-  width: 250px;
-  margin-left: 25px;
-  margin-right: 25px;
-  margin-top: 0;
-  margin-bottom: 0px;
-  border-bottom: 2px solid #d5e7f5;
-  /* background:grey; */
 }
 
 .small {

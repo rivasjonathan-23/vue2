@@ -10,25 +10,21 @@
 <script>
 import SignUp from "./signUp";
 
-
 export default {
   name: "Home",
   data() {
     return {
-       image: require("@/assets/background.jpg")
-    }
+      image: require("@/assets/background.jpg")
+    };
   },
-  components: { 
-    SignUp 
-  },
+  components: {
+    SignUp
+  }
 };
 </script>
 
 
 <style scoped>
-
-
-
 .col-sm-3 {
   border: 1px solid lightgrey;
   width: 400px;
@@ -51,21 +47,22 @@ export default {
 }
 
 body {
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
 }
 
 .outercont {
   margin-top: 0;
   width: 100%;
-  padding-left:0;
-  padding-right:0;
-  margin-right:0;
-  margin-left:0;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 0;
+  margin-left: 0;
   height: 100vh;
   background-image: url("~@/assets/bb/10.jpg");
   background-size: cover;
-  
+  -webkit-filter: brightness(75%); /* Safari 6.0 - 9.0 */
+  filter: brightness(75%);
 }
 
 .con {
@@ -77,8 +74,6 @@ body {
 
   /* height:100%; */
 }
-
-
 </style>
 
 

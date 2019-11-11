@@ -38,11 +38,13 @@
                 @focus="focus = true"
                 required
               />
-              <div class="month" v-show="focus">
-                <div v-for="(m,n) in cal" :key="n">
-                  <h5 class="m" @click="month(m)">{{m}}</h5>
+              <transition name="slide">
+                <div class="month" v-show="focus">
+                  <div v-for="(m,n) in cal" :key="n">
+                    <h5 class="m" @click="month(m)">{{m}}</h5>
+                  </div>
                 </div>
-              </div>
+              </transition>
             </td>
 
             <td id="day" class="inpt d">
@@ -116,7 +118,7 @@ export default {
         "December"
       ],
       focus: false,
-      resized: false,
+      resized: false
     };
   },
   methods: {
@@ -211,13 +213,51 @@ export default {
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
   },
-   created() {
+  created() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
-   },
+  }
 };
 </script>
 <style scoped>
+.slide-enter-active {
+  -moz-transition-duration: 0.4s;
+  -webkit-transition-duration: 0.4s;
+  -o-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  -moz-transition-timing-function: ease-in;
+  -webkit-transition-timing-function: ease-in;
+  -o-transition-timing-function: ease-in;
+  transition-timing-function: ease-in;
+}
+
+.slide-leave-active {
+  -moz-transition-duration: 0.4s;
+  -webkit-transition-duration: 0.4s;
+  -o-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.slide-enter-to,
+.slide-leave {
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.slide-enter,
+.slide-leave-to {
+  overflow: hidden;
+  max-height: 0;
+}
+.pd-side {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .holder {
   margin-bottom: 30px;
   margin-top: 30px;

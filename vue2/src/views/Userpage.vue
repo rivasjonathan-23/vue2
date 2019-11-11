@@ -2,7 +2,7 @@
   <div class="page" v-bind:class="{small: resized}">
     <b-row>
       <b-col cols="12">
-        <Profile></Profile>
+        <Profile :badgenum="size"></Profile>
       </b-col>
     </b-row>
     <b-row>
@@ -29,7 +29,7 @@ export default {
     return {
       badgeCode: "",
       resized: false,
-      size: 0
+      size: 123
     };
   },
   components: {
@@ -38,7 +38,6 @@ export default {
   },
   created() {
     window.addEventListener("resize", this.handleResize);
-    this.size = window.innerWidth;
     this.handleResize();
   },
   destroyed() {

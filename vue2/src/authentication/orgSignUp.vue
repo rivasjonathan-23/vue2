@@ -65,96 +65,6 @@
       </div>
     </form>
   </div>
-  <!-- <center>
-    <div class="innercont">
-      <b-form @submit.prevent="register">
-        <b-row>
-          <b-col class="signup" sm="4">
-            <p class="sign">Sign Up</p>
-            <label>
-              <p class="label-txt1">ADMIN USERNAME</p>
-              <input
-                type="text"
-                class="input"
-                required
-                v-model="username"
-                
-              >
-              <div id="unameErr" class="line-box">
-                <div class="line"></div>
-              </div>
-              <transition name="slide-fade">
-                <span class="err" v-if="err">Username already taken!</span>
-              </transition>
-            </label>
-            <label>
-              <p class="label-txt1">PASSWORD</p>
-              <input type="password" class="input" required v-model="password">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-              <transition name="slide-fade">
-                <span
-                  class="err"
-                  v-show=" password.length < 8 && password  != ''"
-                >must be at least 8 characters!</span>
-              </transition>
-            </label>
-            <label>
-              <p class="label-txt1">CONFIRM PASSWORD</p>
-              <input type="password" class="input" required v-model="confirmpassword">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-              <transition name="slide-fade">
-                <span
-                  class="err"
-                  v-show="confirmpassword != password && confirmpassword && password"
-                >Password doesn't match!</span>
-              </transition>
-            </label>
-          </b-col>
-          <b-col id="perinfo" sm="8">
-            <p class="sign2">About your organization</p>
-            <label>
-              <p class="label-txt">NAME OF THE ORGANIZATION</p>
-              <input type="text" class="input" required v-model="orgName">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-            </label>
-            <label>
-              <p class="label-txt">ADDRESS</p>
-              <input type="text" class="input" required v-model="address">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-            </label>
-
-            <label>
-              <p class="label-txt">ADMIN EMAIL ADDRESS</p>
-              <input type="email" class="input" required v-model="email">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-            </label>
-            <label>
-              <p class="label-txt">
-                WHAT YOU DO? (
-                Short description)
-              </p>
-              <input id="description" type="text" class="input" required v-model="description">
-              <div class="line-box">
-                <div class="line"></div>
-              </div>
-            </label>
-
-            <button type="submit">submit</button>
-          </b-col>
-        </b-row>
-      </b-form>
-    </div>
-  </center>-->
 </template>
 
 <script>
@@ -176,7 +86,8 @@ export default {
       isValid: true,
       err: false,
       loading: false,
-      type: ""
+      type: "",
+      resized: false,
     };
   },
 
@@ -191,7 +102,8 @@ export default {
         description: this.description,
         type: "Organization",
         badges: [],
-        posts: []
+        posts: [],
+        
       };
       if (
         this.isValid &&
@@ -232,30 +144,16 @@ export default {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/");
       });
-    }
-  },
-  created() {
-    if (
-      this.username != "" &&
-      this.password != "" &&
-      this.confirmpassword != ""
-    ) {
-      $(".label-txt1").addClass("label-active");
-    }
-    axios.get("http://localhost:8081/user/signedup").then(
-      response => {
-        if (response.data.username != null) {
-          this.username = response.data.username;
-          this.password = response.data.password;
-          this.confirmpassword = response.data.password;
-          $(".label-txt1").addClass("label-active");
-        }
-      },
-      err => {
-        console.log("error");
+    },
+    handleResize() {
+      if (window.innerWidth <= 650) {
+        this.resized = true;
+      } else {
+        this.resized = false;
       }
-    );
+    }
   },
+  
   mounted() {
     $(".label-txt")
       .addClass("label-active")
@@ -280,6 +178,13 @@ export default {
         .find("p")
         .css({ color: "#555657" });
     });
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  created() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
   }
 };
 </script>

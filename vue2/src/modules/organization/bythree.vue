@@ -60,7 +60,12 @@ export default {
   margin: 0;
   height: 250px;
   text-align: left;
-  
+  transition: ease .2s
+}
+
+.imgholder:hover {
+  -webkit-filter: brightness(90%); /* Safari 6.0 - 9.0 */
+  filter: brightness(90%);
 }
 .blogo {
   top:14px;
@@ -77,7 +82,7 @@ export default {
 }
 .box {
   width: 279px;
-  overflow: hidden;
+  overflow: auto;
   height: 400px;
   text-align: center;
   background: white;
@@ -90,6 +95,14 @@ export default {
   -webkit-box-shadow: 0px 1px 6px #8492a1;
   box-shadow: 0px 1px 6px #8492a1;
   position: relative;
+  /* transition: ease 0.9s; */
+}
+
+.box:hover {
+  margin-top: 0;
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0px 4px 10px #8492a1;
+  box-shadow: 0px 4px 10px #8492a1;
 }
 .small {
   width: 98%;

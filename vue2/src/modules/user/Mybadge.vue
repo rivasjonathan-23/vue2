@@ -2,10 +2,10 @@
   <div>
     <div id="mybadge">
       <div class="sheader">
-        <span class="tbadge" v-bind:class="{fit: sm}">
+        <!-- <span class="tbadge" v-bind:class="{fit: sm}">
           <span>Badges&nbsp;</span>
           <span class="nb">{{badgelist.length}}</span>
-        </span>
+        </span> -->
         <span class="tbadge" v-bind:class="{fit: sm}">
           <span>Pending badges&nbsp;</span>
           <span class="nb">{{badgelist.length}}</span>
@@ -16,7 +16,7 @@
           class="btn"
          v-bind:class="{fit: sm}"
           v-b-modal.availBadge-modal
-        >Avail new certificate</b-button>
+        >Claim certificate</b-button>
       </div>
       <div id="line"></div>
       <div class="loading" v-show="isLoading">

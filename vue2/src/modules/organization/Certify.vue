@@ -414,7 +414,8 @@ export default {
         data: this.$store.getters.token
       })
       .then(resp => {
-        (this.isLoading = false), (this.badges = resp.data.badges.reverse());
+        this.isLoading = false;
+        this.badges = resp.data.badges.reverse();
         if (this.badges.length == 0) {
           this.hasdata = false;
         }
@@ -422,7 +423,7 @@ export default {
         this.badges.forEach(badge => {
           badge["imgnum"] = num;
           num += 1;
-            if (num > 10) {
+          if (num > 10) {
             num = 0;
           }
         })
@@ -533,9 +534,19 @@ export default {
         })
         .then(resp => {
           this.badges = resp.data.badges.reverse();
+          alert("got response")
           if (this.badges.length != 0) {
-            this.hasdata = false;
+            alert("has data")
+             var num = 0;
+            // this.badges.forEach(badge => {
+            //   badge["imgnum"] = num;
+            //   num += 1;
+            //   if (num > 10) {
+            //     num = 0;
+            //   }
+            // })
           } else {
+            alert("no data")
             this.hasdata = true;
           }
         });
