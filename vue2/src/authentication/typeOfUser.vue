@@ -60,16 +60,17 @@ export default {
 <style scoped>
 .btns {
   /* margin-top:50px; */
-  padding:20px;
-  background-image: linear-gradient(to bottom right, #80b7d1 , #e4f1f7);
+  padding:60px;
+  color:white;
+  /* background-image: linear-gradient(to bottom right, #80b7d1 , #e4f1f7); */
   margin-bottom: 0;
   /* text-align: center; */
+  background-image: url("~@/assets/bb/11.jpg");
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .contain {
-  /* background-image: url("~@/assets/bb/3.jpg");
-  background-size: cover;
-  background-attachment: fixed; */
   padding-top: 50px;
   text-align: center;
   margin-top: 0;
