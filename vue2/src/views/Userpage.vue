@@ -2,12 +2,12 @@
   <div class="page" v-bind:class="{small: resized}">
     <b-row>
       <b-col cols="12">
-        <Profile :badgenum="size"></Profile>
+        <Profile :badgenum="numofbadge" :zindex="index"></Profile>
       </b-col>
     </b-row>
     <b-row>
       <b-col class="views" cols="12">
-        <Newsfeed></Newsfeed>
+        <Badges @badgeCount="getBadgeCount"></Badges>
       </b-col>
     </b-row>
   </div>
@@ -17,7 +17,7 @@
 /*eslint linebreak-style: ["error", "windows"]*/
 import axios from "axios";
 import Profile from "@/modules/user/Profile.vue";
-import Newsfeed from "@/modules/user/Mybadge.vue";
+import Badges from "@/modules/user/Mybadge.vue";
 import $ from "jquery";
 
 export default {
@@ -29,12 +29,12 @@ export default {
     return {
       badgeCode: "",
       resized: false,
-      size: 123
+      numofbadge: 0,
     };
   },
   components: {
     Profile,
-    Newsfeed
+    Badges
   },
   created() {
     window.addEventListener("resize", this.handleResize);
@@ -56,6 +56,9 @@ export default {
     },
     redirect(path) {
       this.$router.push(path);
+    },
+    getBadgeCount(count) {
+      this.numofbadge = count;
     }
   }
 };

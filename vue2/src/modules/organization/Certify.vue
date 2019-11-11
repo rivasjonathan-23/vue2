@@ -25,9 +25,6 @@
     >
       <Offer v-on:submit="closeCreate" @submit="getData" @cancel="closeCreate"></Offer>
     </b-modal>
-    <div class="text-center">
-      <h3 class="temp" style="display:none">You haven't offered badges yet</h3>
-    </div>
     <div class="loading" v-show="isLoading">
       <div class="text-center text-danger my-2">
         <b-spinner id="loading2" class="align-middle"></b-spinner>
@@ -274,8 +271,8 @@ export default {
       tindex: 0,
       size: 0,
       resized: false,
-      isLoading: true,
-      hasdata: false,
+      isLoading: false,
+      hasdata: true,
       sm: false,
     };
   },
@@ -284,131 +281,131 @@ export default {
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-    // this.badges =  [
-    //     {
-    //       badgename: "First placer",
-    //       code: "s8fs6df",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "Septembner", day: 23, year: 2019 },
-    //       recipient: [
+    this.badges =  [
+        {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
            
-    //       ]
-    //     },
-    //     {
-    //       badgename: "First placer",
-    //       code: "s8fs6df",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "Septembner", day: 23, year: 2019 },
-    //       recipient: [
-    //         {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         }, {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         },
-    //          {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         }
-    //       ]
-    //     },
-    //      {
-    //       badgename: "First placer",
-    //       code: "s8fs6df",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "Septembner", day: 23, year: 2019 },
-    //       recipient: [
-    //         {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         }
-    //       ]
-    //     },
-    //      {
-    //       badgename: "First placer",
-    //       code: "s8fs6df",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "Septembner", day: 23, year: 2019 },
-    //       recipient: [
-    //         {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         }
-    //       ]
-    //     },
-    //      {
-    //       badgename: "First placer",
-    //       code: "s8fs6df",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "Septembner", day: 23, year: 2019 },
-    //       recipient: [
-    //         {
-    //           username: "jrivas23",
-    //           fullname: "Jonathan Rivas",
-    //           _id: "asdfasdfgsdfiau23"
-    //         }
-    //       ]
-    //     }
-    //   ];
-    //   var num = 0;
-    //   this.badges.forEach(badge => {
-    //     badge["imgnum"] = num;
-    //     num += 1;
-    //       if (num > 10) {
-    //       num = 0;
-    //     }
-    //   })
+          ]
+        },
+        {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }, {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            },
+             {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        },
+         {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        },
+         {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        },
+         {
+          badgename: "First placer",
+          code: "s8fs6df",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "Septembner", day: 23, year: 2019 },
+          recipient: [
+            {
+              username: "jrivas23",
+              fullname: "Jonathan Rivas",
+              _id: "asdfasdfgsdfiau23"
+            }
+          ]
+        }
+      ];
+      var num = 0;
+      this.badges.forEach(badge => {
+        badge["imgnum"] = num;
+        num += 1;
+          if (num > 10) {
+          num = 0;
+        }
+      })
     axios
       .post("http://localhost:8081/user/pendingbadges", {
         data: this.$store.getters.token

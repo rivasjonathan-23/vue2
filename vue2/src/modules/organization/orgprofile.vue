@@ -67,7 +67,7 @@ export default {
     },
     handleResize() {
       // if (window.innerWidth >= this.size) {
-        if (window.innerWidth < 1200) {
+        if (window.innerWidth < 900) {
 
             this.resized = true;
           
@@ -164,9 +164,9 @@ p {
 }
 .prfl {
   float: left;
-  width: 250px;
-  margin-left:25px;
-  margin-right: 25px;
+  width: 25%;
+  /* margin-left:25px; */
+  /* margin-right: 25px; */
   margin-bottom: 0px;
   border-bottom: 2px solid #d5e7f5;
   /* background:grey; */

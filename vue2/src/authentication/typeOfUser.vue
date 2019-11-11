@@ -1,13 +1,20 @@
 <template>
   <div class="contain">
-    <h2>Create account as</h2>
+    <div class="btns">
+      <h2>Create account as</h2>
       <b-button
         class="btn org"
         variant="primary"
         v-bind:class="{pressed: change}"
         v-on:click="signUpAs('/signUpAs/organization')"
       >Organization</b-button>
-      <b-button v-bind:class="{unpressed: !change}" v-on:click="signUpAs('/signUpAs')"  variant="primary" class="btn reg">Regular user</b-button>
+      <b-button
+        v-bind:class="{unpressed: !change}"
+        v-on:click="signUpAs('/signUpAs')"
+        variant="primary"
+        class="btn reg"
+      >Regular user</b-button>
+    </div>
     <center>
       <router-view></router-view>
     </center>
@@ -23,7 +30,7 @@ export default {
   name: "TypeOfUser",
   data() {
     return {
-      change: false,
+      change: false
     };
   },
   components: {
@@ -34,33 +41,36 @@ export default {
     signUpAs(type) {
       this.$router.push(type);
       if (this.$router.currentRoute.path == "/signUpAs/organization") {
-       this.change = true;
+        this.change = true;
       } else {
-       this.change= false;
+        this.change = false;
       }
     }
   },
   created() {
-     if (this.$router.currentRoute.path == "/signUpAs/organization") {
-       this.change = true;
-      } else {
-       this.change= false;
-      }
+    if (this.$router.currentRoute.path == "/signUpAs/organization") {
+      this.change = true;
+    } else {
+      this.change = false;
+    }
   }
 };
 </script>
 
 <style scoped>
-.nav {
-  background: #e6eff5;
-  text-align: center;
+.btns {
+  /* margin-top:50px; */
+  padding:20px;
+  background-image: linear-gradient(to bottom right, #80b7d1 , #e4f1f7);
+  margin-bottom: 0;
+  /* text-align: center; */
 }
 
 .contain {
-  /* background-image: url("~@/assets/background3.jpg");
+  /* background-image: url("~@/assets/bb/3.jpg");
   background-size: cover;
   background-attachment: fixed; */
-  padding-top: 65px;
+  padding-top: 50px;
   text-align: center;
   margin-top: 0;
   margin-left: 0;
@@ -70,6 +80,8 @@ export default {
   width: 100%;
   /* height: 140vh; */
   font-weight: normal;
+  color: #385b73;
+  /* color:white; */
 }
 
 .tp {
@@ -77,40 +89,37 @@ export default {
   padding-bottom: 0;
 }
 
-
-
 .btn {
   margin: 5px;
   color: white;
   border: none;
   padding: 10px;
-  font-size:20px;
+  font-size: 20px;
   padding-bottom: 8px;
   cursor: pointer;
   transition: ease 0.3s;
 }
 
-
 .org {
   background-color: #d3e0e8;
-   color:#136ea8;
+  color: #136ea8;
 }
 .btn:focus {
   outline: none;
 }
 .pressed {
   background-color: #136ea8;
-  color:white;
+  color: white;
 }
 
 .reg {
   background-color: #d3e0e8;
-  color:#136ea8;
+  color: #136ea8;
 }
 
 .unpressed {
   background-color: #136ea8;
-  color:white;
+  color: white;
 }
 
 .close {
@@ -120,7 +129,7 @@ export default {
 }
 h2 {
   margin: 0;
-  padding-top:20px;
+  padding-top: 20px;
   font-family: verdana;
   padding-bottom: 10px;
 }

@@ -22,6 +22,7 @@
         <div class="holder">
           <b-input v-model="venue" autocomplete="off" placeholder="Name of event" required/>
         </div>
+
         <div class="holder drow">
           <p class="labl">Date</p>
           <table class="bday table">
@@ -71,7 +72,7 @@
             </td>
           </table>
         </div>
-
+     
         <div class="bhldr">
           <b-button @click="cancel" class="btn btn-danger btn-lg nm">Cancel</b-button>
           <b-button class="btn btn-lg nm" type="submit" variant="primary">
@@ -220,6 +221,21 @@ export default {
 };
 </script>
 <style scoped>
+.upic {
+  background: red;
+  padding-top:0;
+}
+.holder2 {
+  height: 50px;
+  position: relative;
+  /* background:red; */
+}
+.upicture {
+  /* top: 0;
+  padding-top:0;
+  left:0;
+  position: absolute; */
+}
 .slide-enter-active {
   -moz-transition-duration: 0.4s;
   -webkit-transition-duration: 0.4s;
@@ -302,6 +318,7 @@ export default {
 }
 
 .drow {
+  padding-top: 0;
   margin-top: 0px;
 }
 .d {
@@ -317,6 +334,7 @@ export default {
   width: 100%;
   padding: 10px;
   height: 100%;
-  background: #e1f1f7;
+  background: #f2f9fc;
+  border: 2px solid #d3e8f5;
 }
 </style>

@@ -2,7 +2,8 @@
   <div class="innercont" v-bind:class="{ftsize: resized}">
     <form @submit.prevent="register">
       <div class="accinfo">
-        <p class="sign">Sign Up*</p>
+         <p class="sign">Create an account for your</p>
+        <p class="rutext">Organization*</p>
         <div class="inputholder">
           <span>Username</span>
           <b-input type="text" class="binput" required v-model="username"></b-input>
@@ -51,8 +52,8 @@
           <b-input type="text" class="binput" required v-model="years"></b-input>
         </div>
         <div class="inputholder">
-          <span>What you do? | short description</span>
-          <b-input type="text" class="binput" required v-model="description"></b-input>
+          <span>What you do? | Description</span>
+          <b-form-textarea type="text" rows="5" class="binput" required v-model="description"></b-form-textarea>
         </div>
 
         <b-button v-on:click="redirect('/signUpAs')" type="submit" class="lgnbtn" variant="primary">
@@ -217,9 +218,12 @@ export default {
   position: relative;
 }
 .innercont {
+  color:#385b73;
   padding: 0;
   border-radius: 0;
   width: 600px;
+  margin-top:45px;
+  border-top:4px solid #e8f3fa;
   background: white;
   text-align: center;
   padding: 40px;
@@ -459,11 +463,16 @@ table {
 .sign {
   padding: 0px;
   margin-top: 0;
-  font-size: 40px;
+  font-size: 25px;
   font-weight: unset;
   font-family: verdana;
   font-weight: normal;
-  margin-bottom: 10px;
+  margin-bottom: 0;
+  color:#385b73;
+}
+
+.rutext {
+  font-size: 30px;
 }
 .sign2 {
   padding: 0px;
@@ -474,6 +483,7 @@ table {
   font-family: verdana;
   font-weight: normal;
   margin-bottom: 10px;
+  color:#385b73;
 }
 </style>
 

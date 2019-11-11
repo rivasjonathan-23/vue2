@@ -2,7 +2,8 @@
   <div class="innercont" v-bind:class="{ftsize: resized}">
     <form @submit.prevent="register">
       <div class="accinfo">
-        <p class="sign">Sign Up*</p>
+        <p class="sign">Create an account as a</p>
+        <p class="rutext">Regular user*</p>
         <div class="inputholder">
           <span>Username</span>
           <b-input type="text" class="binput" required v-model="username"></b-input>
@@ -355,11 +356,15 @@ export default {
   width: 100%;
   padding: 0;
   position: relative;
+  margin-top:0;
 }
 .innercont {
+  color:#385b73;
   padding: 0;
   border-radius: 0;
+  margin-top:45px;
   width: 600px;
+  border-top:4px solid #e8f3fa;
   background: white;
   text-align: center;
   padding: 40px;
@@ -449,17 +454,6 @@ hr {
   padding: 0;
 }
 
-.signup {
-  overflow: auto;
-  background: #e3e3e3;
-  padding: 40px;
-  text-align: center;
-  border-right: none;
-  height: 648px;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  border-right: 1px solid #b3b4b5;
-}
 .uname {
   text-decoration: underline;
 }
@@ -599,11 +593,15 @@ table {
 .sign {
   padding: 0px;
   margin-top: 0;
-  font-size: 40px;
+  font-size: 25px;
   font-weight: unset;
   font-family: verdana;
   font-weight: normal;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
+}
+
+.rutext {
+  font-size: 30px;
 }
 .sign2 {
   padding: 0px;

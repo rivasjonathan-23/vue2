@@ -109,7 +109,7 @@ import $ from "jquery";
 import { userInfo } from "os";
 
 export default {
-  name: "Newsfeed",
+  name: "Badges",
   props: {
     userInfo: Object
   },
@@ -123,8 +123,9 @@ export default {
       availing: false,
       size: 0,
       resized: false,
-      isLoading: true,
+      isLoading: false,
       sm: false,
+      pressed: true
     };
   },
   methods: {
@@ -183,52 +184,54 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   created() {
-    // this.badgelist = [
-    //     {
-    //       granted: true,
-    //       badgename: "First Place",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "June", day: 23, year: 2019 },
-    //       descriptions:
-    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-    //       organization: "Passerelless numeriques"
-    //     },
-    //     {
-    //       granted: true,
-    //       badgename: "First Place",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "June", day: 23, year: 2019 },
-    //       descriptions:
-    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-    //       organization: "Passerelless numeriques"
-    //     },
-    //     {
-    //       granted: true,
-    //       badgename: "First Place",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "June", day: 23, year: 2019 },
-    //       descriptions:
-    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-    //       organization: "Passerelless numeriques"
-    //     },
-    //     {
-    //       granted: true,
-    //       badgename: "First Place",
-    //       venue: "Passerelles Numeriques coding contest",
-    //       date: { month: "June", day: 23, year: 2019 },
-    //       descriptions:
-    //         "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
-    //       organization: "Passerelless numeriques"
-    //     }
-    //   ];
-    //   var num =0;
-    // this.badgelist.forEach(element => {
-    //   element["imgnum"] = num;
-    //   num += 1;
-    //   if (num > 10) {
-    //     num = 0;
-    //   }
-    // });
+    
+    this.badgelist = [
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        },
+        {
+          granted: true,
+          badgename: "First Place",
+          venue: "Passerelles Numeriques coding contest",
+          date: { month: "June", day: 23, year: 2019 },
+          descriptions:
+            "For winnig first place in the passerelles numeriques coding contest held at Nasipit, Talamban, Cebu City at June 19, 2019",
+          organization: "Passerelless numeriques"
+        }
+      ];
+      var num =0;
+    this.badgelist.forEach(element => {
+      element["imgnum"] = num;
+      num += 1;
+      if (num > 10) {
+        num = 0;
+      }
+    });
+    this.$emit("badgeCount", this.badgelist.length);
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
@@ -289,13 +292,13 @@ export default {
   padding-top: 30px;
   padding-bottom: 20px;
   color: #3d4c54;
-  background: #f2f8fa;
+  background: #e8f3fa;
   text-align: center;
   font-family: Verdana;
   font-size: 16px;
   height: 390px;
   border-right:6px solid #779cb5;
-  border-bottom:8px solid #f2f8fa;
+  border-bottom:8px solid #e8f3fa;
 }
 .btnrow {
   background: white;
@@ -320,7 +323,7 @@ export default {
   margin-top: 25px;
   padding: 0;
   margin-bottom: 25px;
-  background: #f2f8fa;
+  background: #e8f3fa;
   -webkit-box-shadow: 0px 1px 6px #74818f;
   box-shadow: 0px 1px 6px #74818f;
 }

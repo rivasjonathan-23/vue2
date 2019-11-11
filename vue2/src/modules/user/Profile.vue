@@ -7,7 +7,7 @@
       <h4 class="fullname">{{ userinf.firstname+" "+userinf.lastname }}</h4>
       <p class="username">{{userinf.username}}</p>
     </div>
-    <div v-bind:class="{smallinfo: resized}" class="info">
+    <div v-bind:class="{smallinfo: resized, changepad: chpad}" class="info">
       <p class="occupation">{{userinf.occupation+" for "+userinf.years+yrlabel}} at {{company}}</p>
       <p class="bday">Born on {{birthdate}}</p>
       <p class="age">{{userinf.age}} years old</p>
@@ -25,15 +25,12 @@
     </div>
     <div class="outercont" v-bind:class="{smlbcount: resized}">
       <div class="bcountoutercont" v-bind:class="{sml: resized}">
-        <div class="countinnercont" v-if="!resized">
+        <div class="countinnercont" v-bind:class="{changezi: zindex}">
           <h1>{{badgenum}}</h1>
         </div>
-        <div class="bnumdesign"  v-bind:class="{smldes: resized}">
-          <div class="changedes" v-if="resized">
-            <h1>{{badgenum}}&nbsp;Badges</h1>
-          </div>
-        </div>
-        <h2 v-if="!resized" class="btext">Badges</h2>
+        <h3 v-if="resized" class="btext2">{{badgenum > 1 ? 'Badges': 'Badge'}}</h3>
+        <div class="bnumdesign" v-bind:class="{changedes: resized}"></div>
+        <p v-if="!resized" class="btext">{{badgenum > 1 ? 'Badges': 'Badge'}}</p>
       </div>
     </div>
   </div>
@@ -63,13 +60,16 @@ export default {
       yrlabel: "",
       company: "Aksintyur",
       birthdate: "September 23, 1998",
-      resized: false
+      resized: false,
+      btext: "Badge",
+      chpad: false
     };
   },
   props: {
-    badgenum: Number
+    badgenum: Number,
   },
   created() {
+    this.btext = this.badgenum > 1 ? "Badges" : "Badge";
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
@@ -95,17 +95,24 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    Alert(o) {
-      alert(o);
-    },
     redirect(path) {
       this.$router.push(path);
     },
     handleResize() {
-      if (window.innerWidth < 1000) {
-        this.resized = true;
+      if (window.innerWidth < 1200) {
+        if (window.innerWidth > 900) {
+          this.chpad = true;
+        } else {
+          this.chpad = false;
+        }
+        if (window.innerWidth < 900) {
+          this.resized = true;
+        } else {
+          this.resized = false;
+        }
       } else {
         this.resized = false;
+        this.chpad = false;
       }
     },
     InsideMethod() {
@@ -116,69 +123,76 @@ export default {
 </script>
 <style scoped>
 .outercont {
-  width: 25%;
+  width: 20%;
   float: left;
   font-family: verdana;
-  margin-top: 145px;
+  margin-top: 160px;
 }
 .smlbcount {
   width: 100%;
   margin: 0;
-  
 }
 
 .info {
   float: left;
   font-size: 14px;
-  width: 50%;
+  width: 55%;
   text-align: left;
   margin-bottom: 0;
   margin-top: 155px;
   padding: 10px;
-  background: white;
+}
+
+.changepad {
+  padding-left: 6%;
 }
 .countinnercont {
-  color: white;
   z-index: 55555;
-  background: grey;
+  background: #b8d6e3;
   border-radius: 50px;
-  padding-top: 15px;
-  margin-left: 50px;
-  padding-bottom: 15px;
+  padding-top: 9px;
+  margin-left: 40px;
+  color: #416e82;
+  padding-bottom: 9px;
   width: 80px;
   top: 24px;
+  border-bottom: 5px solid #89bfd6;
+  border-top: 5px solid #89bfd6;
+  border-right: 5px solid #f0fbff;
+  border-left: 5px solid #f0fbff;
   overflow: visible;
   position: absolute;
+  z-index: 1000;
+}
+
+.changeinner {
+  border-bottom: 5px solid #f0fbff;
+  border-top: 5px solid #f0fbff;
+  border-right: 5px solid #89bfd6;
+  border-left: 5px solid #89bfd6;
+}
+
+.changezi {
+  z-index: -1;
 }
 .bnumdesign {
   width: 100%;
   padding: 0;
   border-right: 20px solid white;
   border-left: 20px solid white;
-  border-bottom: 20px solid lightgrey;
-  border-top: 20px solid lightgrey;
+  border-bottom: 20px solid #daedf5;
+  border-top: 20px solid #daedf5;
 }
-
-.smldes {
-  border-right: 10px solid white;
-  border-left: 10px solid white;
-  border-bottom: 10px solid lightgrey;
-  border-top: 10px solid white;
-}
-
 .changedes {
-  background: transparent;
-  color: grey;
-  margin: 0;
-  position: unset;
+  border-left: 20px solid #daedf5;
 }
 .bcountoutercont {
-  width: 200px;
+  width: 180px;
   padding-top: 45px;
   padding-left: 10px;
   padding-right: 10px;
   position: relative;
-  color: grey;
+  color: #416e82;
   border-bottom: 2px solid #d5e7f5;
 }
 
@@ -189,6 +203,14 @@ export default {
 }
 .btext {
   margin-top: 20px;
+  font-size: 22px;
+}
+
+.btext2 {
+  position: absolute;
+  left: 140px;
+  top: 50px;
+  font-size: 22px;
 }
 .logo {
   overflow: hidden;
