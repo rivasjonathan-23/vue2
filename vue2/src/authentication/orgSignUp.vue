@@ -52,7 +52,7 @@
           <b-input type="text" class="binput" required v-model="years"></b-input>
         </div>
         <div class="inputholder">
-          <span>What you do? | Description</span>
+          <span>What your organization do? | Description</span>
           <b-form-textarea type="text" rows="5" class="binput" required v-model="description"></b-form-textarea>
         </div>
 

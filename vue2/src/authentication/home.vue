@@ -3,8 +3,10 @@
     <div class="con">
       <div class="overlay">
         <div class="title">
-          <p class="badgebook">Badgebook*</p>
-          <p class="tagline">Treasure your achievements</p>
+          <div class="dv">
+          <p class="badgebook" v-bind:class="{smlfnt: resized}" >Badgebook</p>
+          <p class="tagline" v-bind:class="{smlfnt2: resized}">Treasure your achievements</p>
+          </div>
         </div>
       </div>
     </div>
@@ -16,22 +18,46 @@ export default {
   name: "Home",
   data() {
     return {
-      image: require("@/assets/background.jpg")
+      image: require("@/assets/background.jpg"),
+      resized: false
     };
+  },
+  methods: {
+    handleResize() {
+      if (window.innerWidth < 800) {
+        this.resized = true;
+      } else {
+        this.resized = false;
+      }
+    }
+  },
+  created() {
+    window.addEventListener("resize", this.handleResize);
+    this.size = window.innerWidth;
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
   }
 };
 </script>
 
 
 <style scoped>
+
 .overlay {
   position: fixed;
-  width:100%;
+  width: 100%;
   height: 100%;
   text-align: center;
   height: 100%;
   /* background:#186fa1; */
-  background-image: linear-gradient(to bottom right, rgb(24, 111, 161, .6),rgb(24, 111, 161, .8), #186fa1);
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(24, 111, 161, 0.6),
+    rgb(24, 111, 161, 0.8),
+    #186fa1
+  );
 }
 .badgebook {
   color: white;
@@ -44,11 +70,19 @@ export default {
   font-family: verdana;
   margin: 0;
   color: white;
+  letter-spacing: 4px;
   font-size: 20px;
 }
+.smlfnt {
+  font-size: 40px;
+}
+
+.smlfnt2 {
+  font-size: 8px;
+}
 .title {
-  padding: 300px;
-  width:100%;
+  padding-top: 150px;
+  width: 100%;
   height: 100%;
   text-align: center;
   height: 100%;

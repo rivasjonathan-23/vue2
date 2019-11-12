@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar class="navbar" toggleable="lg" type="dark">
-      <b-navbar-brand class="web-name" @click="redirect('/')">BadgeBook*</b-navbar-brand>
+      <b-navbar-brand class="web-name" @click="redirect('/')">Badgebook</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 

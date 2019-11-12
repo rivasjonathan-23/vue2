@@ -4,33 +4,53 @@
       <div class="accinfo">
         <p class="sign">Create an account as a</p>
         <p class="rutext">Regular user*</p>
-        <div class="inputholder">
+        <div class="inputholder" v-bind:class="{red: err}">
           <span>Username</span>
-          <b-input type="text" class="binput" required v-model="username"></b-input>
+          <b-input
+            type="text"
+            class="binput"
+            required
+            v-model="username"
+            v-bind:class="{unameErr: err}"
+          ></b-input>
           <transition name="slide-fade">
-            <span class="err" v-if="err">Username already taken!</span>
+            <span class="err" v-bind:class="{red: err}" v-if="err">This username is already taken!</span>
           </transition>
         </div>
-         <div class="inputholder">
+        <div class="inputholder">
           <span>Email</span>
           <b-input type="email" class="binput" required v-model="email"></b-input>
         </div>
-        <div class="inputholder">
+        <div class="inputholder" v-bind:class="{red: passhort}">
           <span>Password</span>
-          <b-input type="password" class="binput" required v-model="password"></b-input>
+          <b-input
+            type="password"
+            class="binput"
+            v-bind:class="{unameErr: passhort}"
+            required
+            v-model="password"
+          ></b-input>
           <transition name="slide-fade">
             <span
               class="err"
+              v-bind:class="{red: passhort}"
               v-show=" password.length < 8 && password  != ''"
             >must be at least 8 characters!</span>
           </transition>
         </div>
-        <div class="inputholder">
+        <div class="inputholder" v-bind:class="{red: passErr}">
           <span>Confirm Password</span>
-          <b-input type="password" class="binput" required v-model="confirmpassword"></b-input>
+          <b-input
+            type="password"
+            v-bind:class="{unameErr: passErr}"
+            class="binput"
+            required
+            v-model="confirmpassword"
+          ></b-input>
           <transition name="slide-fade">
             <span
               class="err"
+              v-bind:class="{red: passErr}"
               v-show="confirmpassword != password && confirmpassword && password"
             >Password doesn't match!</span>
           </transition>
@@ -44,21 +64,11 @@
             <tr>
               <td>
                 <span>Firstname</span>
-                <b-input
-                  type="text"
-                  class="binput"
-                  required
-                  v-model="firstname"
-                ></b-input>
+                <b-input type="text" class="binput" required v-model="firstname"></b-input>
               </td>
               <td>
                 <span>Lastname</span>
-                <b-input
-                  type="text"
-                  class="binput"
-                  required
-                  v-model="lastname"
-                ></b-input>
+                <b-input type="text" class="binput" required v-model="lastname"></b-input>
               </td>
             </tr>
           </table>
@@ -116,13 +126,7 @@
           <table class="srow">
             <td>
               <span>Age</span>
-              <b-input
-                type="number"
-                class="binput"
-                required
-                v-model="age"
-                min="12"
-              ></b-input>
+              <b-input type="number" class="binput" required v-model="age" min="12"></b-input>
             </td>
             <td class="genders">
               <span class="g">Gender</span>
@@ -143,40 +147,35 @@
             </td>
           </table>
         </div>
-       
-        <p class="lbl">Working already?</p>
+
+        <p class="lbl">Are you working already?</p>
         <div class="inputholder">
           <span>Work</span>
-          <b-input
-            type="text"
-            class="binput"
-            placeholder="Optional"
-            required
-            v-model="occupation"
-          ></b-input>
+          <b-input type="text" class="binput" v-model="occupation"></b-input>
+           <transition name="slide-fade">
+            <span class="err" v-bind:class="{red: chosedwrk}" v-if="company && !occupation">What is your work?</span>
+            
+          </transition>
         </div>
         <div class="inputholder">
-          <span>Company</span>
-          <b-input
-            type="text"
-            class="binput"
-            placeholder="Optional"
-            required
-            v-model="company"
-          ></b-input>
+          <span>Company | organization</span>
+          <b-input type="text" class="binput" v-model="company"></b-input>
+           <transition name="slide-fade">
+            <span class="err" v-bind:class="{red: chosedwrkrvd}" v-if="occupation && !company">Where are you working?</span>
+          </transition>
         </div>
         <p class="lbl">Or still studying?</p>
         <div class="inputholder">
           <span>School</span>
-          <b-input
-            type="text"
-            class="binput"
-            placeholder="Optional"
-            required
-            v-model="occupation"
-          ></b-input>
+          <b-input type="text" class="binput" v-model="school"></b-input>
         </div>
-        <b-button v-on:click="redirect('/signUpAs')" type="submit" class="lgnbtn" variant="primary">
+        <div class="noChsn">
+          <p class="ertxt" v-if="noChosen">Are you working or studying? Please fill up.</p>
+          <p class="ertxt" v-if="err">The username you've entered is already taken!</p>
+          <p class="ertxt" v-if="passhort">Your password is less than 8 characters!</p>
+          <p class="ertxt" v-if="passErr">Password did not match!</p>
+        </div>
+        <b-button type="submit" class="lgnbtn" variant="primary">
           <span v-if="!loading">Register</span>
           <span v-else>
             <span>Loading&nbsp;</span>
@@ -197,21 +196,19 @@ export default {
   name: "FullSignUp",
   data() {
     return {
-      username: "",
-      password: "",
-      confirmpassword: "",
-      firstname: "",
-      lastname: "",
-      email: "",
-      age: null,
-      address: "",
+      username: "rivas",
+      password: "jrivas2398",
+      confirmpassword: "jrivas2398",
+      firstname: "Jonathan",
+      lastname: "Rivas",
+      email: "rivas@gmail.com",
+      age: 21,
+      address: "address",
       occupation: "",
       company: "",
-      school:"",
+      school: "",
       gender: "",
-      birthdate: { month: "", day: null, year: null },
-      isValid: true,
-      err: false,
+      birthdate: { month: "February", day: 23, year: 2019 },
       type: "",
       loading: false,
       cal: [
@@ -229,7 +226,14 @@ export default {
         "December"
       ],
       focus: false,
-      resized: false
+      resized: false,
+      err: false,
+      passErr: false,
+      passhort: false,
+      workErr: false,
+      noChosen: false,
+      chosedwrk: false,
+      chosedwrkrvd: false
     };
   },
 
@@ -249,40 +253,37 @@ export default {
         age: this.age,
         type: "Regular user"
       };
-      if (
-        this.isValid &&
-        this.password != "" &&
-        this.password == this.confirmpassword
-      ) {
-        this.loading = true;
+      var val = this.validate();
+      if (val) {
         this.$store
           .dispatch("fullsignup", userInfo)
           .then(() => {
             this.$router.push("/user");
             this.err = false;
-            $("#unameErr").css({ background: "#555657" });
+            this.loading = false;
           })
-          .catch(err => {
-            $("#unameErr").css({ background: "red" });
-            this.err = true;
+          .catch(error => {
+            if (error.response.status === 400) {
+              this.err = true;
+              this.loading = false;
+            } else if (error.response.status === 500) {
+              this.loading = false;
+            }
+            this.loading = false;
           });
       } else {
-        alert("invalid credentials!");
+        this.loading = false;
       }
     },
-    checkUsername() {
-      axios
-        .post("http://localhost:8081/user/checkusername", {
-          username: this.username
-        })
-        .then(response => {
-          this.err = false;
-          this.isValid = true;
-        })
-        .catch(err => {
-          this.err = true;
-          this.isValid = false;
-        });
+    validate() {
+      this.loading = true;
+      this.passhort = this.password.length < 8;
+      this.passErr = this.password != this.confirmpassword;
+      this.noChosen =
+        this.school === "" && (this.occupation === "" || this.company == "");
+      var chosedwrk = this.occupation != "" && this.company === "";
+      var chosedwrkrvd = this.occupation === "" && this.company != "";
+      return !this.passErr && !this.passhort && !this.noChosen && (!chosedwrk || !chosedwrkrvd);
     },
     month(m) {
       this.birthdate.month = m;
@@ -326,6 +327,20 @@ export default {
 
 
 <style scoped>
+.noChsn {
+  padding: 10px;
+  font-size: 13px;
+  /* border: 1px solid red; */
+  /* background: #f7e4e4; */
+  color: red;
+  /* margin-bottom: 20px; */
+  /* border-radius: 5px; */
+}
+
+.ertxt  {
+  padding:0;
+  margin:0;
+}
 .ws {
   /* background:#fafcfc; */
   padding: 10px;
@@ -337,10 +352,10 @@ export default {
   background: #f5f9fa;
 }
 .lbl {
-  font-size: 17px;
-  margin-top:35px;
+  font-size: 18px;
+  margin-top: 35px;
   padding-bottom: 0;
-  margin-bottom:0;
+  margin-bottom: 0;
 }
 .perinfo {
   /* background: white; */
@@ -350,16 +365,17 @@ export default {
   margin: 0;
   width: 100%;
   height: 100%;
+  position: relative;
   text-align: center;
 }
 .accinfo {
   width: 100%;
   padding: 0;
   position: relative;
-  margin-top:0;
+  margin-top: 0;
 }
 .innercont {
-  color:#385b73;
+  color: #385b73;
   padding: 0;
   border-radius: 0;
   width: 600px;
@@ -411,6 +427,11 @@ export default {
   margin-top: 0;
   margin-bottom: 20px;
   text-align: left;
+}
+.unameErr {
+  border: 1px solid red;
+  background: #f7e4e4;
+  color: red;
 }
 
 .m {
@@ -517,10 +538,13 @@ h5:hover {
 
 .err {
   font-weight: normal;
-  color: red;
+  color: #1a95ed;
   font-size: 11px;
   position: absolute;
   left: 0px;
+}
+.red {
+  color: red;
 }
 
 .fname {

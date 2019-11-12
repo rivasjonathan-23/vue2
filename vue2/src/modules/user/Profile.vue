@@ -131,6 +131,7 @@ export default {
 .smlbcount {
   width: 100%;
   margin: 0;
+  padding-bottom: 40px;
 }
 
 .info {
