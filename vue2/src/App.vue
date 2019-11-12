@@ -36,11 +36,20 @@
       <b-form>
         <b-form-input id="searchb" v-model="person" placeholder="Enter username"></b-form-input>
       </b-form>
-      <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
+      <div class="divSearch">
+        <b-row>
+          <b-col>
+            <b-button block variant="outline-danger" @click="$bvModal.hide('searchUser')">Exit</b-button>
+          </b-col>
+          <b-col cols="8">
+            <b-button block variant="outline-success" @click="search">Search Now</b-button>
+          </b-col>
+        </b-row>
+      </div>
     </b-modal>
     <div class="content">
       <center>
-        <router-view :userInfo="info"/>
+        <router-view :userInfo="info" />
       </center>
     </div>
   </div>
@@ -87,14 +96,18 @@ export default {
       }
     },
     search() {
-      let user = { user: this.person };
+      let user = { username: this.person };
       axios.post("http://localhost:8081/search", user).then(
         response => {
-          if (response.data.respond != "Cannot find user!") {
+          if (response.data.status) {
             console.log(response.data);
-            alert(response.data.respond);
+            //alert(response.data.respond);
+            this.$bvModal.hide('searchUser')
+            this.$router.push({path: "/"+response.data.username})
+            
           } else {
-            alert(response.data.respond);
+            alert(response.data.sms);
+            //this.$router.push({name: "viewuser"})
           }
         },
         err => {
@@ -407,7 +420,7 @@ label {
   top: -3em;
 }
 
-button {
+/* button {
   display: inline-block;
   padding: 12px 24px;
   background: rgb(220, 220, 220);
@@ -418,15 +431,19 @@ button {
   border-radius: 3px;
   cursor: pointer;
   transition: ease 0.3s;
-}
+} */
 
 /* #nav {
   width: 450px;
   text-align: right;
 } */
 
-button:hover {
+/* button:hover {
   background: #5d5f61;
   color: #ffffff;
+} */
+.divSearch {
+  width: 95%;
+  margin-left: 2.5%;
 }
 </style>

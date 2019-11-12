@@ -17,6 +17,7 @@ import UserBadgelist from "./modules/user/Mybadge.vue";
 
 import badges from "./modules/organization/Badges.vue";
 import certify from "./modules/organization/Certify.vue";
+import ViewUser from "./views/viewUser.vue"
 
 Vue.use(Router);
 // eslint-disable-next-line
@@ -30,7 +31,12 @@ let router = new Router({
       component: Home,
       
     },
-    
+    {
+      path: "/:username",
+      name: "viewuser",
+      component: ViewUser,
+      props: true
+    },
 
     {
       path: "/login",
