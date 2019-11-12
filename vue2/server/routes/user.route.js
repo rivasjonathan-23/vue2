@@ -139,9 +139,5 @@ userRoute.route("/fullsignup").post((req,res) =>{
     console.log(req.body)
 })
 
-userRoute.route("/search").post((req,res)=>{
-    console.log("searching.....")
-    res.send({status: true, user: req.body.user})
-})
 
 module.exports = userRoute

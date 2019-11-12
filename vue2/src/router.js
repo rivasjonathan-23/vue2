@@ -32,12 +32,17 @@ let router = new Router({
       
     },
     {
-      path: "/:username",
+      path: "/view-user/:username",
       name: "viewuser",
       component: ViewUser,
       props: true
     },
-
+    // {
+    //   path: "/:username",
+    //   name: "viewuser",
+    //   component: ViewUser,
+    //   props: true
+    // },
     {
       path: "/login",
       component: login,

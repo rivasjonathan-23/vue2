@@ -103,7 +103,7 @@ export default {
             console.log(response.data);
             //alert(response.data.respond);
             this.$bvModal.hide('searchUser')
-            this.$router.push({path: "/"+response.data.username})
+            this.$router.push({path: "/view-user/"+response.data.username})
             
           } else {
             alert(response.data.sms);

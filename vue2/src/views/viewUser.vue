@@ -54,6 +54,8 @@ export default {
       function(route) {
         if (route.name === "viewuser") {
           this.getUser();
+        }else{
+          this.userfound = false;
         }
       }
     );
