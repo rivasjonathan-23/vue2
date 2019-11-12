@@ -31,7 +31,7 @@ export default {
   text-align: center;
   height: 100%;
   /* background:#186fa1; */
-  background-image: linear-gradient(to right, rgb(24, 111, 161, .6),rgb(24, 111, 161, .9), #186fa1);
+  background-image: linear-gradient(to bottom right, rgb(24, 111, 161, .6),rgb(24, 111, 161, .8), #186fa1);
 }
 .badgebook {
   color: white;
@@ -87,7 +87,7 @@ body {
   margin-right: 0;
   margin-left: 0;
   height: 100vh;
-  background-image: url("~@/assets/bb/12.jpg");
+  background-image: url("~@/assets/bb/10.jpg");
   background-size: cover;
   /* -webkit-filter: brightness(80%);
   filter: brightness(80%); */
