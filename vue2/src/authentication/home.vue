@@ -1,30 +1,58 @@
 <template>
   <div class="outercont">
     <div class="con">
-      <SignUp class="box"></SignUp>
-      <!-- <img :src="image" alt class="background"> -->
+      <div class="overlay">
+        <div class="title">
+          <p class="badgebook">Badgebook*</p>
+          <p class="tagline">Treasure your achievements</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import SignUp from "./signUp";
-
 export default {
   name: "Home",
   data() {
     return {
       image: require("@/assets/background.jpg")
     };
-  },
-  components: {
-    SignUp
   }
 };
 </script>
 
 
 <style scoped>
+.overlay {
+  position: fixed;
+  width:100%;
+  height: 100%;
+  text-align: center;
+  height: 100%;
+  /* background:#186fa1; */
+  background-image: linear-gradient(to right, rgb(24, 111, 161, .6),rgb(24, 111, 161, .9), #186fa1);
+}
+.badgebook {
+  color: white;
+  font-size: 70px;
+  letter-spacing: 3px;
+  margin: 0;
+  padding: 0;
+}
+.tagline {
+  font-family: verdana;
+  margin: 0;
+  color: white;
+  font-size: 20px;
+}
+.title {
+  padding: 300px;
+  width:100%;
+  height: 100%;
+  text-align: center;
+  height: 100%;
+}
 .col-sm-3 {
   border: 1px solid lightgrey;
   width: 400px;
@@ -59,10 +87,10 @@ body {
   margin-right: 0;
   margin-left: 0;
   height: 100vh;
-  background-image: url("~@/assets/bb/10.jpg");
+  background-image: url("~@/assets/bb/12.jpg");
   background-size: cover;
-  -webkit-filter: brightness(75%); /* Safari 6.0 - 9.0 */
-  filter: brightness(75%);
+  /* -webkit-filter: brightness(80%);
+  filter: brightness(80%); */
 }
 
 .con {

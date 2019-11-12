@@ -362,9 +362,7 @@ export default {
   color:#385b73;
   padding: 0;
   border-radius: 0;
-  margin-top:45px;
   width: 600px;
-  border-top:4px solid #e8f3fa;
   background: white;
   text-align: center;
   padding: 40px;

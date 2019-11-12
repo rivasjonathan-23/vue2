@@ -65,9 +65,10 @@ export default {
   /* background-image: linear-gradient(to bottom right, #80b7d1 , #e4f1f7); */
   margin-bottom: 0;
   /* text-align: center; */
-  background-image: url("~@/assets/bb/11.jpg");
-  background-size: cover;
-  background-attachment: fixed;
+  /* background-image: url("~@/assets/bb/11.jpg"); */
+  /* background-size: cover; */
+  /* background-attachment: fixed; */
+   background:#186fa1;
 }
 
 .contain {
@@ -102,25 +103,30 @@ export default {
 }
 
 .org {
-  background-color: #d3e0e8;
-  color: #136ea8;
+  background-color: #1d7fb8;
+  color: white;
 }
 .btn:focus {
   outline: none;
 }
+
+.btn:hover {
+  background-color: #d3e0e8;
+  color:#186fa1;
+}
 .pressed {
-  background-color: #136ea8;
-  color: white;
+  background-color: #d3e0e8;
+  color: #186fa1;
 }
 
 .reg {
-  background-color: #d3e0e8;
-  color: #136ea8;
+   background-color: #1d7fb8;
+  color: white;
 }
 
 .unpressed {
-  background-color: #136ea8;
-  color: white;
+  background-color: #d3e0e8;
+  color: #186fa1;
 }
 
 .close {

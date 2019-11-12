@@ -235,8 +235,8 @@ button:hover {
   font-family: verdana;
   padding: 5px;
   margin: 0;
-  color: #445f6e;
-  background:#e3e7e8;
+  color: #186fa1;
+  background:#d3e0e8;
 }
 
 .text {

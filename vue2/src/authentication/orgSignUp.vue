@@ -222,8 +222,6 @@ export default {
   padding: 0;
   border-radius: 0;
   width: 600px;
-  margin-top:45px;
-  border-top:4px solid #e8f3fa;
   background: white;
   text-align: center;
   padding: 40px;
