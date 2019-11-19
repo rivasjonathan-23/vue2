@@ -96,24 +96,8 @@ export default {
       }
     },
     search() {
-      let user = { username: this.person };
-      axios.post("http://localhost:8081/search", user).then(
-        response => {
-          if (response.data.status) {
-            console.log(response.data);
-            //alert(response.data.respond);
-            this.$bvModal.hide('searchUser')
-            this.$router.push({path: "/view-user/"+response.data.username})
-            
-          } else {
-            alert(response.data.sms);
-            //this.$router.push({name: "viewuser"})
-          }
-        },
-        err => {
-          console.log("error");
-        }
-      );
+      this.$bvModal.hide("searchUser");
+      this.$router.push({ path: "/" + this.person });
     },
     signout() {
       this.$store.dispatch("logout").then(() => {

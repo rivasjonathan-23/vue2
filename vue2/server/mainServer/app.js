@@ -49,16 +49,26 @@ app.use(cors())
 
 app.use("/user", userRoute)
 
-app.get("/", (req, res) => {
-    res.send("Hello")
-})
-
 app.post("/search", (req, res) => {
+	console.log("searching....")
     let usernamei = req.body.username;
-    if (usernamei == "redgie") {
+    var db = ["redgie","pnorg"]
+    if(db.includes(usernamei)){
         res.send({ status: true, username: usernamei })
-    }else {
+    }else{
         res.send({ status: false, sms: "Username not found" })
+    }
+})
+app.post('/get-user', function(req, res){
+    console.log("get user....")
+    let usernamei = req.body.username;
+    console.log(usernamei)
+    if (usernamei == "redgie") {
+        res.send({ status: true, username: usernamei, type: "regular" })
+    }else if (usernamei == "pnorg") {
+        res.send({ status: true, username: usernamei, type: "org" })
+    }else {
+        res.send({ status: false, username: "notfound", sms: "Username not found" })
     }
 })
 app.listen(process.env.PORT || 8081)
