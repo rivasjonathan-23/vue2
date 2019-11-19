@@ -4,17 +4,22 @@
       <div class="accinfo">
         <p class="sign">Create an account as a</p>
         <p class="rutext">Regular user*</p>
-        <div class="inputholder" v-bind:class="{red: err}">
+        <div class="inputholder" v-bind:class="{red: err || errlen}">
           <span>Username</span>
           <b-input
             type="text"
             class="binput"
             required
             v-model="username"
-            v-bind:class="{unameErr: err}"
+            v-bind:class="{unameErr: err  || errlen}"
           ></b-input>
           <transition name="slide-fade">
             <span class="err" v-bind:class="{red: err}" v-if="err">This username is already taken!</span>
+            <span
+              class="err"
+              v-bind:class="{red: errlen}"
+              v-if="username && username.length < 7"
+            >must be at least 7 characters!</span>
           </transition>
         </div>
         <div class="inputholder">
@@ -57,122 +62,29 @@
         </div>
       </div>
       <div class="perinfo">
-        <p class="sign2">Personal Information*</p>
+        <p class="sign2">About your organization*</p>
 
         <div class="inputholder">
-          <table>
-            <tr>
-              <td>
-                <span>Firstname</span>
-                <b-input type="text" class="binput" required v-model="firstname"></b-input>
-              </td>
-              <td>
-                <span>Lastname</span>
-                <b-input type="text" class="binput" required v-model="lastname"></b-input>
-              </td>
-            </tr>
-          </table>
+          <span>Name</span>
+          <b-input type="text" class="binput" required v-model="orgName"></b-input>
         </div>
         <div class="inputholder">
           <span>Address</span>
           <b-input type="text" class="binput" required v-model="address"></b-input>
         </div>
-        <div class="inputholder bdd">
-          <span>Date of birth</span>
-          <table class="bday">
-            <td>
-              <b-input
-                class="binput"
-                autocomplete="off"
-                type="text"
-                placeholder="Month"
-                min="1"
-                id="mnth"
-                max="12"
-                required
-                v-model="birthdate.month"
-              ></b-input>
-              <div class="month">
-                <div v-for="(m,n) in cal" :key="n">
-                  <h5 class="m" @click="month(m)">{{m}}</h5>
-                </div>
-              </div>
-            </td>
-            <td>
-              <b-input
-                type="number"
-                placeholder="Day"
-                min="1"
-                max="32"
-                class="binput"
-                required
-                v-model="birthdate.day"
-              ></b-input>
-            </td>
-            <td>
-              <b-input
-                type="number"
-                placeholder="Year"
-                min="1990"
-                max="2019"
-                class="binput"
-                required
-                v-model="birthdate.year"
-              ></b-input>
-            </td>
-          </table>
+        <div class="inputholder">
+          <span>Year started</span>
+          <b-input type="number" class="binput" min="1800" required v-model="years"></b-input>
         </div>
         <div class="inputholder">
-          <table class="srow">
-            <td>
-              <span>Age</span>
-              <b-input type="number" class="binput" required v-model="age" min="12"></b-input>
-            </td>
-            <td class="genders">
-              <span class="g">Gender</span>
-              <table>
-                <tr>
-                  <td>
-                    <b-form-radio v-model="gender" class="Gender" value="Male">
-                      <span class="glabel">Male</span>
-                    </b-form-radio>
-                  </td>
-                  <td>
-                    <b-form-radio v-model="gender" class="Gender" value="Female">
-                      <span class="glabel">Female</span>
-                    </b-form-radio>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </table>
+          <span>What your organization do? | Description</span>
+          <b-form-textarea type="text" rows="5" class="binput" required v-model="description"></b-form-textarea>
         </div>
-
-        <p class="lbl">Are you working already?</p>
-        <div class="inputholder">
-          <span>Work</span>
-          <b-input type="text" class="binput" v-model="occupation"></b-input>
-           <transition name="slide-fade">
-            <span class="err" v-bind:class="{red: chosedwrk}" v-if="company && !occupation">What is your work?</span>
-            
-          </transition>
-        </div>
-        <div class="inputholder">
-          <span>Company | organization</span>
-          <b-input type="text" class="binput" v-model="company"></b-input>
-           <transition name="slide-fade">
-            <span class="err" v-bind:class="{red: chosedwrkrvd}" v-if="occupation && !company">Where are you working?</span>
-          </transition>
-        </div>
-        <p class="lbl">Or still studying?</p>
-        <div class="inputholder">
-          <span>School</span>
-          <b-input type="text" class="binput" v-model="school"></b-input>
-        </div>
-        <div class="noChsn">
+        <div class="noChsn" v-show="hasError">
           <p class="ertxt" v-if="noChosen">Are you working or studying? Please fill up.</p>
           <p class="ertxt" v-if="err">The username you've entered is already taken!</p>
-          <p class="ertxt" v-if="passhort">Your password is less than 8 characters!</p>
+          <p class="ertxt" v-if="passhort">Your password is weak! Must be 8 or more characters.</p>
+          <p class="ertxt" v-if="errlen">Your username is less than 7 characters!</p>
           <p class="ertxt" v-if="passErr">Password did not match!</p>
         </div>
         <b-button type="submit" class="lgnbtn" variant="primary">
@@ -196,117 +108,74 @@ export default {
   name: "FullSignUp",
   data() {
     return {
-      username: "rivas",
+      username: "jrivas23",
       password: "jrivas2398",
       confirmpassword: "jrivas2398",
-      firstname: "Jonathan",
-      lastname: "Rivas",
-      email: "rivas@gmail.com",
-      age: 21,
-      address: "address",
-      occupation: "",
-      company: "",
-      school: "",
-      gender: "",
-      birthdate: { month: "February", day: 23, year: 2019 },
-      type: "",
-      loading: false,
-      cal: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-      ],
-      focus: false,
-      resized: false,
+      orgName: "Passerelles Numeriques",
+      email: "rivas23@gmail.com",
+      years: "2001",
+      address: "Nasipit, Talamban, Cebu City",
+      description:"Our mission is to provide education, technical and professional training in the digital sector to young underprivileged people by leveraging their potential and willpower. We endeavour to truly develop their employability which will allow them and their families to escape poverty in a sustainable way, and contribute to the social and economic development of their countries.",
       err: false,
-      passErr: false,
-      passhort: false,
-      workErr: false,
-      noChosen: false,
-      chosedwrk: false,
-      chosedwrkrvd: false
+      loading: false,
+      type: "",
+      resized: false,
     };
   },
 
   methods: {
     register() {
       let userInfo = {
-        username: this.username,
+         username: this.username,
         password: this.password,
-        firstname: this.firstname,
-        lastname: this.lastname,
-        birthdate: this.birthdate,
         email: this.email,
         address: this.address,
-        occupation: this.occupation,
-        gender: this.gender,
+        orgName: this.orgName,
         years: this.years,
-        age: this.age,
-        type: "Regular user"
+        description: this.description,
+        type: "Organization",
+        badges: [],
       };
       var val = this.validate();
       if (val) {
         this.$store
-          .dispatch("fullsignup", userInfo)
+          .dispatch("orgsignup", userInfo)
           .then(() => {
             this.$router.push("/user");
             this.err = false;
             this.loading = false;
+            this.hasError = false;
           })
           .catch(error => {
             if (error.response.status === 400) {
               this.err = true;
               this.loading = false;
+              this.hasError = true;
             } else if (error.response.status === 500) {
+              alert("Unpected error occured! Pleaser try again later");
               this.loading = false;
+              this.hasError = false;
             }
             this.loading = false;
           });
       } else {
         this.loading = false;
+        this.hasError = true;
       }
     },
     validate() {
       this.loading = true;
       this.passhort = this.password.length < 8;
       this.passErr = this.password != this.confirmpassword;
-      this.noChosen =
-        this.school === "" && (this.occupation === "" || this.company == "");
-      var chosedwrk = this.occupation != "" && this.company === "";
-      var chosedwrkrvd = this.occupation === "" && this.company != "";
-      return !this.passErr && !this.passhort && !this.noChosen && (!chosedwrk || !chosedwrkrvd);
-    },
-    month(m) {
-      this.birthdate.month = m;
-      this.focus = true;
-    },
-    logout() {
-      this.$store.dispatch("logout").then(() => {
-        this.$router.push("/");
-      });
+      this.noChosen = this.school === "" && this.profession === "";
+      this.errlen = this.username.length < 7;
+      return !this.errlen && !this.passErr && !this.passhort && !this.noChosen;
     },
     handleResize() {
       if (window.innerWidth <= 650) {
         this.resized = true;
       } else {
         this.resized = false;
-      }
-    }
-  },
-  watch: {
-    focus(val) {
-      if (this.birthdate.month != "") {
-        $(".month").slideUp();
-        this.focus = false;
       }
     }
   },
@@ -331,15 +200,15 @@ export default {
   padding: 10px;
   font-size: 13px;
   /* border: 1px solid red; */
-  /* background: #f7e4e4; */
+  background: #f7e4e4;
   color: red;
-  /* margin-bottom: 20px; */
-  /* border-radius: 5px; */
+  margin-bottom: 20px;
+  border-radius: 5px;
 }
 
-.ertxt  {
-  padding:0;
-  margin:0;
+.ertxt {
+  padding: 0;
+  margin: 0;
 }
 .ws {
   /* background:#fafcfc; */

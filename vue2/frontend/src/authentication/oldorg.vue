@@ -4,33 +4,58 @@
       <div class="accinfo">
          <p class="sign">Create an account for your</p>
         <p class="rutext">Organization*</p>
-        <div class="inputholder">
+       <div class="inputholder" v-bind:class="{red: err || errlen}">
           <span>Username</span>
-          <b-input type="text" class="binput" required v-model="username"></b-input>
+          <b-input
+            type="text"
+            class="binput"
+            required
+            v-model="username"
+            v-bind:class="{unameErr: err  || errlen}"
+          ></b-input>
           <transition name="slide-fade">
-            <span class="err" v-if="err">Username already taken!</span>
+            <span class="err" v-bind:class="{red: err}" v-if="err">This username is already taken!</span>
+            <span
+              class="err"
+              v-bind:class="{red: errlen}"
+              v-if="username && username.length < 7"
+            >must be at least 7 characters!</span>
           </transition>
         </div>
         <div class="inputholder">
           <span>Email</span>
           <b-input type="email" class="binput" required v-model="email"></b-input>
         </div>
-        <div class="inputholder">
+        <div class="inputholder" v-bind:class="{red: passhort}">
           <span>Password</span>
-          <b-input type="password" class="binput" required v-model="password"></b-input>
+          <b-input
+            type="password"
+            class="binput"
+            v-bind:class="{unameErr: passhort}"
+            required
+            v-model="password"
+          ></b-input>
           <transition name="slide-fade">
             <span
               class="err"
+              v-bind:class="{red: passhort}"
               v-show=" password.length < 8 && password  != ''"
             >must be at least 8 characters!</span>
           </transition>
         </div>
-        <div class="inputholder">
+        <div class="inputholder" v-bind:class="{red: passErr}">
           <span>Confirm Password</span>
-          <b-input type="password" class="binput" required v-model="confirmpassword"></b-input>
+          <b-input
+            type="password"
+            v-bind:class="{unameErr: passErr}"
+            class="binput"
+            required
+            v-model="confirmpassword"
+          ></b-input>
           <transition name="slide-fade">
             <span
               class="err"
+              v-bind:class="{red: passErr}"
               v-show="confirmpassword != password && confirmpassword && password"
             >Password doesn't match!</span>
           </transition>
@@ -49,7 +74,7 @@
         </div>
         <div class="inputholder">
           <span>Year started</span>
-          <b-input type="text" class="binput" required v-model="years"></b-input>
+          <b-input type="number" class="binput" min="1800" required v-model="years"></b-input>
         </div>
         <div class="inputholder">
           <span>What your organization do? | Description</span>
@@ -76,14 +101,14 @@ export default {
   name: "OrgSignUp",
   data() {
     return {
-      username: "",
-      password: "",
-      confirmpassword: "",
-      orgName: "",
-      email: "",
-      years: "",
-      address: "",
-      description:"",
+      username: "jrivas23",
+      password: "jrivas2398",
+      confirmpassword: "jrivas2398",
+      orgName: "Passerelles Numeriques",
+      email: "rivas23@gmail.com",
+      years: "2001",
+      address: "Nasipit, Talamban, Cebu City",
+      description:"Our mission is to provide education, technical and professional training in the digital sector to young underprivileged people by leveraging their potential and willpower. We endeavour to truly develop their employability which will allow them and their families to escape poverty in a sustainable way, and contribute to the social and economic development of their countries.",
       isValid: true,
       err: false,
       loading: false,
@@ -102,9 +127,6 @@ export default {
         orgName: this.orgName,
         description: this.description,
         type: "Organization",
-        badges: [],
-        posts: [],
-        
       };
       if (
         this.isValid &&

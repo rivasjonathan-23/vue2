@@ -49,7 +49,6 @@ export default new Vuex.Store({
             const token = resp.data.token;
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = token;
-            console.log(token);
             commit('auth_success', token);
             resolve(resp.data.type);
           })
@@ -72,7 +71,6 @@ export default new Vuex.Store({
           })
           .then(resp => {
             const token = resp.data.token;
-            console.log(token)
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = token;
             commit('auth_success', token);
@@ -85,7 +83,7 @@ export default new Vuex.Store({
           })
       })
     },
-    orgSignUp({
+    orgsignup({
       commit
     }, user) {
       return new Promise((resolve, reject) => {
@@ -129,10 +127,8 @@ export default new Vuex.Store({
             method: 'POST'
           })
           .then(resp => {
-            console.log(this.getters.token);
             var userType = resp.data.userType;
             if (userType == 'Regular user') {
-              console.log(userType);
               resolve(true);
             } else {
               resolve(false);
@@ -156,7 +152,6 @@ export default new Vuex.Store({
             method: 'POST'
           })
           .then(resp => {
-            console.log(resp.data);
             commit('getInfoStatus', 'success');
             resolve(resp.data);
           })

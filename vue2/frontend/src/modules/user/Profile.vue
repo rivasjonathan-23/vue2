@@ -25,7 +25,7 @@
     </div>
     <div class="outercont" v-bind:class="{smlbcount: resized}">
       <div class="bcountoutercont" v-bind:class="{sml: resized}">
-        <div class="countinnercont" v-bind:class="{changezi: zindex}">
+        <div class="countinnercont">
           <h1>{{badgenum}}</h1>
         </div>
         <h3 v-if="resized" class="btext2">{{badgenum > 1 ? 'Badges': 'Badge'}}</h3>
@@ -158,7 +158,7 @@ export default {
   width: 80px;
   top: 24px;
   border-bottom: 5px solid #89bfd6;
-  border-top: 5px solid #89bfd6;
+  border-top: 5px solid #f0fbff;
   border-right: 5px solid #f0fbff;
   border-left: 5px solid #f0fbff;
   overflow: visible;

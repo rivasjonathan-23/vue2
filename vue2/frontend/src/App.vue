@@ -38,7 +38,7 @@
       </b-form>
       <b-button class="closeSearch" block @click="$bvModal.hide('searchUser')">Exit</b-button>
     </b-modal>
-    <div class="content">
+    <div>
       <center>
         <router-view :userInfo="info"/>
       </center>
@@ -266,8 +266,8 @@ p:hover {
 }
 
 .navbar {
-  z-index: 99999;
-  position: fixed;
+  z-index: 1000;
+  position: absolute;
   width: 100%;
   margin-top: 0px;
   border-radius: 0;

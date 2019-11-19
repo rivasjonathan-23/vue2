@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import FullSignUp from "./fullSignUp";
-import OrgSignUp from "./orgSignUp";
 import $ from "jquery";
 
 export default {
@@ -32,10 +30,6 @@ export default {
     return {
       change: false
     };
-  },
-  components: {
-    FullSignUp,
-    OrgSignUp
   },
   methods: {
     signUpAs(type) {

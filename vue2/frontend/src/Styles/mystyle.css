@@ -203,7 +203,7 @@
   
   .month {
     padding: 0px;
-    /* display: none; */
+    display: none;
     position: absolute;
     border: 1px solid lightgray;
     z-index: 9999;

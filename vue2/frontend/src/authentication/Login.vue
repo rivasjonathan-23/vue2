@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <center>
+      
       <form class="lgn" id="lgn" v-bind:class="{small: resized}" @submit.prevent="login">
         <div class="sign">
           <h1 class="text">Sign in</h1>
@@ -25,6 +26,7 @@
           </b-button>
         </div>
       </form>
+      <div class="error"  v-bind:class="{small: resized}" v-show="error" >The username or password is incorrect!</div>
     </center>
   </div>
 </template>
@@ -41,7 +43,8 @@ export default {
       username: "",
       password: "",
       loading: false,
-      resized: false
+      resized: false,
+      error: false,
     };
   },
   methods: {
@@ -60,9 +63,14 @@ export default {
             this.$router.push("/organization");
           }
         })
-        .catch(err => {
+        .catch(error => {
           this.loading = false;
-          alert("Invalid credentials!");
+          if (error.response.status != 500) {
+            this.error = true;
+          } else {
+            alert(error.response.data.message);
+            this.loading = false;
+          }
         });
     },
     handleResize() {
@@ -152,6 +160,18 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
+}
+.error {
+  width: 360px;
+  padding-left: 20px;
+  padding-right: 20px;
+  /* border: 1px solid red; */
+  background: #f7e4e4;
+  color: red;
+  font-size: 17px;
+  border-radius: 0;
+  /* border-bottom: 4px solid #f08d8d; */
+  margin-top: 20px;
 }
 
 .small {

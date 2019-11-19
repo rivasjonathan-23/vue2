@@ -36,16 +36,13 @@
                 min="1"
                 ref="month"
                 max="12"
-                @focus="focus = true"
                 required
               />
-              <transition name="slide">
-                <div class="month" v-show="focus">
+                <div class="month">
                   <div v-for="(m,n) in cal" :key="n">
                     <h5 class="m" @click="month(m)">{{m}}</h5>
                   </div>
                 </div>
-              </transition>
             </td>
 
             <td id="day" class="inpt d">
@@ -118,7 +115,6 @@ export default {
         "November",
         "December"
       ],
-      focus: false,
       resized: false
     };
   },
@@ -154,7 +150,6 @@ export default {
     },
     month(m) {
       this.date.month = m;
-      this.focus = false;
     },
     async offerBadge() {
       var ok = false;
@@ -217,6 +212,15 @@ export default {
   created() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
+  },
+  mounted() {
+    $("#mnth").focus(function() {
+      $(".month").slideDown();
+    });
+
+    $("#mnth").focusout(function() {
+      $(".month").slideUp();
+    });
   }
 };
 </script>

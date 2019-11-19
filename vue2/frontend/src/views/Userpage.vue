@@ -2,7 +2,7 @@
   <div class="page" v-bind:class="{small: resized}">
     <b-row>
       <b-col cols="12">
-        <Profile :badgenum="numofbadge" :zindex="index"></Profile>
+        <Profile :badgenum="numofbadge" ></Profile>
       </b-col>
     </b-row>
     <b-row>
