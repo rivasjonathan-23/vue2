@@ -55,9 +55,6 @@ export default {
         this.resized = false;
       }
     },
-    redirect(path) {
-      this.$router.push(path);
-    },
     getBadgeCount(count) {
       this.numofbadge = count;
     }
