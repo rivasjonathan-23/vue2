@@ -161,9 +161,6 @@ export default new Vuex.Store({
           });
       })
     },
-    submit({commit}) {
-      commit("form_submitted")
-    }
 
   },
   getters: {

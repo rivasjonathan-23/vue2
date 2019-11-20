@@ -196,9 +196,9 @@ export default {
           this.date.day = "";
           this.date.year = "";
           $("p").removeClass(".label-active");
-          this.$emit("submit");
           this.sending = false;
-          this.$store.dispatch("submit");
+          this.$emit("submit");
+          this.$bvModal.hide("offer");
         })
         .catch(err => {
           alert("ERROR OCCURED!");

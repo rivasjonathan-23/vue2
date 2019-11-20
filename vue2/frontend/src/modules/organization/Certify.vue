@@ -6,7 +6,6 @@
         v-bind:class="{fit: sm}"
         variant="primary"
         class="btn"
-        @click="covered"
         v-b-modal.offer
       >Create new</b-button>
       <div class="pbadges" v-bind:class="{fit: sm}">
@@ -23,7 +22,7 @@
       no-close-on-backdrop
       hide-footer
     >
-      <Offer v-on:submit="closeCreate" @submit="getData" @cancel="closeCreate"></Offer>
+      <Offer @submit="getData" @cancel="closeCreate"></Offer>
     </b-modal>
     <div class="loading" v-show="isLoading">
       <div class="text-center text-danger my-2">
@@ -64,10 +63,10 @@
             <table class="recip" v-if="badge.recipient.length > 0">
               <tr class="thead">
                 <td class="imp">
-                  <p class="TH">Username</p>
+                  <p class="TH nmrgn">Username</p>
                 </td>
                 <td class="imp1">
-                  <p class="TH">Full name</p>
+                  <p class="TH nmrgn">Full name</p>
                 </td>
                 <td class="nimp"></td>
               </tr>
@@ -75,94 +74,56 @@
                 class="reclist"
                 v-for="(recipient, index) in badge.recipient"
                 :key="index"
-                @mouseover="hover = recipient._id"
+                @mouseenter="hover = recipient._id"
                 @mouseleave="hover = ''"
               >
                 <td class="imp">
-                  <p>{{recipient.username}}</p>
+                  <p class="nmrgn">{{recipient.username}}</p>
                 </td>
                 <td class="imp1">
-                  <p>{{recipient.fullname}}</p>
+                  <p class="nmrgn">{{recipient.fullname}}</p>
                 </td>
                 <td class="nimp">
-                  <transition name="slide-fade">
-                    <p class="delete" v-if="hover === recipient._id">Delete</p>
-                  </transition>
+                    <span v-if="hover === recipient._id" class="remove nmrgn">Remove</span>
                 </td>
               </tr>
             </table>
-            <p class="noRec" v-else>No recipient had availed yet</p>
+            <p class="noRec" v-else>No recipient yet</p>
           </div>
           <div id="bmenu" class="text-left">
             <b-button
               variant="primary"
               id="cert"
               class="btn2"
-              v-b-modal.certify-modal
               v-bind:class="{fit: sm}"
-              v-on:click="getBadgeDetail(badge.code, badge.date)"
+              v-on:click="getBadgeDetail('certify-modal', badge._id, badge.code, badge.date, badge.recipient)"
             >Certify Recipients</b-button>
 
             <b-button
               variant="info"
               class="btn2"
-              @click="covered"
               v-bind:class="{fit: sm}"
-              v-b-modal.addRecipient-modal
-              v-on:click="getBadgeDetail(badge.code, badge.date)"
+              v-on:click="getBadgeDetail('addRecipient-modal', badge._id, badge.code, badge.date, [])"
             >Add Recipient</b-button>
             <b-button
               variant="danger"
               class="btn2"
               v-bind:class="{fit: sm}"
-              @click="covered"
-              v-b-modal.addRecipient-modal
-              v-on:click="getBadgeDetail(badge.code, badge.date)"
             >Delete badge</b-button>
           </div>
         </div>
       </div>
     </div>
     <b-modal
-      class="modl"
       id="addRecipient-modal"
       title="Recepient Information"
-      centered
       size="sm"
+      centered
       no-close-on-esc
       no-close-on-backdrop
       hide-footer
     >
-      <form class="addR" @submit.prevent="addRecipient()">
-        <span class="error" v-show="error">Cannot find user or user already in the list!</span>
-        <br>
-        <b-input id="usernamei" required v-model="s_username" placeholder="Enter username"/>
-        <br>
-        <b-row  v-if="!adding">
-          <b-col class="bl">
-            <b-button
-              v-on:click="handleCancel"
-             
-              variant="danger"
-              class="btn btn-block"
-            >Cancel</b-button>
-          </b-col>
-          <b-col class="br">
-            <b-button
-              type="submit"
-              
-              variant="primary"
-              autocomplete
-              class="btn btn-block"
-            >Add Recipient</b-button>
-          </b-col>
-          
-        </b-row>
-        <div v-else class="add">
-              <b-spinner class="align-middle"></b-spinner>&nbsp;
-              <strong>Adding recipient...</strong>
-        </div>
-      </form>
+      <Addrecipient v-on:submit="getData" :badgeinfo="{code: badge_code, id: badge_id}"></Addrecipient>
     </b-modal>
     <b-modal
       class="modl"
@@ -170,70 +131,12 @@
       id="certify-modal"
       title="Certify The Recipients"
       centered
+      hide-header-close
       no-close-on-esc
       no-close-on-backdrop
       hide-footer
     >
-      <div class="text-center ifont">
-        <form @submit.stop.prevent="handleCertificationSubmit()">
-          <span>This certificate of</span>
-          <br>
-          <input
-            class="inputline cername"
-            placeholder="Certificate Name"
-            v-model="certificateName"
-            required
-          >
-          <br>
-          <br>
-          <br>
-          <span>is awarded to</span>
-          <br>
-          <p>
-            (
-            <i>participant/s' name</i>)
-            <br>
-            <br>
-            <br>
-          </p>
-          <textarea
-            name="description"
-            id="description"
-            rows="4"
-            placeholder="Certificate body..."
-            class="text-center ifont"
-            v-model="descriptions"
-            required
-          ></textarea>
-          <br>
-          <br>
-          <br>
-          <p>Given this {{ date }}</p>
-          <hr>
-          <div class="btnholder">
-        
-              <b-button
-                v-if="!certifying | errorCertifying"
-                variant="danger"
-                class="btn cerbtn"
-                v-on:click="resetCertification"
-              >Cancel</b-button>
-              <b-button
-                variant="primary"
-                v-if="!certifying & !errorCertifying"
-                class="btn cerbtn"
-                type="sumbit"
-              >Certify Now</b-button>
-              <span class="errorC" v-if="errorCertifying & !certifying">
-                <strong>No recipient to certify!</strong>
-              </span>
-              <span v-if="certifying" class="add">
-                <b-spinner class="align-middle"></b-spinner>&nbsp;
-                <strong>Certifying recipient...</strong>
-              </span>
-          </div>
-        </form>
-      </div>
+      <Certificate @submit="getData" :badge="{recipients: recipients, code: badge_code, id: badge_id, date: badge_date}"></Certificate>
     </b-modal>
   </div>
 </template>
@@ -241,6 +144,9 @@
 <script>
 import Offer from "./Offer";
 import axios from "axios";
+import Certificate from "./certificate";
+import Addrecipient from "./addRecipient";
+import "@/Styles/cerStyle.css";
 import $ from "jquery";
 
 export default {
@@ -249,7 +155,9 @@ export default {
     username: String
   },
   components: {
-    Offer
+    Offer,
+    Certificate,
+    Addrecipient
   },
   data() {
     return {
@@ -259,14 +167,13 @@ export default {
       s_src: "",
       warning: "",
       certificateName: "",
-      code: "",
-      date: "",
+      badge_code: "",
+      badge_date: "",
+      badge_id: "",
       descriptions: "",
       userExit: false,
       error: false,
       adding: false,
-      certifying: false,
-      errorCertifying: false,
       hover: "",
       tindex: 0,
       size: 0,
@@ -274,6 +181,7 @@ export default {
       isLoading: false,
       hasdata: true,
       sm: false,
+      recipients: []
     };
   },
 
@@ -281,131 +189,7 @@ export default {
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
-    this.badges =  [
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-           
-          ]
-        },
-        {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }, {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            },
-             {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        },
-         {
-          badgename: "First placer",
-          code: "s8fs6df",
-          venue: "Passerelles Numeriques coding contest",
-          date: { month: "Septembner", day: 23, year: 2019 },
-          recipient: [
-            {
-              username: "jrivas23",
-              fullname: "Jonathan Rivas",
-              _id: "asdfasdfgsdfiau23"
-            }
-          ]
-        }
-      ];
-      var num = 0;
-      this.badges.forEach(badge => {
-        badge["imgnum"] = num;
-        num += 1;
-          if (num > 10) {
-          num = 0;
-        }
-      })
+    
     axios
       .post("http://localhost:8081/user/pendingbadges", {
         data: this.$store.getters.token
@@ -415,6 +199,8 @@ export default {
         this.badges = resp.data.badges.reverse();
         if (this.badges.length == 0) {
           this.hasdata = false;
+        } else {
+          this.hasdata = true;
         }
         var num = 0;
         this.badges.forEach(badge => {
@@ -442,9 +228,12 @@ export default {
       }
     },
     
-    getBadgeDetail(bcode, date) {
-      this.code = bcode;
-      this.date = date.month + " " + date.day + ", " + date.year;
+    getBadgeDetail(modal ,id, bcode, date, recip) {
+      this.recipients = recip;
+      this.badge_id = id;
+      this.badge_code = bcode;
+      this.badge_date = date.month + " " + date.day + ", " + date.year;
+      this.$bvModal.show(modal);
     },
     resetModal() {
       this.s_username = "";
@@ -452,37 +241,7 @@ export default {
       this.userExit = false;
       this.warning = "";
     },
-    async addRecipient() {
-      var done = await this.add();
-      if (done) {
-        this.adding = false;
-        this.getData();
-      }
-    },
-    add() {
-      this.adding = true;
-      return new Promise(resolve => {
-        axios
-          .post("http://localhost:8081/user/addrecipient", {
-            username: this.s_username,
-            org: this.$store.getters.token,
-            code: this.code
-          })
-          .then(res => {
-            this.badges = res.data.badges;
-            this.resetModal();
-            $("#usernamei").css({ "border-color": "lightgrey" });
-            this.$bvModal.hide("addRecipient-modal");
-            this.error = false;
-            resolve(true);
-          })
-          .catch(err => {
-            $("#usernamei").css({ "border-color": "red" });
-            this.adding = false;
-            this.error = true;
-          });
-      });
-    },
+    
 
     handleCancel() {
       this.resetModal();
@@ -490,28 +249,7 @@ export default {
       $("#usernamei").css({ "border-color": "lightgrey" });
       this.error = false;
     },
-    handleCertificationSubmit() {
-      this.certifying = true;
-      let badgeInfo = {
-        code: this.code,
-        certificateName: this.certificateName,
-        descriptions: this.descriptions
-      };
-      axios
-        .post("http://localhost:8081/user/certify", {
-          user: this.$store.getters.token,
-          badgeInfo: badgeInfo
-        })
-        .then(res => {
-          this.certifying = false;
-          this.resetCertification();
-          this.getData();
-        })
-        .catch(err => {
-          this.certifying = false;
-          this.errorCertifying = true;
-        });
-    },
+    
     resetCertification() {
       this.errorCertifying = false;
       this.descriptions = "";
@@ -519,10 +257,7 @@ export default {
       this.$bvModal.hide("certify-modal");
     },
     closeCreate() {
-      this.$bvModal.hide("offer");
-    },
-    covered() {
-      this.$emit("changeZindex");
+      
     },
     getData() {
       axios
@@ -531,499 +266,26 @@ export default {
         })
         .then(resp => {
           this.badges = resp.data.badges.reverse();
-          alert("got response")
           if (this.badges.length != 0) {
-            alert("has data")
              var num = 0;
-            // this.badges.forEach(badge => {
-            //   badge["imgnum"] = num;
-            //   num += 1;
-            //   if (num > 10) {
-            //     num = 0;
-            //   }
-            // })
+            this.badges.forEach(badge => {
+              badge["imgnum"] = num;
+              num += 1;
+              if (num > 10) {
+                num = 0;
+              }
+            })
           } else {
             alert("no data")
             this.hasdata = true;
           }
         });
-    }
+  },
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
-  },
-  mounted() {
-    $(".reclist").mouseenter(function() {
-      $(this)
-        .find(".delete")
-        .show();
-    });
-    $(".reclist").mouseleave(function() {
-      $(this)
-        .find(".delete")
-        .hide();
-    });
   }
  
 };
 </script>
-
-<style scoped>
-.bl {
-  margin-right: 0;
-  padding-right: 5px;
-}
-
-.br {
-  margin-left: 0;
-  padding-left: 5px;
-}
-.loading {
-  margin-top: 15px;
-  padding-top: 200px;
-  padding-bottom: 200px;
-  background: #f2f8fa;
-}
-
-.align-middle {
-  color: rgb(3, 78, 133);
-  height: 30px;
-  width: 30px;
-}
-
-#loading2 {
-  color: rgb(3, 78, 133);
-  height: 70px;
-  width: 70px;
-}
-
-.reclist {
-  color: #476069;
-}
-
-.slide-fade-enter-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
-}
-.slide-fade-enter,
-.slide-fade-leave-to {
-  transform: translateX(5px);
-  opacity: 0;
-}
-.createNnum {
-  margin-top: 0;
-  margin-left: 0;
-  margin-right: 0;
-  /* background-image: linear-gradient(to right, #87cefa , white); */
-  height: 40px;
-  position: relative;
-}
-
-.cerbtn {
-  margin:5px;
-}
-
-.btnholder {
-  margin-top:10px;
-  text-align: right;
-}
-.blogo {
-  /* float: left; */
-  width: 200px;
-  margin-top: 20px;
-}
-.cerMenu {
-  width: 300px;
-}
-
-#createC {
-  font-size: 18px;
-  overflow: hidden;
-  float: left;
-  border-radius: 2px;
-}
-
-.nrec {
-  background: #e1eef7;
-  border-radius: 5px;
-  padding-left: 8px;
-  padding-right: 8px;
-  color: #415663;
-}
-
-.nb {
-  padding-left: 7px;
-  padding-right: 7px;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  background: #d1e2e6;
-  border-radius: 5px;
-  font-size: 20px;
-  margin-left: 1px;
-}
-.delete {
-  transition: ease 0.5s;
-}
-.delete:hover {
-  color: red;
-}
-.btncont {
-  width: 100%;
-  padding: 0;
-}
-
-.brow {
-  /* background:red; */
-  margin-right: 0;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
-
-/* #cert {
-  margin-right: 2px;
-} */
-
-.btn2 {
-  float: right;
-  margin-top: 5px;
-  margin-left: 2px;
-  margin-right: 2px;
-  border-radius: 2px;
-}
-
-#certifyrec {
-  margin-right: 0;
-  width: 100%;
-  border: none;
-}
-
-#addrecip {
-  margin-left: 0;
-  border: none;
-  background: #43aefa;
-  width: 100%;
-}
-.pbadges {
-  left: 130px;
-  font-size: 20px;
-  color: #2a5c82;
-  padding-top: 5px;
-  padding-left: 20px;
-  float: left;
-}
-textarea:focus,
-input:focus {
-  outline: none;
-}
-
-.nooffered {
-  text-align: center;
-}
-.tiRec {
-  float: left;
-  font-size: 25px;
-  margin: 0;
-  padding-left: 9px;
-  background: #b5d4e8;
-}
-.cuRec {
-  float: left;
-  font-size: 17px;
-  padding-top: 8px;
-  font-weight: normal;
-  padding-left: 20px;
-  padding-right: 10px;
-  margin: 0;
-  background: #b5d4e8;
-}
-
-#description {
-  border: none;
-  width: 60%;
-  font-size: 16px;
-  font-style: italic;
-  color: #3b3d3d;
-   background: #f5fbff;
-  border-bottom: 1px solid grey;
-  border-top: 1px solid grey;
-}
-
-
-.badgeicon {
-  /* -webkit-filter: opacity(80%);
-  filter: opacity(80%); */
-  height: 400px;
-  width: 40%;
-  color: white;
-  overflow: auto;
-  margin-bottom: 0;
-  background-image: url("~@/assets/background2.jpg");
-  background-size: cover;
-  margin-top: 0;
-  /* background: white; */
-  /* border: 1px solid lightgrey; */
-  float: left;
-  /* margin-left: 30px; */
-  position: relative;
-}
-
-.bpic {
-  height: 100%;
-  width:100%;
-  /* z-index: 3333; */
-  -webkit-filter: brightness(50%); /* Safari 6.0 - 9.0 */
-  filter: brightness(50%);
-  background-size: cover;
-  position: absolute;
-}
-
-.background {
-  position: absolute;
-  margin:0;
-  /* z-index: 5555; */
-  background-size: cover;
-  height: 100%;
-  width: 100%;
-}
-
-.bcontent {
-  width:100%;
-  height: 100%;
-}
-
-.fit {
-  width: 100%;
-  text-align: center;
-}
-
-.recContainer {
-  width: 60%;
-  float: left;
-  margin-right: 0;
-  margin-bottom: 24px;
-  /* border-bottom:7px solid #779cb5; */
-}
-.small {
-  width: 100%;
-}
-.recipient {
-  text-align: center;
-  background: #e1eef7;
-  margin-bottom: 0;
-  /* border-bottom: 3px solid #dce2e6; */
-  /* border: 1px solid lightgrey; */
-  padding: 0;
-  margin-top: 0;
-  height: 318px;
-  width: 100%;
-  overflow: auto;
-}
-.thead {
-  background: #ccdeeb;
-  color: #5b758a;
-}
-#bmenu {
-  width: 100%;
-  height: 45px;
-  background: #b5d4e8;
-  padding-bottom: 0;
-  padding-left: 5px;
-  padding-right: 2px;
-  text-align: right;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-#bmenu1 {
-  border-top-left-radius: 1px;
-  border-top-right-radius: 1px;
-  padding-bottom: 0;
-  text-align: left;
-  height: 37px;
-  width: 100%;
-  margin-bottom: 0;
-  /* padding-left: 9px;
-  padding-right: 9px; */
-  color: #165780;
-  background: #b5d4e8;
-}
-.imp {
-  width: 40%;
-}
-
-.nimp {
-  width: 12%;
-}
-
-.imp1 {
-  width: 48%;
-}
-
-p {
-  padding: 0;
-  margin: 0;
-}
-
-.TH {
-  font-size: 16px;
-}
-
-.btn {
-  margin-bottom: 0;
-}
-
-.recip {
-  width: 100%;
-  text-align: left;
-  margin: 0;
-}
-
-.recip td {
-  padding: 5px;
-  padding-left: 10px;
-  font-size: 15px;
-  /* border-bottom: 1px solid lightgrey; */
-}
-
-.delete {
-  display: none;
-}
-tr {
-  transition: ease 0.4s;
-}
-.reclist:hover {
-  background-color: #c3e3f7;
-}
-
-.recip th {
-  width: 100%;
-}
-.errorC {
-  color: red;
-  font-family: verdana;
-  font-size: 19px;
-  background: #f0bdbf;
-  padding:11px;
-  height: 30px;
-  margin-top: 8px;
-  border-radius: 5px;
-  margin-bottom: 0;
-}
-
-.noRec {
-  margin-top: 140px;
-  font-size: 20px;
-  color: #2a5c82;
-  /* margin-left: 190px; */
-}
-.size50 {
-  height: 50px;
-  width: 50px;
-  margin-top: 100px;
-}
-.red {
-  color: red;
-}
-
-#closeM {
-  width: 100px;
-  float: left;
-  margin: 5px;
-  margin-bottom: 0;
-}
-
-.error {
-  color: red;
-}
-
-b-modal {
-  top: 100px;
-}
-
-.add {
-  color: #0071ff;
-  text-align: center;
-  background:lightblue;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.inputline {
-  font-style: italic;
-  font-size: 20px;
-  width: 30%;
-  color: #3b3d3d;
-  background: transparent;
-  border: none;
-  background: #f5fbff;
-  border-bottom: 1px solid grey;
-  text-align: center;
-}
-.ifont {
-  font-family: verdana;
-}
-
-.temp {
-  margin-top: 50px;
-  display: none;
-  margin-bottom: 50px;
-  color: #2a5c82;
-}
-
-.binfo {
-  margin-top: 3px;
-  margin-bottom: 3px;
-}
-
-#addRecipient-modal {
-  padding-top: 500px;
-}
-
-.certify {
-  text-align: left;
-  /* background: #f2f7fa; */
-  margin-top: 0;
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 20px;
-
-  font-family: verdana;
-}
-
-.nopdng {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.modl {
-  background: red;
-}
-hr {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.contain {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  border-radius: 0;
-  padding:0;
-  margin-right: 0;
-  margin-left: 0;
-  width: 100%;
-  height: 400px;
-  /* border-bottom:2px solid #dce2e6; */
-  /* background: lightseagreen; */
-  border-radius: 1px;
-  /* padding-top: 15px;
-  padding-bottom: 15px; */
-  text-align: center;
-  /* padding-left: 35px;
-  padding-right: 25px; */
-  /* -webkit-box-shadow: 0px 5px 20px darkgrey;
-  box-shadow: 0px 5px 20px darkgrey; */
-}
-</style>
 

@@ -9,7 +9,7 @@
     </b-row>
     <b-row>
       <b-col cols="12" class="views">
-        <div class="Nav" v-bind:class="{czindex: under}">
+        <div class="Nav">
           <div class="option">
             <span
               id="badges"
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div>
-          <router-view @changeZindex="under = true" ></router-view>
+          <router-view></router-view>
         </div>
       </b-col>
     </b-row>
@@ -51,7 +51,6 @@ export default {
       resized: false,
       nothidden: true,
       blpressed: true,
-      under: false
     };
   },
   created() {
