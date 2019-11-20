@@ -159,8 +159,9 @@ function addAndAvailBadge(data, User) {
               var obadge = badges[i].recipient;
               var existed = false;
               for (var j = 0; j < obadge.length; ++j) {
-                if (obadge[j].username == User.username) {
+                if (obadge[j].username === User.username) {
                   existed = true;
+                  console.log("found username "+obadge[j].username)
                   resolve("User already exist in the list");
                 }
               }
@@ -188,36 +189,37 @@ function addAndAvailBadge(data, User) {
 }
  
 userRoute.route("/availbadge").post((req, res) => {
-  async function avail() {
-    var data = req.body;
-    var User = jwt.decode(data.credentials);
-    try {
-      var userinfo = await findUser(User.username);
-      if (userinfo != "not found") {
-        try {
-          var result = await addAndAvailBadge(data, userinfo);
-          if (result == "Successful") {
-            console.log("You successfully availed the badge with the code"+data.code)
-            res.status(200).json({message: "You successfully availed the badge with the code"+data.code});
-          } else if (result == "Badge is not found") {
-            console.log("Cannot find badge with the code "+data.code)
-            res.status(404).json({message: "Cannot find badge with the code "+data.code});
-          } else if (result == "User already exist in the list") {
-            console.log("You are already in the list!")
-            res.status(400).json({message: "You are already in the list!"});
-          }
-        } catch(err) {
-          res.status(500).json({message: "Unexpected error occured!"});
-        }
-      } else {
-        res.status(200).json({message: "User not found!"});
-      }
-    } catch(err) {
-      console.log("Error occured!!!");
-      res.status(500).json({message: "Unexpected error occured"})
-    }
-  }
-  avail();
+  getUserBadges(req, res);
+  // async function avail() {
+  //   var data = req.body;
+  //   var User = jwt.decode(data.user);
+  //   try {
+  //     var userinfo = await findUser(User.username);
+  //     if (userinfo != "not found") {
+  //       try {
+  //         console.log("userifo =>" +userinfo)
+  //         var result = await addAndAvailBadge(data, userinfo);
+  //         if (result == "Successful") {
+  //           getUserBadges(req, res);
+  //         } else if (result == "Badge is not found") {
+  //           console.log("Cannot find badge with the code "+data.code)
+  //           res.status(404).json({message: "Cannot find badge with the code "+data.code});
+  //         } else if (result == "User already exist in the list") {
+  //           console.log("You are already in the list!")
+  //           res.status(400).json({message: "You are already in the list!"});
+  //         }
+  //       } catch(err) {
+  //         res.status(500).json({message: "Unexpected error occured!"});
+  //       }
+  //     } else {
+  //       res.status(404).json({message: "User not found!"});
+  //     }
+  //   } catch(err) {
+  //     console.log("Error occured!!!");
+  //     res.status(500).json({message: "Unexpected error occured"})
+  //   }
+  // }
+  // avail();
 
 })
  
@@ -337,30 +339,38 @@ function getBadges(username) {
   })
 }
  
-userRoute.route("/userbadges").post((req, res) => {
-  async function getUserBadges() {
-    var user = jwt.decode(req.body.user);
-    try {
-      var result = await getBadges(user.username);
-      var badges = [];
-      result.forEach(function (b) {
-        b.badges.forEach(function (bdg) {
-          bdg.recipient.forEach(function (re) {
-            if (re.username == user.username) {
+async function getUserBadges(req, res) {
+  var user = jwt.decode(req.body.user);
+  console.log(user);
+  try {
+    var result = await getBadges(user.username);
+    var badges = [];
+    var pendingbadges = [];
+    result.forEach(function (b) {
+      b.badges.forEach(function (bdg) {
+        bdg.recipient.forEach(function (re) {
+          if (re.username == user.username) {
+            if (bdg.granted) {
               badges.push(bdg);
+            } else {
+              pendingbadges.push(bdg);
             }
-          })
- 
+          }
         })
+
       })
-      res.status(200).json({ badges: badges});
-    } catch(err) {
-      res.status(500).json({
-        message: "Unexpected error occured!"
-      })
-    }
+    })
+    res.status(200).json({ badges: badges, pendingbadges: pendingbadges, availedbadge: badges[0]});
+  } catch(err) {
+    console.log(err);
+    console.log("ERRROR IN GETTING DATA")
+    res.status(500).json({
+      message: "Unexpected error occured!"
+    })
   }
-  getUserBadges();
+}
+userRoute.route("/userbadges").post((req, res) => {
+  getUserBadges(req, res);
 })
  
 function deleteUsers() {

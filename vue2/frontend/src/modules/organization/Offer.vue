@@ -216,7 +216,7 @@ export default {
           this.$bvModal.hide("offer");
         })
         .catch(err => {
-          alert("ERROR OCCURED!");
+          alert("Unexpected error occured! Please try again later.");
           console.log(err);
         });
     }
@@ -237,16 +237,6 @@ export default {
       $(".month").slideUp();
     });
   },
-  watch: {
-    background(image) {
-      if (image != null) {
-        console.log(image);
-        $(".badgePic").css({
-          "background-image": "url(@/assets/" + image.name
-        });
-      }
-    }
-  }
 };
 </script>
 <style scoped>

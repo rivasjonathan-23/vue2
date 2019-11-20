@@ -1,19 +1,18 @@
 <template>
   <div>
     <div id="mybadge">
-      <div class="sheader">
+      <div class="sheader2">
         <!-- <span class="tbadge" v-bind:class="{fit: sm}">
           <span>Badges&nbsp;</span>
           <span class="nb">{{badgelist.length}}</span>
         </span> -->
         <span class="tbadge" v-bind:class="{fit: sm}">
-          <span>Pending badges&nbsp;</span>
-          <span class="nb">{{badgelist.length}}</span>
+          <span @click="$bvModal.show('pendings')" class="pndng">Pending badges</span>
+          <span class="nb2">{{pending.length}}</span>
         </span>
         <b-button
-          id="createC"
           variant="primary"
-          class="btn"
+          class="btn bm"
          v-bind:class="{fit: sm}"
           v-b-modal.availBadge-modal
         >Claim certificate</b-button>
@@ -25,8 +24,7 @@
         </div>
       </div>
       <h3 class="temp" v-show="hasData">You haven't availed badges yet</h3>
-      <div v-for="(badge, index) in badgelist" :key="index">
-        <b-row v-if="badge.granted" class="row" >
+        <b-row v-for="(badge, index) in badgelist" :key="index" class="row" >
           <div class="badgeicon" v-bind:class="{zoomin: resized}" >
             <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+badge.imgnum+".jpg")})`}'>
             </div>
@@ -43,7 +41,7 @@
             <p class="name">
               This certificate of
               <br>
-              {{badge.certificateName}}
+              <span class="cern">{{badge.certificateName}}</span>
             </p>
             <span>is awarded to</span>
             <h5>{{fullname}}</h5>
@@ -56,13 +54,12 @@
             </div>
           </div>
         </b-row>
-      </div>
     </div>
     <b-modal
       size="sm"
       class="modl"
       id="availBadge-modal"
-      title="Avail badge"
+      title="Claim certificate"
       centered
       no-close-on-esc
       no-close-on-backdrop
@@ -70,7 +67,8 @@
       hide-footer
     >
       <form class="addR" @submit.prevent="searchBadge">
-        <span class="error" v-show="error">Incorrect code or badge is not available</span>
+        <span class="error" v-show="error">Incorrect code or badge is not available!</span>
+        <span class="error" v-show="availed">You have availed this bade already!</span>
         <b-input
           class="binput"
           v-model="badgeCode"
@@ -79,26 +77,64 @@
           required
         />
 
-        <b-row class="btnrow nosh" v-if="!availing">
-          <b-col class="bl">
+        <div class="btnrow nosh text-right" v-if="!availing">
               <b-button
               @click="$bvModal.hide('availBadge-modal')"
               variant="danger"
-              class="btn btn-block"
+              class="btn"
               v-on:click="reset"
-            >Cancel</b-button>
-          </b-col>
-          <b-col class="br">
-            <b-button type="submit" variant="primary" class="btn btn-block">Avail badge</b-button>
-          </b-col>
-        </b-row>
-        <b-row v-else class="add nosh">
+            >Cancel</b-button>&nbsp;
+            <b-button type="submit" variant="primary" class="btn">Claim</b-button>
+        </div>
+        <div v-else class="add nosh">
           <div>
             <b-spinner class="align-middle"></b-spinner>&nbsp;
             <strong>Searching badge...</strong>
           </div>
-        </b-row>
+        </div>
       </form>
+    </b-modal>
+    <b-modal
+      size="sm"
+      class="modl"
+      id="availed"
+      centered
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-header-close
+      hide-header
+      hide-footer
+    >
+    <div class="text-center">
+      <div class="sucav">
+      <img src="@/assets/image2.png" class="blogo">
+      <p class="pl p1">{{availedbadge.badgename}}</p>      
+      <p class="pl p2">{{"From "+availedbadge.organization}}</p>
+      </div>
+      <p class="pl p3">You have successfull availed this badge. Kindly wait for the certification</p>
+      <hr>
+      <b-button @click="$bvModal.hide('availed')" variant="primary" class="btn">OK</b-button>
+      </div>
+    </b-modal>
+    <b-modal
+      class="modl"
+      id="pendings"
+      centered
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-footer
+      title="Pending badges"
+    >
+    <div class="cnt">
+    <div class="text-left pcont">
+     <div class="pndngb" v-for="(pb, i) in pending" :key="i">
+       <p class="pl p2">{{pb.badgename}}</p>
+       <p class="pl p3">{{pb.organization}}</p><hr class="phr">
+       <p class="pl p3 d8">{{pb.date.month+" "+pb.date.day+", "+pb.date.year}}</p>
+     </div>
+     <p class="pl p2">{{"Total: "+pending.length}}</p>
+    </div>
+    </div>
     </b-modal>
   </div>
 </template>
@@ -125,7 +161,10 @@ export default {
       resized: false,
       isLoading: false,
       sm: false,
-      pressed: true
+      pressed: true,
+      availed: false,
+      pending: [],
+      availedbadge: {badgename: "", organization: ""}
     };
   },
   methods: {
@@ -134,35 +173,54 @@ export default {
       axios
         .post("http://localhost:8081/user/availbadge", {
           code: this.badgeCode,
-          credentials: this.$store.getters.token
+          user: this.$store.getters.token
         })
-        .then(resp => {
+        .then(res => {
           this.availing = false;
           this.reset();
           this.$bvModal.hide("availBadge-modal");
-          axios
-            .post("http://localhost:8081/user/userbadges", {
-              user: this.$store.getters.token
-            })
-            .then(res => {
-              alert("got updated data");
-              console.log("badgess" + res.data.badges);
-              this.badgelist = res.data.badges.reverse();
-              this.fullname = userInfo.firstname + " " + userInfo.lastname;
-              console.log({ badges: this.badgelist });
-              if (this.badgelist.length == 0) {
-                this.hasData = true;
-              }
-            });
+          this.badgelist = res.data.badges.reverse();
+          this.pending = res.data.pendingbadges;
+          this.availedbadge = res.data.availedbadge;
+          this.$bvModal.show("availed");
+          if (this.badgelist.length == 0) {
+            this.hasData = true;
+          }
+            var num =0;
+          this.badgelist.forEach(element => {
+            element["imgnum"] = num;
+            num += 1;
+            if (num > 10) {
+              num = 0;
+            }
+          })
+          // axios
+          //   .post("http://localhost:8081/user/userbadges", {
+          //     user: this.$store.getters.token
+          //   })
+          //   .then(res => {
+              
+
+          //     this.error= false;
+          //     if (this.badgelist.length == 0) {
+          //       this.hasData = true;
+          //     }
+          //   });
         })
-        .catch(error => {
+        .catch((err) => {
+          if (err.response.status === 404) {
+            this.err = true;            
+          } else {
+            this.availed = true;
+          }
+          console.log(err)
           this.availing = false;
           $(".binput").css({ "border-color": "red" });
-          this.error = true;
         });
     },
     reset() {
       this.error = false;
+      this.availed = false;
       this.badgeCode = "";
       $(".binput").css({ "border-color": "gray" });
     },
@@ -243,7 +301,7 @@ export default {
         this.isLoading = false;
         console.log("badgess" + res.data.badges);
         this.badgelist = res.data.badges.reverse();
-        console.log({ badges: this.badgelist });
+        this.pending = res.data.pendingbadges;
         if (this.badgelist.length == 0) {
           this.hasData = true;
         }
@@ -256,10 +314,56 @@ export default {
           }
         })
       });
+  }, watch: {
+    availed(val) {
+      if (val) {
+        this.error = false;
+      } 
+    }, 
+    error(val) {
+      if (val) {
+        this.availed = false;
+      }
+    }
   }
 };
 </script>
 <style scoped>
+.pndngb {
+  position: relative;
+}
+
+.pcont {
+  height: 500px;
+  overflow: auto;
+  margin:0;
+  background: #e3f0f7;
+  padding:10px;
+  
+}
+
+.cnt {
+  height: 500px;
+  overflow: hidden;
+  border-radius: 7px;
+
+}
+
+.d8 {
+  top:0;
+  position: absolute;
+  right: 0;
+}
+.pndng:hover {
+  background: #e3f0f7;
+ color: #047cd4;
+ border-radius: 5px;
+}
+.pndng {
+ padding:5px;
+ margin:1px;
+
+}
 .bl {
   margin-right: 0;
   margin-left: 0;
@@ -267,7 +371,9 @@ export default {
   padding-left: 5px;
 
 }
-
+.bh {
+  background:red;
+}
 .br {
   margin-left: 0;
   margin-right: 0;
@@ -275,7 +381,7 @@ export default {
   padding-right: 5px;
 
 }
-.nb {
+.nb2 {
   padding-left: 7px;
   padding-right: 7px;
   padding-top: 3px;
@@ -309,6 +415,10 @@ export default {
   width: 200px;
 }
 
+.cern {
+  font-size: 20px;
+}
+
 .btn:focus {
   outline: none;
 }
@@ -316,7 +426,16 @@ export default {
 .name {
   font-size: 18px;
 }
+.phr {
+  margin-top:8px;
+  margin-bottom:8px;
+}
 
+.sucav {
+  background:#e8f3fa;
+  padding:10px;
+  margin-bottom: 10px;
+}
 .row {
   margin-right: 10px;
   margin-left: 10px;
@@ -415,7 +534,7 @@ export default {
   height: 70px;
   width: 70px;
 }
-.sheader {
+.sheader2 {
   /* background: rgb(138, 196, 219, 0.9); */
   text-align: right;
   font-family: verdana;
@@ -423,7 +542,8 @@ export default {
   padding-bottom: 0;
   padding-right: 7px;
 }
-#createC {
+
+.bm {
   border: none;
   border-radius: 2px;
   padding-left: 12px;
@@ -502,4 +622,27 @@ label {
   padding: 0;
   margin: 0;
 }
+
+.pl {
+  color:#31445c;
+  font-family: verdana;
+  padding:0;
+  margin:0;
+}
+
+.p1 {
+  font-size: 24px;
+}
+
+.p2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.p3 {
+  margin: 3px;
+  font-size: 13px;
+}
+
+
 </style>

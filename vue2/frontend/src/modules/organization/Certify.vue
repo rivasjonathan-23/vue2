@@ -21,6 +21,7 @@
       no-close-on-esc
       no-close-on-backdrop
       hide-footer
+      hide-header-close
     >
       <Offer @submit="getData"></Offer>
     </b-modal>
@@ -145,23 +146,12 @@
       id="removeRecip"
       centered
       hide-header-close
-      title="Delete recipient"
+      title="Remove recipient"
       no-close-on-esc
       no-close-on-backdrop
       hide-footer
     >
-    <div class="text-center modaltext">
-    <p>Are you sure you want to remove <strong>{{" "+user2remove.recipient_name+"?"}}</strong></p>
-    </div>
-     <hr>
-    <div v-if="!removing" class="text-center">
-     <b-button variant="danger" @click="$bvModal.hide('removeRecip')" class="mrgn3">Cancel</b-button>
-     <b-button variant="primary" @click="removeRecipient" class="mrgn3">Remove</b-button>
-    </div>
-     <div v-else class="add">
-      <b-spinner variant="primary" class="align-middle"></b-spinner>&nbsp;
-      <strong>Removing recipient...</strong>
-    </div>
+      <Remove :recipient="user2remove" @submit="updateData"></Remove>
     </b-modal>
     <b-modal
       class="modl"
@@ -195,6 +185,7 @@ import Offer from "./Offer";
 import axios from "axios";
 import Certificate from "./certificate";
 import Addrecipient from "./addRecipient";
+import Remove from "./removerecip";
 import "@/Styles/cerStyle.css";
 import $ from "jquery";
 
@@ -206,7 +197,8 @@ export default {
   components: {
     Offer,
     Certificate,
-    Addrecipient
+    Addrecipient,
+    Remove
   },
   data() {
     return {
@@ -329,19 +321,9 @@ export default {
       }
       this.$bvModal.show('removeRecip');
     },
-    removeRecipient() {
-      this.removing = true;
-      axios.post("http://localhost:8081/user/remove", this.user2remove)
-      .then(res => {
-        this.badges = res.data.badges.reverse();
-        this.manageData();       
-        this.$bvModal.hide("removeRecip");
-        this.removing = false;
-      }).catch(err => {
-        console.log(err);
-        this.removing = false;
-        alert("Unexpected error occured! Please try again later.");
-      })
+    updateData(data) {
+      this.badges = data;
+      this.manageData();
     },
     getData() {
       axios
@@ -400,4 +382,9 @@ export default {
  
 };
 </script>
+
+<style scoped>
+
+</style>
+
 

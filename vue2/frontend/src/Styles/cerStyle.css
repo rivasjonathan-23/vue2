@@ -499,7 +499,7 @@
   }
 
   .awhol {
-    width: 500px;
+    width: 60%;
     height: 60px;
     overflow: auto;
   }
@@ -512,7 +512,7 @@
 
   /* width */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 8px;
 }
 
 /* Track */
@@ -522,12 +522,12 @@
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(177, 174, 174); 
+  background: rgb(165, 162, 162); 
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(100, 98, 98); 
+  background: rgb(88, 89, 90); 
 }
 
 .mrgnbtm {
@@ -538,4 +538,8 @@
 
 .modaltext {
   font-size: 20px;
+}
+
+.modl {
+  overflow-y: auto;
 }

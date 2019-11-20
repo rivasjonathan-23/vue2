@@ -1,7 +1,7 @@
 <template>
   <div id="bythree">
     <b-col class="holder" v-for="(badge, index) in this.data" :key="index">
-      <div class="box" v-bind:class="{small: resized}">
+      <div class="box" @click="viewInfo(badge)" v-bind:class="{small: resized}">
         <div class="imgholder" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+badge.imgnum+".jpg")})`}'>
         </div>
         <img src="@/assets/image2.png" class="blogo">
@@ -14,10 +14,45 @@
         </div>
       </div>
     </b-col>
+    <b-modal
+      class="modl"
+      id="badgeinfo"
+      size="lg"
+      title="Certificate information"
+      centered
+      hide-footer
+    >
+    <div class="cerBody">
+      <p class="name">
+        This certificate of
+        <br>
+        <span class="cern">{{badge.certificateName}}</span>
+      </p>
+      <center>
+      <span class="awardedto">is awarded to</span>
+      <div class="rcpnt">
+      <span v-for="(rec, i) in badge.recipient" :key="i">{{" "+rec.fullname}}
+      <span v-if="i == badge.recipient.length - 2">&</span>
+      <span v-else>
+      <span v-if="i != badge.recipient.length - 1">,</span>
+      </span>
+      </span>
+      </div>
+      </center>
+      <br>
+      <p class="description">{{badge.descriptions}}</p>
+      <br>
+      <p>Given this {{ badge.date.month+" "+badge.date.day+", "+badge.date.year }}</p>
+      <div class="byorg">
+        <h5>Given by {{badge.organization}}</h5>
+      </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 <script>
 import $ from "jquery";
+import "@/Styles/cerStyle.css";
 
 export default {
   name: "bythree",
@@ -25,7 +60,23 @@ export default {
     return {
       size: 0,
       resized: false,
-    }       
+      hidden: true,
+      badge: {
+        granted: "",
+        code: "",
+        badgename: "",
+        venue: this.venue,
+        recipient: [],
+        certificateName: "",
+        descriptions: "",
+        organization: "",
+        date: {
+          month: "",
+          day: "",
+          year: ""
+        }
+      }       
+  }
   },
   props: {
     data: Array
@@ -47,12 +98,67 @@ export default {
       } else {
         this.resized = false;
       }
+    },
+    viewInfo(badge) {
+      this.$bvModal.show("badgeinfo");
+      this.badge = badge;
+      this.hidden = false;
+    }, 
+    close() {
+      this.$bvModal.hide("badgeinfo");
+      this.hidden = true;
     }
+  }, 
+  watch: {
+    // hidden(val) {
+    //   if (!val) {
+    //     document.body.style.position = 'fixed';
+    //     document.body.style.top = `-${window.scrollY}px`;
+    //   } else {
+    //     const scrollY = document.body.style.top;
+    //     document.body.style.position = '';
+    //     document.body.style.top = '';
+    //     window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    //   }
+    // }
   }
 };
 </script>
 
 <style scoped>
+.cerBody {
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  color: #3d4c54;
+  background: #e8f3fa;
+  text-align: center;
+  font-family: Verdana;
+  font-size: 16px;
+  height: 390px;
+  /* border-right:6px solid #779cb5; */
+  /* border-bottom:8px solid #e8f3fa; */
+}
+
+.cern {
+  font-size:19px;
+}
+
+.rcpnt {
+  width:60%;
+  border-bottom: 1px solid #c4d2dd;
+}
+
+.description {
+  font-size: 17px;
+}
+
+.name {
+  font-size: 18px;
+}
+
 .imgholder {
    -webkit-filter: brightness(60%); /* Safari 6.0 - 9.0 */
   filter: brightness(60%);
@@ -72,7 +178,6 @@ export default {
   left:0;
   width: 100px;
   position: absolute;
-  z-index: 5555;
    -webkit-filter: brightness(130%); /* Safari 6.0 - 9.0 */
   filter: brightness(130%);
 }
@@ -148,5 +253,9 @@ export default {
 
 .row {
   border-color: white;
+}
+
+.nmar2 {
+  margin-right: 0;
 }
 </style>
