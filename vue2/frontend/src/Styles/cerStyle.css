@@ -1,11 +1,15 @@
 .bl {
     margin-right: 0;
-    padding-right: 5px;
+    /* padding-right: 1px; */
   }
   
   .br {
     margin-left: 0;
-    padding-left: 5px;
+    /* padding-left: 1px; */
+  }
+
+  .b-col {
+    padding:0;
   }
   .loading {
     margin-top: 15px;
@@ -15,7 +19,7 @@
   }
   
   .align-middle {
-    color: rgb(3, 78, 133);
+    /* color: rgb(3, 78, 133); */
     height: 30px;
     width: 30px;
   }
@@ -25,6 +29,19 @@
     height: 70px;
     width: 70px;
   }
+  
+  .custom-file-label {
+    padding-left: 5px;
+    margin:0;
+  }
+
+   
+  .custom-file-input {
+    padding-left: 5px;
+    margin:0;
+    text-align: left;
+  }
+
   
   .reclist {
     color: #476069;
@@ -49,6 +66,9 @@
     height: 40px;
     position: relative;
   }
+  .fileinput {
+    padding-left:5px;
+  }
   
   .cerbtn {
     margin:5px;
@@ -60,7 +80,8 @@
   }
   .blogo {
     /* float: left; */
-    width: 200px;
+    
+    width: 150px;
     margin-top: 20px;
   }
   .cerMenu {
@@ -203,6 +224,10 @@
     float: left;
     /* margin-left: 30px; */
     position: relative;
+  }
+
+  .mrgn3 {
+    margin:3px;
   }
   
   .bpic {
@@ -406,7 +431,6 @@
   
   .temp {
     margin-top: 50px;
-    display: none;
     margin-bottom: 50px;
     color: #2a5c82;
   }
@@ -488,7 +512,7 @@
 
   /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 7px;
 }
 
 /* Track */
@@ -503,5 +527,15 @@
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(114, 111, 111); 
+  background: rgb(100, 98, 98); 
+}
+
+.mrgnbtm {
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+
+.modaltext {
+  font-size: 20px;
 }

@@ -502,6 +502,7 @@ function orgInfo(username) {
  
  
 userRoute.route("/offerbadge").post((req, res) => {
+  // console.log(req.body);
   async function offer() {
     var org = jwt.decode(req.body.user);
     try {
@@ -540,38 +541,73 @@ userRoute.route("/badges-org").post((req, res) => {
   getOrgBadges();
 })
  
- 
+async function getPendingBadges(req, res) {
+  var user = jwt.decode(req.body.data);
+  var org = await orgInfo(user.username);
+  try {
+    var badges = org.data.badges;
+    var pendingbadges = [];
+    badges.forEach(function (badge) {
+      if (!badge.granted) {
+        var recipient = [];
+        badge.recipient.forEach(function (re) {
+          recipient.push({ username: re.username, fullname: re.fullname });
+        })
+        badge.recipient = recipient;
+        pendingbadges.push(badge);
+      }
+    });
+    console.log("THE ORG HAS " + pendingbadges.length + " PENDING BADGES")
+    res.status(200).json({
+      badges: pendingbadges
+    })
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({
+      message: "unexpected error occured!"
+    })
+  }
+}
  
 userRoute.route("/pendingbadges").post((req, res) => {
-  async function getPendingBadges() {
-    var user = jwt.decode(req.body.data);
-    var org = await orgInfo(user.username);
-    try {
-      var badges = org.data.badges;
-      var pendingbadges = [];
-      badges.forEach(function (badge) {
-        if (!badge.granted) {
-          var recipient = [];
-          badge.recipient.forEach(function (re) {
-            recipient.push({ username: re.username, fullname: re.fullname });
-          })
-          badge.recipient = recipient;
-          // console.log(recipient);
-          // console.log(badge);
-          pendingbadges.push(badge);
-        }
-      });
-      console.log("THE ORG HAS " + pendingbadges.length + " PENDING BADGES")
-      res.status(200).json({
-        badges: pendingbadges
-      })
-    } catch(err) {
-      res.status(500).json({
-        message: "unexpected error occured!"
-      })
-    }
-  }
-  getPendingBadges();
+  getPendingBadges(req, res);
+})
+
+userRoute.route("/remove").post((req, res) => {
+  var org = jwt.decode(req.body.data);
+  Organization.findOne({username: org.username}, 'badges')
+  .then(doc => {
+    doc.badges.forEach(element => {
+      if  (element.code === req.body.badge_code) {
+        var recip = [];
+        element.recipient.forEach(rec => {
+          if (rec.username != req.body.recipient_username) {
+            recip.push(rec);
+          }
+        })
+        element.recipient = recip;
+      }
+    });
+    doc.save().then(() => {
+      getPendingBadges(req, res);
+    })
+  }).catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  })
+})
+
+userRoute.route("/deletebadge").post((req, res) => {
+  console.log("deleting a badge.........")
+  console.log(req.body);
+  var org = jwt.decode(req.body.data);
+  Organization.updateOne({username: org.username}, { $pull: {badges: {_id : req.body.badgeinfo.id}}})
+  .then(() => {
+    getPendingBadges(req, res);
+  }).catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  })
 })
  
  

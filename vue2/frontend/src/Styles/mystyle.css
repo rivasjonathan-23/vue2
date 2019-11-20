@@ -46,11 +46,14 @@
     margin-left:10px;
     margin-right:5px;
     float:left;
-    background:#d3e8f5;
+    position: relative;
+    /* background-size: cover; */
+    background:#93c1dd;
+    /* background:transparent; */
   }
 
   .blogo{
-    width:200px;
+    width:100px;
   }
 
   .b {

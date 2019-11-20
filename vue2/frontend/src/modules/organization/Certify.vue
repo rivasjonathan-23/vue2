@@ -22,18 +22,18 @@
       no-close-on-backdrop
       hide-footer
     >
-      <Offer @submit="getData" @cancel="closeCreate"></Offer>
+      <Offer @submit="getData"></Offer>
     </b-modal>
     <div class="loading" v-show="isLoading">
       <div class="text-center text-danger my-2">
-        <b-spinner id="loading2" class="align-middle"></b-spinner>
+        <b-spinner id="loading2" variant="primary" class="align-middle"></b-spinner>
       </div>
+    </div>
+    <div v-show="!hasdata" class="nooffered">
+      <h3 class="temp">You haven't offered badges yet</h3>
     </div>
     <div v-for="(badge, index) in badges" v-bind:key="index">
       <div v-if="!badge.granted" class="contain">
-        <div v-if="!hasdata" class="nooffered">
-          <h3 class="temp">You haven't offered badges yet</h3>
-        </div>
         <div class="badgeicon" v-bind:class="{small: resized}">
           <div class="bpic" v-bind:style='{backgroundImage: `url(${require("@/assets/bb/"+badge.imgnum+".jpg")})`}'>
           </div>
@@ -84,7 +84,7 @@
                   <p class="nmrgn">{{recipient.fullname}}</p>
                 </td>
                 <td class="nimp">
-                    <span v-if="hover === recipient._id" class="remove nmrgn">Remove</span>
+                    <span @click="remove(badge._id, badge.code, recipient.username, recipient.fullname)" v-if="hover === recipient._id" class="remove nmrgn">Remove</span>
                 </td>
               </tr>
             </table>
@@ -107,6 +107,7 @@
             >Add Recipient</b-button>
             <b-button
               variant="danger"
+              @click="deletebadge(badge._id, badge.code, badge.badgename)"
               class="btn2"
               v-bind:class="{fit: sm}"
             >Delete badge</b-button>
@@ -116,7 +117,7 @@
     </div>
     <b-modal
       id="addRecipient-modal"
-      title="Recepient Information"
+      title="Add recipient"
       size="sm"
       centered
       no-close-on-esc
@@ -129,7 +130,7 @@
       class="modl"
       size="lg"
       id="certify-modal"
-      title="Certify The Recipients"
+      title="Certify Recipients"
       centered
       hide-header-close
       no-close-on-esc
@@ -137,6 +138,54 @@
       hide-footer
     >
       <Certificate @submit="getData" :badge="{recipients: recipients, code: badge_code, id: badge_id, date: badge_date}"></Certificate>
+    </b-modal>
+    <b-modal
+      class="modl"
+      size="sm"
+      id="removeRecip"
+      centered
+      hide-header-close
+      title="Delete recipient"
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-footer
+    >
+    <div class="text-center modaltext">
+    <p>Are you sure you want to remove <strong>{{" "+user2remove.recipient_name+"?"}}</strong></p>
+    </div>
+     <hr>
+    <div v-if="!removing" class="text-center">
+     <b-button variant="danger" @click="$bvModal.hide('removeRecip')" class="mrgn3">Cancel</b-button>
+     <b-button variant="primary" @click="removeRecipient" class="mrgn3">Remove</b-button>
+    </div>
+     <div v-else class="add">
+      <b-spinner variant="primary" class="align-middle"></b-spinner>&nbsp;
+      <strong>Removing recipient...</strong>
+    </div>
+    </b-modal>
+    <b-modal
+      class="modl"
+      size="sm"
+      id="deleteBadge"
+      title="Delete badge"
+      centered
+      hide-header-close
+      no-close-on-esc
+      no-close-on-backdrop
+      hide-footer
+    >
+    <div class="text-left">
+      <b-input v-model="inputbname" placeholder="Type the badge name to confirm"></b-input>
+    </div>
+    <br>
+    <div v-if="!removing" class="text-right">
+     <b-button variant="danger" @click="$bvModal.hide('deleteBadge')" class="mrgn3">Cancel</b-button>
+     <b-button @click="deleteb" :disabled="inputbname != badgename" variant="primary" class="mrgn3">Delete</b-button>
+    </div>
+     <div v-else class="add">
+      <b-spinner variant="primary" class="align-middle"></b-spinner>&nbsp;
+      <strong>Deleting badge...</strong>
+    </div>
     </b-modal>
   </div>
 </template>
@@ -181,11 +230,25 @@ export default {
       isLoading: false,
       hasdata: true,
       sm: false,
-      recipients: []
+      recipients: [],
+      user2remove: {
+        recipient_name: "",
+        recipient_id: "",
+        badge_id: "",
+        badge_code: ""
+      },
+      removing: false,
+      badgename: "BADGENNAME123xyz*#",
+      inputbname: "",
+      btodelete: {
+        id: "",
+        code: "",
+      }
     };
   },
 
   created() {
+    this.isLoading = true;
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();
@@ -256,8 +319,29 @@ export default {
       this.certificateName = "";
       this.$bvModal.hide("certify-modal");
     },
-    closeCreate() {
-      
+    remove(id, code, username, name) {
+      this.user2remove = {
+        recipient_name:name,
+        recipient_username: username,
+        badge_code:code,
+        badge_id:id,
+        data: this.$store.getters.token
+      }
+      this.$bvModal.show('removeRecip');
+    },
+    removeRecipient() {
+      this.removing = true;
+      axios.post("http://localhost:8081/user/remove", this.user2remove)
+      .then(res => {
+        this.badges = res.data.badges.reverse();
+        this.manageData();       
+        this.$bvModal.hide("removeRecip");
+        this.removing = false;
+      }).catch(err => {
+        console.log(err);
+        this.removing = false;
+        alert("Unexpected error occured! Please try again later.");
+      })
     },
     getData() {
       axios
@@ -266,21 +350,49 @@ export default {
         })
         .then(resp => {
           this.badges = resp.data.badges.reverse();
-          if (this.badges.length != 0) {
-             var num = 0;
-            this.badges.forEach(badge => {
-              badge["imgnum"] = num;
-              num += 1;
-              if (num > 10) {
-                num = 0;
-              }
-            })
-          } else {
-            alert("no data")
-            this.hasdata = true;
+          this.manageData();
+        }).catch(err => {
+          alert("Unexpected error occured! Please try again later.");
+        })
+    },
+    deletebadge(id, code, name) {
+      this.badgename = name;
+      this.btodelete = {
+        id: id, code: code
+      }
+      this.$bvModal.show("deleteBadge");
+    },
+    deleteb() {
+      this.removing = true;
+      axios.post("http://localhost:8081/user/deletebadge", {
+        data: this.$store.getters.token, badgeinfo: this.btodelete})
+     .then(resp => {
+        this.badges = resp.data.badges.reverse();
+        this.manageData();
+        this.removing = false;
+        this.$bvModal.hide("deleteBadge");
+
+      }).catch(err => {
+        this.removing = false;
+        this.$bvModal.hide("deleteBadge");
+        alert("Unexpected error occured! Please try again later.");
+      })
+    },
+    manageData() {
+      if (this.badges.length != 0) {
+        this.hasdata = true;
+          var num = 0;
+        this.badges.forEach(badge => {
+          badge["imgnum"] = num;
+          num += 1;
+          if (num > 10) {
+            num = 0;
           }
-        });
-  },
+        })
+      } else {
+        this.hasdata = false;
+      }
+    }
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);

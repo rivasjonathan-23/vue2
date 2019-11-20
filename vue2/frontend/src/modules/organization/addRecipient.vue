@@ -5,14 +5,10 @@
     
     <b-input id="usernamei" required v-model="username" placeholder="Enter username"/>
     <br>
-    <b-row v-if="!adding">
-      <b-col class="bl">
-        <b-button v-on:click="$bvModal.hide('addRecipient-modal')" variant="danger" class="btn btn-block">Cancel</b-button>
-      </b-col>
-      <b-col class="br">
-        <b-button type="submit" variant="primary" autocomplete class="btn btn-block">Add Recipient</b-button>
-      </b-col>
-    </b-row>
+    <div v-if="!adding"  class="text-right">
+        <b-button v-on:click="$bvModal.hide('addRecipient-modal')" variant="danger" class="btn">Cancel</b-button>
+        &nbsp;<b-button type="submit" variant="primary" autocomplete class="btn">Add</b-button>
+    </div>
     <div v-else class="add">
       <b-spinner class="align-middle"></b-spinner>&nbsp;
       <strong>Adding recipient...</strong>
@@ -21,6 +17,7 @@
 </template>
 <script>
 import axios from 'axios';
+import '@/Styles/cerStyle.css';
 import $ from "jquery";
 
 export default {

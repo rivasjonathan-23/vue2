@@ -9,7 +9,7 @@
       </div>
       <div class="info"  v-bind:class="{smallinfo: resized}">
         <!-- <p>Organization name: {{orgName}}</p> -->
-        <p class="des">{{description}}</p>
+        <p class="des2">{{description}}</p>
         <p class="address">{{address}}</p>
         <p class="email">
           Email at
@@ -107,7 +107,7 @@ div {
   font-weight: bold;
 }
 
-.des {
+.des2 {
   color: #1e4773;
 }
 .email {

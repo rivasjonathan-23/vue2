@@ -1,10 +1,13 @@
 <template>
   <b-row class="con">
     <div class="badgePic rows" v-bind:class="{small: resized}">
-      <img src="@/assets/image2.png" class="blogo">
-      <h5 class="b">{{ badgename }}</h5>
-      <p class="b">{{ venue }}</p>
-      <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>
+      <img class="background" v-if="url" :src="url">
+      <div class="bcontent">
+        <img src="@/assets/image2.png" class="blogo">
+        <h5 class="b">{{ badgename }}</h5>
+        <p class="b">{{ venue }}</p>
+        <p class="b">{{ date.month+" "+date.day+" "+date.year }}</p>
+      </div>
     </div>
     <div class="rows" v-bind:class="{small: resized}">
       <form class="signupform Form" @submit.prevent="createBadge">
@@ -12,17 +15,14 @@
           <h2 class="sign">Offer A Badge</h2>
         </center>
         <div class="holder">
-          <b-input
-            v-model="badgename"
-            autocomplete="off"
-            placeholder="Certificate name | award name "
-            required
-          />
+          <span class="labl">Certificate name | award name</span>
+          <b-input v-model="badgename" autocomplete="off" required/>
         </div>
         <div class="holder">
-          <b-input v-model="venue" autocomplete="off" placeholder="Name of event" required/>
+          <span class="labl">Name of event</span>
+          <b-input v-model="venue" autocomplete="off" required/>
         </div>
-
+        
         <div class="holder drow">
           <p class="labl">Date</p>
           <table class="bday table">
@@ -38,11 +38,11 @@
                 max="12"
                 required
               />
-                <div class="month">
-                  <div v-for="(m,n) in cal" :key="n">
-                    <h5 class="m" @click="month(m)">{{m}}</h5>
-                  </div>
+              <div class="month">
+                <div v-for="(m,n) in cal" :key="n">
+                  <h5 class="m" @click="month(m)">{{m}}</h5>
                 </div>
+              </div>
             </td>
 
             <td id="day" class="inpt d">
@@ -69,15 +69,18 @@
             </td>
           </table>
         </div>
-     
+        <div class="mrgnbtm">
+          <span class="labl">Badge background</span>
+          <b-form-file class="fileinput" placeholder @change="onFileChange" ref="background"></b-form-file>
+        </div>
         <div class="bhldr">
-          <b-button @click="cancel" class="btn btn-danger btn-lg nm">Cancel</b-button>
-          <b-button class="btn btn-lg nm" type="submit" variant="primary">
+          <b-button  v-if="!sending" @click="$bvModal.hide('offer')" class="btn btn-danger nm">Cancel</b-button>
+          <b-button class="btn nm" type="submit" variant="primary">
             <span v-if="sending">
               Creating&nbsp;
               <b-spinner class="align-middle"></b-spinner>
             </span>
-            <span v-else>Submit</span>
+            <span v-else>Create</span>
           </b-button>
         </div>
       </form>
@@ -97,6 +100,7 @@ export default {
   data() {
     return {
       badgename: "",
+      background: null,
       venue: "",
       date: { month: "", day: "", year: "" },
       sending: false,
@@ -115,10 +119,17 @@ export default {
         "November",
         "December"
       ],
-      resized: false
+      resized: false,
+      url: null
     };
   },
   methods: {
+    onFileChange(e) {
+      console.log(this.background);
+      const file = e.target.files[0];
+      this.url = URL.createObjectURL(file);
+    },
+
     handleResize() {
       if (window.innerWidth < 850) {
         this.resized = true;
@@ -145,9 +156,6 @@ export default {
           });
       });
     },
-    cancel() {
-      this.$emit("cancel");
-    },
     month(m) {
       this.date.month = m;
     },
@@ -169,6 +177,7 @@ export default {
     async createBadge() {
       var bdgcode = await this.offerBadge();
       console.log("final result: " + bdgcode);
+      var fd = new FormData();
       let badge = {
         granted: false,
         code: bdgcode,
@@ -184,10 +193,16 @@ export default {
           year: this.date.year
         }
       };
+      // fd.append("photo",this.$refs.background.files[0]);
+      // console.log(this.$refs.background.files[0]);
+      // fd.append("data", badge);
       axios
         .post("http://localhost:8081/user/offerbadge", {
           user: this.$store.getters.token,
           badge: badge
+          // data: fd,
+          // contentType: false,
+          // processData: false
         })
         .then(res => {
           this.badgename = "";
@@ -221,16 +236,26 @@ export default {
     $("#mnth").focusout(function() {
       $(".month").slideUp();
     });
+  },
+  watch: {
+    background(image) {
+      if (image != null) {
+        console.log(image);
+        $(".badgePic").css({
+          "background-image": "url(@/assets/" + image.name
+        });
+      }
+    }
   }
 };
 </script>
 <style scoped>
 .upic {
   background: red;
-  padding-top:0;
+  padding-top: 0;
 }
 .holder2 {
-  height: 50px;
+  height: 40px;
   position: relative;
   /* background:red; */
 }
@@ -279,8 +304,8 @@ export default {
 }
 
 .holder {
-  margin-bottom: 30px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   margin-left: 0px;
   margin-right: 0px;
   text-align: left;
@@ -339,6 +364,36 @@ export default {
   padding: 10px;
   height: 100%;
   background: #f2f9fc;
-  border: 2px solid #d3e8f5;
+  border: 2px solid #93c1dd;
+}
+
+.background {
+  position: absolute;
+
+  /* z-index: -1; */
+  width:100%;
+  height: 100%;
+  margin: 0;
+  left: 0;
+  top: 0;
+  /* opacity: 0.5; */
+     -webkit-filter: brightness(50%); /* Safari 6.0 - 9.0 */
+  filter: brightness(50%);
+}
+
+.bcontent {
+  position: relative;
+  -webkit-filter: brightness(120%); /* Safari 6.0 - 9.0 */
+  filter: brightness(120%);
+  width: 100%;
+  height: auto;
+  z-index: 99999;
+  /* height: 100%; */
+  margin: 0;
+  left: 0;
+  top: 0;
+  color:white;
+  /* background: red; */
+  /* opacity: 0.5; */
 }
 </style>
