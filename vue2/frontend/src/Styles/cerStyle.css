@@ -523,6 +523,7 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgb(165, 162, 162); 
+  border-radius: 5px;
 }
 
 /* Handle on hover */
@@ -542,4 +543,10 @@
 
 .modl {
   overflow-y: auto;
+}
+
+.btn {
+  opacity: 0.9;
+  /* -webkit-filter: brightness(110%); Safari 6.0 - 9.0 */
+  /* filter: brightness(110%); */
 }

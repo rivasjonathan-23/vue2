@@ -129,10 +129,11 @@
     <div class="text-left pcont">
      <div class="pndngb" v-for="(pb, i) in pending" :key="i">
        <p class="pl p2">{{pb.badgename}}</p>
-       <p class="pl p3">{{pb.organization}}</p><hr class="phr">
+       <p class="pl p3">{{pb.organization}}</p>
        <p class="pl p3 d8">{{pb.date.month+" "+pb.date.day+", "+pb.date.year}}</p>
+       <hr class="phr">
+
      </div>
-     <p class="pl p2">{{"Total: "+pending.length}}</p>
     </div>
     </div>
     </b-modal>
@@ -330,7 +331,7 @@ export default {
 </script>
 <style scoped>
 .pndngb {
-  position: relative;
+  /* position: relative; */
 }
 
 .pcont {
@@ -345,14 +346,14 @@ export default {
 .cnt {
   height: 500px;
   overflow: hidden;
-  border-radius: 7px;
+  border-radius: 4px;
 
 }
 
 .d8 {
-  top:0;
-  position: absolute;
-  right: 0;
+  /* top:0; */
+  /* position: absolute; */
+  /* right: 0; */
 }
 .pndng:hover {
   background: #e3f0f7;

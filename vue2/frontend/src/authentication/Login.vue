@@ -163,13 +163,13 @@ export default {
 }
 .error {
   width: 360px;
+  border-radius: 5px;
   padding-left: 20px;
   padding-right: 20px;
   /* border: 1px solid red; */
   background: #f7e4e4;
   color: red;
   font-size: 17px;
-  border-radius: 0;
   /* border-bottom: 4px solid #f08d8d; */
   margin-top: 20px;
 }
