@@ -7,7 +7,7 @@
         <h4 class="orgn">{{ orgName }}</h4>
          <p class="username">Since 1999</p>
       </div>
-      <div class="info"  v-bind:class="{smallinfo: resized}">
+      <div class="info" v-bind:class="{smallinfo: resized}">
         <!-- <p>Organization name: {{orgName}}</p> -->
         <p class="des2">{{description}}</p>
         <p class="address">{{address}}</p>
@@ -17,7 +17,7 @@
         </p>
 
         <b-button
-          v-on:click="redirect('/signUpAs')"
+          v-on:click="redirect('/org_edit_profile')"
           class="update"
           variant="outline-primary"
         >Update Profile</b-button>

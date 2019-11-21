@@ -39,7 +39,7 @@ import UpdateOrg from "@/modules/organization/Update.vue";
 export default {
   name: "orgpage",
   components: {
-    Orgprofile
+    Orgprofile,
   },
   data() {
     return {

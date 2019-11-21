@@ -1,110 +1,107 @@
 <template>
-  <div class="innercont" v-bind:class="{ftsize: resized}">
-    <form @submit.prevent="register">
-      <div class="accinfo">
-        <p class="sign">Create an account as a</p>
-        <p class="rutext">Regular user*</p>
-        <div class="inputholder" v-bind:class="{red: err || errlen}">
-          <span>Username</span>
-          <b-input
-            type="text"
-            class="binput"
-            required
-            v-model="username"
-            v-bind:class="{unameErr: err  || errlen}"
-          ></b-input>
-          <transition name="slide-fade">
-            <span class="err" v-bind:class="{red: err}" v-if="err">This username is already taken!</span>
-            <span
-              class="err"
-              v-bind:class="{red: errlen}"
-              v-if="username && username.length < 7"
-            >must be at least 7 characters!</span>
-          </transition>
-        </div>
-        <div class="inputholder">
-          <span>Email</span>
-          <b-input type="email" class="binput" required v-model="email"></b-input>
-        </div>
-        <div class="inputholder" v-bind:class="{red: passhort}">
-          <span>Password</span>
-          <b-input
-            type="password"
-            class="binput"
-            v-bind:class="{unameErr: passhort}"
-            required
-            v-model="password"
-          ></b-input>
-          <transition name="slide-fade">
-            <span
-              class="err"
-              v-bind:class="{red: passhort}"
-              v-show=" password.length < 8 && password  != ''"
-            >must be at least 8 characters!</span>
-          </transition>
-        </div>
-        <div class="inputholder" v-bind:class="{red: passErr}">
-          <span>Confirm Password</span>
-          <b-input
-            type="password"
-            v-bind:class="{unameErr: passErr}"
-            class="binput"
-            required
-            v-model="confirmpassword"
-          ></b-input>
-          <transition name="slide-fade">
-            <span
-              class="err"
-              v-bind:class="{red: passErr}"
-              v-show="confirmpassword != password && confirmpassword && password"
-            >Password doesn't match!</span>
-          </transition>
+  <div class="orgpage">
+    <div id="Profile">
+      <div class="prfl small">
+        <div class="logo" v-bind:class="{smallLogo: resized2}">
+          <img :src="url" alt class="profile" v-bind:class="{smallpro: resized2}" />
         </div>
       </div>
-      <div class="perinfo">
-        <p class="sign2">About your organization*</p>
+    </div>
+    <div class="innercont" v-bind:class="{ftsize: resized}">
+      <form @submit.prevent="register">
+        <div class="accinfo">
+          <div class="mrgnbtm">
+            <span class="labl">Profile picture</span>
+            <b-form-file class="binput" placeholder @change="onFileChange" ref="background"></b-form-file>
+          </div>
+          <div class="inputholder">
+            <span>Email</span>
+            <b-input type="email" class="binput" required v-model="email"></b-input>
+          </div>
+          <div class="inputholder" v-bind:class="{red: passhort}">
+            <span>Password</span>
+            <b-input
+              type="password"
+              class="binput"
+              v-bind:class="{unameErr: passhort}"
+              required
+              v-model="password"
+            ></b-input>
+            <transition name="slide-fade">
+              <span
+                class="err"
+                v-bind:class="{red: passhort}"
+                v-show=" password.length < 8 && password  != ''"
+              >must be at least 8 characters!</span>
+            </transition>
+          </div>
+          <div class="inputholder" v-bind:class="{red: passErr}">
+            <span>Confirm Password</span>
+            <b-input
+              type="password"
+              v-bind:class="{unameErr: passErr}"
+              class="binput"
+              required
+              v-model="confirmpassword"
+            ></b-input>
+            <transition name="slide-fade">
+              <span
+                class="err"
+                v-bind:class="{red: passErr}"
+                v-show="confirmpassword != password && confirmpassword && password"
+              >Password doesn't match!</span>
+            </transition>
+          </div>
+        </div>
+        <div class="perinfo">
+          <p class="sign2">About your organization*</p>
 
-        <div class="inputholder">
-          <span>Name</span>
-          <b-input type="text" class="binput" required v-model="orgName"></b-input>
+          <div class="inputholder">
+            <span>Name</span>
+            <b-input type="text" class="binput" required v-model="orgName"></b-input>
+          </div>
+          <div class="inputholder">
+            <span>Address</span>
+            <b-input type="text" class="binput" required v-model="address"></b-input>
+          </div>
+          <div class="inputholder">
+            <span>Year started</span>
+            <b-input type="number" class="binput" min="1800" required v-model="years"></b-input>
+          </div>
+          <div class="inputholder">
+            <span>What your organization do? | Description</span>
+            <b-form-textarea type="text" rows="5" class="binput" required v-model="description"></b-form-textarea>
+          </div>
+          <div class="noChsn" v-show="hasError">
+            <p class="ertxt" v-if="noChosen">Are you working or studying? Please fill up.</p>
+            <p class="ertxt" v-if="err">The username you've entered is already taken!</p>
+            <p class="ertxt" v-if="passhort">Your password is weak! Must be 8 or more characters.</p>
+            <p class="ertxt" v-if="errlen">Your username is less than 7 characters!</p>
+            <p class="ertxt" v-if="passErr">Password did not match!</p>
+          </div>
+          <b-button @click="$router.push('/organization')" class="lgnbtn" variant="danger">Cancel</b-button>&nbsp;
+          <b-button type="submit" class="lgnbtn" variant="primary">
+            <span v-if="!loading">Save changes</span>
+            <span v-else>
+              <span>Loading&nbsp;</span>
+              <b-spinner class="align-middle"></b-spinner>&nbsp;
+            </span>
+          </b-button>
         </div>
-        <div class="inputholder">
-          <span>Address</span>
-          <b-input type="text" class="binput" required v-model="address"></b-input>
-        </div>
-        <div class="inputholder">
-          <span>Year started</span>
-          <b-input type="number" class="binput" min="1800" required v-model="years"></b-input>
-        </div>
-        <div class="inputholder">
-          <span>What your organization do? | Description</span>
-          <b-form-textarea type="text" rows="5" class="binput" required v-model="description"></b-form-textarea>
-        </div>
-        <div class="noChsn" v-show="hasError">
-          <p class="ertxt" v-if="err">The username you've entered is already taken!</p>
-          <p class="ertxt" v-if="passhort">Your password is weak! Must be 8 or more characters.</p>
-          <p class="ertxt" v-if="errlen">Your username is less than 7 characters!</p>
-          <p class="ertxt" v-if="passErr">Password did not match!</p>
-        </div>
-        <b-button type="submit" class="lgnbtn" variant="primary">
-          <span v-if="!loading">Register</span>
-          <span v-else>
-            <span>Loading&nbsp;</span>
-            <b-spinner class="align-middle"></b-spinner>&nbsp;
-          </span>
-        </b-button>
-      </div>
-    </form>
+      </form>
+    </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Footer from "../user/footer.vue";
 import $ from "jquery";
 import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
-  name: "OrgSignUp",
+  name: "Orgprofile",
   data() {
     return {
       username: "jrivas23",
@@ -114,18 +111,27 @@ export default {
       email: "rivas23@gmail.com",
       years: "2001",
       address: "Nasipit, Talamban, Cebu City",
-      description:"Our mission is to provide education, technical and professional training in the digital sector to young underprivileged people by leveraging their potential and willpower. We endeavour to truly develop their employability which will allow them and their families to escape poverty in a sustainable way, and contribute to the social and economic development of their countries.",
+      description:
+        "Our mission is to provide education, technical and professional training in the digital sector to young underprivileged people by leveraging their potential and willpower. We endeavour to truly develop their employability which will allow them and their families to escape poverty in a sustainable way, and contribute to the social and economic development of their countries.",
       err: false,
       loading: false,
       type: "",
       resized: false,
+      resized2: false,
+      url: null
     };
   },
-
+components: {
+    Footer
+},
   methods: {
+    onFileChange(e) {
+      const file = e.target.files[0];
+      this.url = URL.createObjectURL(file);
+    },
     register() {
       let userInfo = {
-         username: this.username,
+        username: this.username,
         password: this.password,
         email: this.email,
         address: this.address,
@@ -133,7 +139,7 @@ export default {
         years: this.years,
         description: this.description,
         type: "Organization",
-        badges: [],
+        badges: []
       };
       var val = this.validate();
       if (val) {
@@ -166,21 +172,23 @@ export default {
       this.loading = true;
       this.passhort = this.password.length < 8;
       this.passErr = this.password != this.confirmpassword;
+      this.noChosen = this.school === "" && this.profession === "";
       this.errlen = this.username.length < 7;
       return !this.errlen && !this.passErr && !this.passhort && !this.noChosen;
     },
     handleResize() {
-      if (window.innerWidth <= 650) {
-        this.resized = true;
+      if (window.innerWidth < 1200) {
+        this.resized2 = true;
+        if (window.innerWidth <= 650) {
+          this.resized = true;
+        } else {
+          this.resized = false;
+        }
       } else {
-        this.resized = false;
+          this.resized = false;
+        this.resized2 = false;
       }
     }
-  },
-  mounted() {
-    $("#mnth").focus(function() {
-      $(".month").slideDown();
-    });
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
@@ -501,6 +509,109 @@ table {
   font-family: verdana;
   font-weight: normal;
   margin-bottom: 10px;
+}
+
+/* ================================== */
+
+.username {
+  font-size: 17px;
+  margin-top: 0px;
+  color: #315273;
+  width: 100%;
+}
+div {
+  font-family: verdana;
+}
+
+.orgn {
+  color: #364452;
+  margin-bottom: 0;
+}
+
+.address {
+  font-size: 15px;
+  color: #3b4d70;
+
+  font-weight: bold;
+}
+
+.des2 {
+  color: #1e4773;
+}
+.email {
+  color: #486399;
+  font-size: 15px;
+}
+.emailadd {
+  text-decoration: underline;
+}
+.prof {
+  float: left;
+}
+p {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.profile {
+  /* height: 200px; */
+
+  width: auto;
+  height: 250px;
+}
+
+#Profile {
+  height: 150px;
+  /* background-image: url("~@/assets/orgbackground.jpg"); */
+  background: #186fa1;
+  /* background-size: cover; */
+  font-family: verdana;
+}
+
+.logo {
+  overflow: hidden;
+  margin-top: 30px;
+  width: 250px;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 0px 1px 5px #0e222b;
+  box-shadow: 0px 1px 5px #0e222b;
+  height: 250px;
+  border: 1px solid white;
+  background: white;
+}
+.prfl {
+  float: left;
+  width: 25%;
+  /* margin-left:25px; */
+  /* margin-right: 25px; */
+  margin-bottom: 0px;
+  /* border-bottom: 2px solid #d5e7f5; */
+  /* background:grey; */
+}
+
+.small {
+  width: 100%;
+  margin: 0;
+}
+
+.update {
+  border-radius: 2px;
+}
+.smallLogo {
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+}
+.smallpro {
+  width: auto;
+  height: 180px;
+}
+
+.orgpage {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 50px;
 }
 </style>
 

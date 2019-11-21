@@ -39,9 +39,7 @@
                 required
               />
               <div class="month">
-                <div v-for="(m,n) in cal" :key="n">
-                  <h5 class="m" @click="month(m)">{{m}}</h5>
-                </div>
+                  <h5 class="m" v-for="(m,n) in cal" :key="n" @click="month(m)">{{m}}</h5>
               </div>
             </td>
 
@@ -71,7 +69,7 @@
         </div>
         <div class="mrgnbtm">
           <span class="labl">Badge background</span>
-          <b-form-file class="fileinput" placeholder @change="onFileChange" ref="background"></b-form-file>
+          <b-form-file class="fileinput" placeholder @change="onFileChange"></b-form-file>
         </div>
         <div class="bhldr">
           <b-button  v-if="!sending" @click="$bvModal.hide('offer')" class="btn btn-danger nm">Cancel</b-button>
@@ -120,12 +118,12 @@ export default {
         "December"
       ],
       resized: false,
-      url: null
+      url: null,
+      m: ""
     };
   },
   methods: {
     onFileChange(e) {
-      console.log(this.background);
       const file = e.target.files[0];
       this.url = URL.createObjectURL(file);
     },
@@ -158,6 +156,7 @@ export default {
     },
     month(m) {
       this.date.month = m;
+      this.m = m;
     },
     async offerBadge() {
       var ok = false;
@@ -233,10 +232,16 @@ export default {
       $(".month").slideDown();
     });
 
-    $("#mnth").focusout(function() {
-      $(".month").slideUp();
-    });
-  },
+    // $("#mnth").focusout(function() {
+    //     $(".month").slideUp();
+    // });
+  },watch: {
+    m(val) {
+      if (val != ""){
+        $(".month").slideUp();
+      }
+    }
+  }
 };
 </script>
 <style scoped>

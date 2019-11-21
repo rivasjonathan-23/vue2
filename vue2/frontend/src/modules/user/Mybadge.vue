@@ -125,14 +125,15 @@
       hide-footer
       title="Pending badges"
     >
-    <div class="cnt">
+    
+    <div  v-if="pending.length == 0" class="text-center pl p2 np">You have no pending badges</div>
+    <div v-else  class="cnt">
     <div class="text-left pcont">
      <div class="pndngb" v-for="(pb, i) in pending" :key="i">
        <p class="pl p2">{{pb.badgename}}</p>
        <p class="pl p3">{{pb.organization}}</p>
        <p class="pl p3 d8">{{pb.date.month+" "+pb.date.day+", "+pb.date.year}}</p>
        <hr class="phr">
-
      </div>
     </div>
     </div>
@@ -243,7 +244,6 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   created() {
-    
     this.badgelist = [
         {
           granted: true,
@@ -332,6 +332,10 @@ export default {
 <style scoped>
 .pndngb {
   /* position: relative; */
+}
+
+.np {
+  height: 50px;
 }
 
 .pcont {

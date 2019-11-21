@@ -19,7 +19,7 @@
 
       <b-button
         class="update"
-        v-on:click="Alert(userInfo.username)"
+        v-on:click="$router.push('/user_edit_profile')"
         variant="outline-primary"
       >Update Profile</b-button>
     </div>

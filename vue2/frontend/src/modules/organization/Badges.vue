@@ -11,7 +11,7 @@
     </div>
     <div class="loading" v-show="isLoading">
       <div class="text-center text-danger my-2">
-        <b-spinner class="align-middle"></b-spinner>
+        <b-spinner variant="primary" class="align-middle"></b-spinner>
       </div>
     </div>
     <Bythree :data="by3Data"></Bythree>

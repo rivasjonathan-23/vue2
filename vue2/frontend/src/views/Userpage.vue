@@ -34,7 +34,7 @@ export default {
   },
   components: {
     Profile,
-    Badges
+    Badges,
   },
   created() {
     window.addEventListener("resize", this.handleResize);

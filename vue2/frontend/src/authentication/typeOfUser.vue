@@ -17,12 +17,14 @@
     </div>
     <center>
       <router-view></router-view>
+      <Footer></Footer>
     </center>
   </div>
 </template>
 
 <script>
 import $ from "jquery";
+import Footer from "../modules/user/footer";
 
 export default {
   name: "TypeOfUser",
@@ -47,6 +49,9 @@ export default {
     } else {
       this.change = false;
     }
+  }
+  ,components: {
+    Footer
   }
 };
 </script>

@@ -8,6 +8,8 @@ import OrgSignUp from "@/authentication/orgSignUp.vue";
 import TypeOfUser from "@/authentication/typeOfUser.vue";
 import userpage from "@/views/Userpage.vue";
 import orgpage from "@/views/Organizationpage.vue";
+import Orgprofile from "@/modules/organization/orgeditprofile.vue";
+import Userprofile from "@/modules/user/usereditprofile.vue";
 
 
 
@@ -32,6 +34,34 @@ let router = new Router({
     },
     
 
+    {
+      path: "/org_edit_profile",
+      component: Orgprofile,
+      props: (route) => ({
+        name: route.query.name
+      }),
+      beforeEnter(to, from, next) {
+        // if (!store.getters.isLoggedIn) {
+          next();
+        // } else {
+          // next("/");
+        // }
+      },
+    },
+    {
+      path: "/user_edit_profile",
+      component: Userprofile,
+      props: (route) => ({
+        name: route.query.name
+      }),
+      beforeEnter(to, from, next) {
+        // if (!store.getters.isLoggedIn) {
+          next();
+        // } else {
+          // next("/");
+        // }
+      },
+    },
     {
       path: "/login",
       component: login,
@@ -99,17 +129,17 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        if (store.getters.isLoggedIn) {
-          store.dispatch("identifyUser").then((data) => {
-            if (data) {
+        // if (store.getters.isLoggedIn) {
+        //   store.dispatch("identifyUser").then((data) => {
+        //     if (data) {
               next();
-            } else {
-              next("/login");
-            }
-          })
-        } else {
-          next("/login");
-        }
+        //     } else {
+        //       next("/login");
+        //     }
+        //   })
+        // } else {
+        //   next("/login");
+        // }
       },
       children: [
         {
@@ -129,17 +159,17 @@ let router = new Router({
         name: route.query.name
       }),
       beforeEnter(to, from, next) {
-        if (store.getters.isLoggedIn) {
-          store.dispatch("identifyUser").then((data) => {
-            if (!data) {
+        // if (store.getters.isLoggedIn) {
+        //   store.dispatch("identifyUser").then((data) => {
+        //     if (!data) {
               next();
-            } else {
-              next("/login");
-            }
-          })
-        } else {
-          next("/login");
-        }
+        //     } else {
+        //       next("/login");
+        //     }
+        //   })
+        // } else {
+        //   next("/login");
+        // }
       },
       children: [
         {
