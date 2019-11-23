@@ -240,7 +240,16 @@ export default {
   },
 
   created() {
-    this.isLoading = true;
+    this.badges = [{code: "testcode" ,badgename: "Test badge", organization: "Passerelles Numeriques", recipient: [{username: "jrivas23", _id: "asdfae2134adf", fullname: "Jonathan Rivas"}], date: {month: "September", day: 21, year: 2018}}]
+    var num = 0;
+        this.badges.forEach(badge => {
+          badge["imgnum"] = num;
+          num += 1;
+          if (num > 10) {
+            num = 0;
+          }
+        })
+    this.isLoading = false;
     window.addEventListener("resize", this.handleResize);
     this.size = window.innerWidth;
     this.handleResize();

@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <center>
+      <div class="error mrgnbtm"  v-bind:class="{small: resized}" v-show="error" >The username or password is incorrect!</div>
       
       <form class="lgn" id="lgn" v-bind:class="{small: resized}" @submit.prevent="login">
         <div class="sign">
@@ -26,7 +27,7 @@
           </b-button>
         </div>
       </form>
-      <div class="error"  v-bind:class="{small: resized}" v-show="error" >The username or password is incorrect!</div>
+      <div class="sgn"  v-bind:class="{small: resized}">Don't have an account?&nbsp;<span @click="$router.push('/signUpAs')" class="sgnup">Sign up</span></div>
     </center>
   </div>
 </template>
@@ -121,6 +122,12 @@ export default {
   width: 30px;
 }
 
+
+.sgnup {
+  color:#005ac9;
+  font-size: 18px;
+  text-decoration: underline;
+}
 .submitted {
   color: rgb(3, 78, 133);
   background: #b7d4eb;
@@ -169,6 +176,18 @@ export default {
   /* border: 1px solid red; */
   background: #f7e4e4;
   color: red;
+  font-size: 17px;
+  /* border-bottom: 4px solid #f08d8d; */
+  margin-top: 20px;
+}
+
+.sgn {
+  width: 360px;
+  border-radius: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  /* border: 1px solid red; */
+  color: #334350;
   font-size: 17px;
   /* border-bottom: 4px solid #f08d8d; */
   margin-top: 20px;
@@ -261,6 +280,11 @@ button:hover {
 
 .text {
   font-family: verdana;
+}
+
+.mrgnbtm {
+  text-align: center;
+  margin-bottom: 10px;
 }
 </style>
 

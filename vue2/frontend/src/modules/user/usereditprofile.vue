@@ -703,7 +703,8 @@ p {
   box-shadow: 0px 1px 5px #0e222b;
   height: 250px;
   border: 1px solid white;
-  background: white;
+  background-image: url("~@/assets/profile.png");
+  background-size:cover;
 }
 .prfl {
   float: left;

@@ -10,12 +10,14 @@
 
         <b-navbar-nav class="ml-auto">
           <b-nav-item class="opt" @click="$bvModal.show('searchUser')">Search</b-nav-item>
-          <b-nav-item
+          <b-nav-item 
+            v-if="!inlogin"
             v-show="!this.$store.getters.isLoggedIn"
             class="opt"
             @click="redirect('/login')"
           >Sign in</b-nav-item>
           <b-nav-item
+            v-if="!insignup"
             v-show="!this.$store.getters.isLoggedIn"
             class="opt"
             @click="redirect('/signUpAs')"
@@ -66,6 +68,7 @@ export default {
       notlogin: true,
       isloginConfirm: false,
       inlogin: false,
+      insignup: false,
       path: ""
     };
   },
@@ -80,11 +83,7 @@ export default {
     redirect(path) {
       this.$router.push(path);
       this.path = path;
-      if (this.$router.currentRoute.path == "/login") {
-        this.inlogin = true;
-      } else {
-        this.inlogin = false;
-      }
+      this.locate();
     },
     search() {
       let user = { user: this.person };
@@ -101,6 +100,18 @@ export default {
           console.log("error");
         }
       );
+    },
+    locate() {
+      if (this.$router.currentRoute.path == "/login") {
+        this.inlogin = true;
+        this.insignup = false;
+      } else if  (this.$router.currentRoute.path == "/signUpAs") {
+        this.inlogin = false;
+        this.insignup = true;
+      } else {
+        this.inlogin = false;
+        this.insignup = false;
+      }
     },
     signout() {
       this.$store.dispatch("logout").then(() => {
@@ -136,19 +147,18 @@ export default {
       }
     });
   },
-  watch: {
-    path() {
-      if (this.$router.currentRoute.path == "/login") {
-        this.inlogin = true;
-      } else {
-        this.inlogin = false;
-      }
-    }
-  },
+  
   created() {
     if (this.$router.currentRoute.path == "/login") {
-      this.inlogin = true;
-    }
+        this.inlogin = true;
+        this.insignup = false;
+      } else if  (this.$router.currentRoute.path == "/signUpAs") {
+        this.inlogin = false;
+        this.insignup = true;
+      } else {
+        this.inlogin = false;
+        this.insignup = false;
+      }
     var url = window.location.href;
     if (url.includes("/user")) {
       this.notlogin = false;

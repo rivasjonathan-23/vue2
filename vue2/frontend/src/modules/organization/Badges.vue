@@ -39,78 +39,78 @@ export default {
   },
 
   created() {
-    // this.by3Data = [
-    //   {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //   {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //   {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //   {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //   {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //    {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //    {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //    {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //    {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //    {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //    {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   },
-    //    {
-    //     badgename: "First Placer",
-    //     venue: "Passerelles Numeriques coding contest",
-    //     date: { month: "June", day: 23, year: 2019 }
-    //   }
-    // ];
-    // var num = 0;
-    // this.by3Data.forEach(element => {
-    //   element["imgnum"] = num;
-    //   num += 1;
-    //    if (num > 10) {
-    //     num = 0;
-    //   }
-    // });
+    this.by3Data = [
+      {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+      {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+      {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+      {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+      {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+       {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+       {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+       {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+       {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+       {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+       {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      },
+       {
+        badgename: "First Placer",
+        venue: "Passerelles Numeriques coding contest",
+        date: { month: "June", day: 23, year: 2019 }
+      }
+    ];
+    var num = 0;
+    this.by3Data.forEach(element => {
+      element["imgnum"] = num;
+      num += 1;
+       if (num > 10) {
+        num = 0;
+      }
+    });
     this.$emit("@changeZindex");
-    this.isLoading = true;
+    this.isLoading = false;
     axios
       .post("http://localhost:8081/user/badges-org", {
         data: this.$store.getters.token

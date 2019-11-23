@@ -3,7 +3,7 @@
     <form @submit.prevent="register">
       <div class="accinfo">
         <p class="sign">Create an account as a</p>
-        <p class="rutext">Regular user*</p>
+        <p class="rutext">Regular user</p>
         <div class="inputholder" v-bind:class="{red: err || errlen}">
           <span>Username</span>
           <b-input
@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="perinfo">
-        <p class="sign2">Personal Information*</p>
+        <p class="sign2">Personal Information</p>
 
         <div class="inputholder">
           <table>
